@@ -1,0 +1,742 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<systems>
+    <tile path="Abyz-Fria.png" count="1">
+        <title>Abyz/Fria</title>
+        <planet>
+            <name>Abyz</name>
+            <resources>3</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Fria</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Arinam-Meer.png" count="1">
+        <title>Arinam/Meer</title>
+        <planet>
+            <name>Arinam</name>
+            <resources>1</resources>
+            <influence>2</influence>
+            <blue/>
+        </planet>
+        <planet>
+            <name>Meer</name>
+            <resources>0</resources>
+            <influence>4</influence>
+        </planet>
+    </tile>
+    <tile path="Arnor-Lor.png" count="1">
+        <title>Arnor/Lor</title>
+        <planet>
+            <name>Arnor</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+        <planet>
+            <name>Lor</name>
+            <resources>1</resources>
+            <influence>2</influence>
+            <red/>
+        </planet>
+    </tile>
+    <tile path="Ashtroth-Loki-Abaddon.png" count="1">
+        <title>Ashtroth/Loki/Abaddon</title>
+        <planet>
+            <name>Ashtroth</name>
+            <resources>2</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Loki</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Abaddon</name>
+            <resources>1</resources>
+            <influence>0</influence>
+            <red/>
+        </planet>
+    </tile>
+    <tile path="Asteroid Field.png" count="4">
+        <title>Asteroid Field</title>
+        <hazard/>
+    </tile>
+    <tile path="Bereg-Lirta IV.png" count="1">
+        <title>Bereg/Lirga IV</title>
+        <planet>
+            <name>Bereg</name>
+            <resources>3</resources>
+            <influence>1</influence>
+            <red/>
+        </planet>
+        <planet>
+            <name>Lirta IV</name>
+            <resources>2</resources>
+            <influence>3</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Capha.png" count="1">
+        <title>Capha</title>
+        <planet>
+            <name>Capha</name>
+            <resources>3</resources>
+            <influence>0</influence>
+        </planet>
+    </tile>
+    <tile path="Centauri-Gral.png" count="1">
+        <title>Centauri/Gral</title>
+        <planet>
+            <name>Centauri</name>
+            <resources>1</resources>
+            <influence>3</influence>
+        </planet>
+        <planet>
+            <name>Gral</name>
+            <resources>1</resources>
+            <influence>1</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Coorneeq-Resculon.png" count="1">
+        <title>Coorneeq/Resculon</title>
+        <planet>
+            <name>Coorneeq</name>
+            <resources>1</resources>
+            <influence>2</influence>
+            <red/>
+        </planet>
+        <planet>
+            <name>Resculon</name>
+            <resources>2</resources>
+            <influence>0</influence>
+        </planet>
+    </tile>
+    <tile path="Dal Bootha-Xxehan.png" count="1">
+        <title>Dal Bootha/Xxehan</title>
+        <planet>
+            <name>Dal Bootha</name>
+            <resources>0</resources>
+            <influence>2</influence>
+            <red/>
+        </planet>
+        <planet>
+            <name>Xxehan</name>
+            <resources>1</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Elnath.png" count="1">
+        <title>El'Nath</title>
+        <planet>
+            <name>El'Nath</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Empty System.png" count="12">
+        <title>Empty System</title>
+        <misc/>
+    </tile>
+    <tile path="Everra.png" count="1">
+        <title>Everra</title>
+        <planet>
+            <name>Everra</name>
+            <resources>3</resources>
+            <influence>1</influence>
+        </planet>
+        <hazard/>
+    </tile>
+    <tile path="Faunus.png" count="1">
+        <title>Faunus</title>
+        <planet>
+            <name>Faunus</name>
+            <resources>1</resources>
+            <influence>3</influence>
+            <green/>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Garbozia.png" count="1">
+        <title>Garbozia</title>
+        <planet>
+            <name>Garbozia</name>
+            <resources>2</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Hercalor-Tiamat.png" count="1">
+        <title>Hercalor/Tiamat</title>
+        <planet>
+            <name>Hercalor</name>
+            <resources>1</resources>
+            <influence>0</influence>
+            <yellow/>
+        </planet>
+        <planet>
+            <name>Tiamat</name>
+            <resources>1</resources>
+            <influence>2</influence>
+            <yellow/>
+        </planet>
+    </tile>
+    <tile path="Industrex.png" count="1">
+        <title>Industrex</title>
+        <planet>
+            <name>Industrex</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <red/>
+            <red/>
+        </planet>
+    </tile>
+    <tile path="Ion Storm.png" count="3">
+        <title>Ion Storm</title>
+        <hazard/>
+    </tile>
+    <tile path="Lazar-Sakulag.png" count="1">
+        <title>Lazar/Sakulag</title>
+        <planet>
+            <name>Lazar</name>
+            <resources>1</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Sakulag</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="Lesab.png" count="1">
+        <title>Lesab</title>
+        <planet>
+            <name>Lesab</name>
+            <resources>2</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Lisis-Velnor.png" count="1">
+        <title>Lisis/Velnor</title>
+        <planet>
+            <name>Lisis</name>
+            <resources>2</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Velnor</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <red/>
+        </planet>
+    </tile>
+    <tile path="Mecatol Rex.png" count="1">
+        <title>Mecatol Rex</title>
+        <planet>
+            <name>Mecatol Rex</name>
+            <resources>1</resources>
+            <influence>6</influence>
+        </planet>
+        <misc/>
+    </tile>
+    <tile path="Mehar Xull.png" count="1">
+        <title>Mehar Xull</title>
+        <planet>
+            <name>Mehar Xull</name>
+            <resources>1</resources>
+            <influence>3</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Mellon-Zohbat.png" count="1">
+        <title>Mellon/Zohbat</title>
+        <planet>
+            <name>Mellon</name>
+            <resources>0</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Zohbat</name>
+            <resources>3</resources>
+            <influence>1</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Nebula.png" count="2">
+        <title>Nebula</title>
+        <hazard/>
+    </tile>
+    <tile path="New Albion-Starpoint.png" count="1">
+        <title>New Albion/Starpoint</title>
+        <planet>
+            <name>New Albion</name>
+            <resources>1</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+        <planet>
+            <name>Starpoint</name>
+            <resources>3</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="Perimeter.png" count="1">
+        <title>Perimeter</title>
+        <planet>
+            <name>Perimeter</name>
+            <resources>2</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="Qucenn-Rarron.png" count="1">
+        <title>Qucen'n/Rarron</title>
+        <planet>
+            <name>Qucen'n</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Rarron</name>
+            <resources>0</resources>
+            <influence>3</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Rigel I-Rigel II-Rigel III.png" count="1">
+        <title>Rigel I/Rigel II/Rigel III</title>
+        <planet>
+            <name>Rigel I</name>
+            <resources>0</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+        <planet>
+            <name>Rigel II</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Rigel III</name>
+            <resources>1</resources>
+            <influence>1</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Saudor.png" count="1">
+        <title>Saudor</title>
+        <planet>
+            <name>Saudor</name>
+            <resources>2</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="Sem-Lore.png" count="1">
+        <title>Sem-Lore</title>
+        <planet>
+            <name>Sem-Lore</name>
+            <resources>3</resources>
+            <influence>2</influence>
+            <yellow/>
+        </planet>
+    </tile>
+    <tile path="Supernova.png" count="2">
+        <title>Supernova</title>
+        <hazard/>
+    </tile>
+    <tile path="System-LtBlue.png" count="99">
+        <title>Generic (Cyan)</title>
+        <planet/>
+        <generic/>
+    </tile>
+    <tile path="System-MdBlue.png" count="99">
+        <title>Generic (Blue)</title>
+        <planet/>
+        <planet/>
+        <generic/>
+    </tile>
+    <tile path="System-Red.png" count="99">
+        <title>Generic (Red)</title>
+        <hazard/>
+        <generic/>
+    </tile>
+    <tile path="System-Yellow.png" count="99">
+        <title>Generic (Yellow)</title>
+        <race>Generic (Yellow)</race>
+        <generic/>
+    </tile>
+    <tile path="Tarmann.png" count="1">
+        <title>Tar'mann</title>
+        <planet>
+            <name>Tar'mann</name>
+            <resources>1</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="Tempesta.png" count="1">
+        <title>Tempesta</title>
+        <planet>
+            <name>Tempesta</name>
+            <resources>1</resources>
+            <influence>1</influence>
+            <blue/>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="Tequran-Torkan.png" count="1">
+        <title>Tequ'ran/Torkan</title>
+        <planet>
+            <name>Tequ'ran</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <red/>
+        </planet>
+        <planet>
+            <name>Torkan</name>
+            <resources>0</resources>
+            <influence>3</influence>
+            <blue/>
+        </planet>
+    </tile>
+    <tile path="The Barony of Letnev.png" count="1">
+        <title>Arc Prime/Wren Terra</title>
+        <race>The Barony of Letnev</race>
+        <planet>
+            <name>Arc Prime</name>
+            <resources>4</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Wren Terra</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Brotherhood of Yin.png" count="1">
+        <title>Darien</title>
+        <race>The Brotherhood of Yin</race>
+        <planet>
+            <name>Darien</name>
+            <resources>2</resources>
+            <influence>4</influence>
+        </planet>
+    </tile>
+    <tile path="The Clan of Saar.png" count="1">
+        <title>Lisis II/Ragh</title>
+        <race>The Clan of Saar</race>
+        <planet>
+            <name>Lisis II</name>
+            <resources>1</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Ragh</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Embers of Muaat.png" count="1">
+        <title>Muaat</title>
+        <race>The Embers of Muaat</race>
+        <planet>
+            <name>Muaat</name>
+            <resources>4</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Emirates of Hacan.png" count="1">
+        <title>Arretze/Hercant/Kamdorn</title>
+        <race>The Emirates of Hacan</race>
+        <planet>
+            <name>Arretze</name>
+            <resources>2</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Hercant</name>
+            <resources>1</resources>
+            <influence>1</influence>
+        </planet>
+        <planet>
+            <name>Kamdorn</name>
+            <resources>0</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Federation of Sol.png" count="1">
+        <title>Jord</title>
+        <race>The Federation of Sol</race>
+        <planet>
+            <name>Jord</name>
+            <resources>4</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="The Ghosts of Creuss.png" count="1">
+        <title>The Creuss Gate</title>
+        <race>The Ghosts of Creuss</race>
+    </tile>
+    <tile path="The L1Z1X Mindnet.png" count="1">
+        <title>[0.0.0]</title>
+        <race>The L1Z1X Mindnet</race>
+        <planet>
+            <name>[0.0.0]</name>
+            <resources>5</resources>
+            <influence>0</influence>
+        </planet>
+    </tile>
+    <tile path="The Mentak Coalition.png" count="1">
+        <title>Moll Primus</title>
+        <race>The Mentak Coalition</race>
+        <planet>
+            <name>Moll Primus</name>
+            <resources>4</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Naalu Collective.png" count="1">
+        <title>Maaluuk/Druaa</title>
+        <race>The Naalu Collective</race>
+        <planet>
+            <name>Maaluuk</name>
+            <resources>0</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Druaa</name>
+            <resources>3</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Nekro Virus.png" count="1">
+        <title>Mordai II</title>
+        <race>The Nekro Virus</race>
+        <planet>
+            <name>Mordai II</name>
+            <resources>4</resources>
+            <influence>0</influence>
+        </planet>
+    </tile>
+    <tile path="The Sardakk NOrr.png" count="1">
+        <title>Tren'lak/Quinarra</title>
+        <race>The Sardakk N'Orr</race>
+        <planet>
+            <name>Tren'lak</name>
+            <resources>1</resources>
+            <influence>0</influence>
+        </planet>
+        <planet>
+            <name>Quinarra</name>
+            <resources>3</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Universities of Jol-Nar.png" count="1">
+        <title>Nar/Jol</title>
+        <race>The Universities of Jol-Nar</race>
+        <planet>
+            <name>Nar</name>
+            <resources>2</resources>
+            <influence>3</influence>
+        </planet>
+        <planet>
+            <name>Jol</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="The Winnu.png" count="1">
+        <title>Winnu</title>
+        <race>The Winnu</race>
+        <planet>
+            <name>Winnu</name>
+            <resources>3</resources>
+            <influence>4</influence>
+            <yellow/>
+        </planet>
+    </tile>
+    <tile path="The Xxcha Kingdom.png" count="1">
+        <title>Archon Ren/Archon Tau</title>
+        <race>The Xxcha Kingdom</race>
+        <planet>
+            <name>Archon Ren</name>
+            <resources>2</resources>
+            <influence>3</influence>
+        </planet>
+        <planet>
+            <name>Archon Tau</name>
+            <resources>1</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="The Yssaril Tribes.png" count="1">
+        <title>Retillion/Shalloq</title>
+        <race>The Yssaril Tribes</race>
+        <planet>
+            <name>Retillion</name>
+            <resources>2</resources>
+            <influence>3</influence>
+        </planet>
+        <planet>
+            <name>Shalloq</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="Thibah.png" count="1">
+        <title>Thibah</title>
+        <planet>
+            <name>Thibah</name>
+            <resources>1</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="Vefut II.png" count="1">
+        <title>Vefut II</title>
+        <planet>
+            <name>Vefut II</name>
+            <resources>2</resources>
+            <influence>0</influence>
+            <red/>
+        </planet>
+    </tile>
+    <tile path="Vega Minor-Vega Major.png" count="1">
+        <title>Vega Minor/Vega Major</title>
+        <planet>
+            <name>Vega Minor</name>
+            <resources>1</resources>
+            <influence>2</influence>
+            <blue/>
+        </planet>
+        <planet>
+            <name>Vega Major</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+    </tile>
+    <tile path="Wellon.png" count="1">
+        <title>Wellon</title>
+        <planet>
+            <name>Wellon</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+    </tile>
+    <tile path="Lodor.png" count="1">
+        <title>Lodor</title>
+        <alpha/>
+        <misc/>
+        <planet>
+            <name>Lodor</name>
+            <resources>3</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Quann.png" count="1">
+        <title>Quann</title>
+        <beta/>
+        <misc/>
+        <planet>
+            <name>Quann</name>
+            <resources>2</resources>
+            <influence>1</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="alpha.png" count="1">
+        <title>Alpha Wormhole</title>
+        <alpha/>
+        <misc/>
+    </tile>
+    <tile path="beta.png" count="1">
+        <title>Beta Wormhole</title>
+        <beta/>
+        <misc/>
+    </tile>
+    <tile path="Cormund.png" count="1">
+        <title>Cormund</title>
+        <planet>
+            <name>Cormund</name>
+            <resources>2</resources>
+            <influence>0</influence>
+        </planet>
+        <hazard/>
+    </tile>
+    <tile path="Gravity Rift.png" count="2">
+        <title>Gravity Rift</title>
+        <hazard/>
+    </tile>
+    <tile path="The Arborec.png" count="1">
+        <title>Nestphar</title>
+        <race>The Arborec</race>
+        <planet>
+            <name>Nestphar</name>
+            <resources>3</resources>
+            <influence>2</influence>
+            <green/>
+        </planet>
+    </tile>
+    <tile path="Hope's End.png" count="1">
+        <title>Hope's End</title>
+        <planet>
+            <name>Hope's End</name>
+            <resources>3</resources>
+            <influence>0</influence>
+        </planet>
+        <misc/>
+    </tile>
+    <tile path="Mirage.png" count="1">
+        <title>Mirage</title>
+        <planet>
+            <name>Mirage</name>
+            <resources>1</resources>
+            <influence>2</influence>
+        </planet>
+        <misc/>
+    </tile>
+    <tile path="Primor.png" count="1">
+        <title>Primor</title>
+        <planet>
+            <name>Primor</name>
+            <resources>2</resources>
+            <influence>1</influence>
+        </planet>
+        <misc/>
+    </tile>
+    <tile path="Sumerian-Arcturus.png" count="1">
+        <title>Sumerian/Arcturus</title>
+        <planet>
+            <name>Sumerian</name>
+            <resources>2</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Arcturus</name>
+            <resources>1</resources>
+            <influence>1</influence>
+        </planet>
+        <misc/>
+    </tile>
+    <tile path="Tsion-Bellatrix.png" count="1">
+        <title>Tsion/Bellatrix</title>
+        <planet>
+            <name>Tsion</name>
+            <resources>2</resources>
+            <influence>2</influence>
+        </planet>
+        <planet>
+            <name>Bellatrix</name>
+            <resources>0</resources>
+            <influence>1</influence>
+            <red/>
+        </planet>
+        <misc/>
+    </tile>
+</systems>

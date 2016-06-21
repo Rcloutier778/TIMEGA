@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<personnel>
+    <person color="red" tier="1">
+        <name>Fleet Control</name>
+        <effect>Increase your fleet supply by one in systems containing at least one of your space docks.</effect>
+    </person>
+    <person color="red" tier="1">
+        <name>Moneylender</name>
+        <effect>After building ships, you may exhaust any number of space docks to receive their planets' resource values in destroyers in those systems. When refreshing a space dock, exhaust its planet.</effect>
+    </person>
+    <person color="red" tier="2">
+        <name>Marauder</name>
+        <effect>Receive one mercenary in any friendly or empty system containing one of your units or planets.</effect>
+    </person>
+    <person color="red" tier="2">
+        <name>Cultist</name>
+        <effect>When you have three or more ships of the same type in a system, they each receive +1 on all normal combat rolls. This bonus is lost for the rest of the battle when one of them is taken as a casualty.</effect>
+    </person>
+    <person color="red" tier="3">
+        <name>Usurper</name>
+        <effect>Receive bonus votes equal to the number of capital ships you control in or adjacent to Mecatol Rex, up to a maximum of six.</effect>
+    </person>
+    <person color="red" tier="3">
+        <name>Advisor</name>
+        <effect>Increase your command pool by one. The first time you activate a system each round, you may activate it twice. Each of your ships in that system receives +1 during the first round of space combat.</effect>
+    </person>
+    <person color="red" tier="4">
+        <name>Conqueror</name>
+        <effect>Choose a type of ship (except fighters). Whenever you destroy a ship of that type, set it aside. Return them after the development phase.</effect>
+    </person>
+    
+    <person color="blue" tier="1">
+        <name>Astronomer</name>
+        <effect>Your carriers may collect deep space tokens. Upon collecting your third, receive one blue technology at no cost, ignoring all of its prerequisites. (Do not collect any more deep space tokens.)</effect>
+    </person>
+    <person color="blue" tier="1">
+        <name>Lookout</name>
+        <effect>At the end of each battle phase, do this twice: you may move one destroyer or cruiser into an adjacent empty system.</effect>
+    </person>
+    <person color="blue" tier="2">
+        <name>Cartographer</name>
+        <effect>Your ships may travel to the wormhole nexus.</effect>
+    </person>
+    <person color="blue" tier="2">
+        <name>Scavenger</name>
+        <effect>Your ships may travel to the wormhole nexus.</effect>
+    </person>
+    <person color="blue" tier="3">
+        <name>Admiral</name>
+        <effect>Each of your capital ships receives +1 movement if its destination does not have any enemy ships.</effect>
+    </person>
+    <person color="blue" tier="3">
+        <name>Technician</name>
+        <effect>You may place an alpha or beta wormhole token on one of your space docks. Only you may use this wormhole.</effect>
+    </person>
+    <person color="blue" tier="4">
+        <name>Champion</name>
+        <effect>During each round of a space battle, your ships receive a combat bonus equal to the difference between the number of your ships and the number of your opponent's non-fighter ships (zero if not outnumbered).</effect>
+    </person>
+    
+    <person color="green" tier="1">
+        <name>Envoy</name>
+        <effect>Immediately after the speaker votes, you may cast two free votes in the same way.</effect>
+    </person>
+    <person color="green" tier="1">
+        <name>Salvager</name>
+        <effect>When scuttling non-fighter ships, receive one bonus resource each during the upcoming development phase.</effect>
+    </person>
+    <person color="green" tier="2">
+        <name>Engineer</name>
+        <effect>Your space docks have a minimum production capacity of four (before technology and racial abilities).</effect>
+    </person>
+    <person color="green" tier="2">
+        <name>Mechanic</name>
+        <effect>Each of your SASs may fire one pre-combat shot as if it were a cruiser.</effect>
+    </person>
+    <person color="green" tier="3">
+        <name>Chancellor</name>
+        <effect>Each round, the first time a system containing one of your ships is activated by another player, it must be activated twice.</effect>
+    </person>
+    <person color="green" tier="3">
+        <name>Explorer</name>
+        <effect>Each of your carriers rolls normal combat dice at 6+.</effect>
+    </person>
+    <person color="green" tier="4">
+        <name>Tactician</name>
+        <effect>During each round of a space battle, each of your ships receives +1 on combat rolls if there is no opposing ship of the same type.</effect>
+    </person>
+</personnel>
