@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="client">
+    <output-path>$USER_HOME$/Desktop/TIMEGA Project/toolkit</output-path>
+    <root id="archive" name="clientapp.jar">
+      <element id="module-output" name="toolkit" />
+    </root>
+  </artifact>
+</component>
