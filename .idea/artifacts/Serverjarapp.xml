@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="Serverjarapp">
-    <output-path>$USER_HOME$/Desktop/TIMEGA Project/toolkit</output-path>
+    <output-path>$PROJECT_DIR$</output-path>
     <root id="archive" name="toolkit.jar">
       <element id="module-output" name="toolkit" />
     </root>

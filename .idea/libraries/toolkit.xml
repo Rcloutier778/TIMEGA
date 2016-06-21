@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="toolkit">
     <CLASSES>
-      <root url="jar://$USER_HOME$/Desktop/TIMEGA Project/toolkit/sandbox_client.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/TIMEGA Project/toolkit/mapmaker.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/TIMEGA Project/toolkit/server.jar!/" />
+      <root url="jar://$PROJECT_DIR$/sandbox_client.jar!/" />
+      <root url="jar://$PROJECT_DIR$/mapmaker.jar!/" />
+      <root url="jar://$PROJECT_DIR$/server.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
