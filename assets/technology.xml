@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<technology>
+    <tech color="red">
+        <name>Hylar V Assault Laser</name>
+        <effect>Each of your cruisers and destroyers receives +1 on all combat rolls.</effect>
+    </tech>
+    <tech color="red" prereq="Hylar V Assault Laser">
+        <name>Ion Cannons</name>
+        <effect>Each of your dreadnoughts receives +2 on all combat rolls.</effect>
+    </tech>
+    <tech color="red" prereq="Hylar V Assault Laser">
+        <name>ADT</name>
+        <effect>Each of your destroyers receives +1 on anti-fighter barrage, further increased by one for every fifth enemy fighter.</effect>
+    </tech>
+    <tech color="red" prereq="Hylar V Assault Laser" prereqOR="Cybernetics">
+        <name>Hyper Metabolism</name>
+        <effect>All tier i personnel are unlocked.</effect>
+    </tech>
+    <tech color="red" prereq="Ion Cannons" prereqAND="Enviro Compensator">
+        <name>Magen Defence Grid</name>
+        <effect>You may not build spaceborne artillery systems. Your dreadnoughts have a spaceborne artillery system capacity of one.</effect>
+    </tech>
+    <tech color="red" prereq="Magen Defence Grid">
+        <name>Auxiliary Drones</name>
+        <effect>Your fleets that contain at least one dreadnought roll an additional combat die at 9+. This die benefits from all modifiers to dreadnought combat dice.</effect>
+    </tech>
+    <tech color="red" prereq="Magen Defence Grid" prereqAND="Cybernetics">
+        <name>Assault Cannon</name>
+        <effect>Up to two of your cruisers may take one pre-combat shot each at +1.</effect>
+    </tech>
+    <tech color="red" prereq="Ion Cannons" prereqAND="Fighter Bays">
+        <name>Deep Space Cannon</name>
+        <effect>During your turns, dreadnoughts in adjacent systems may immediately take two shots. These hits will cause double casualties against fighters.</effect>
+    </tech>
+    
+    <tech color="blue">
+        <name>Antimass Deflectors</name>
+        <effect>Your ships may move through asteroid field and ion storm systems. Your ships suffer no movement penalty when leaving nebulae.</effect>
+    </tech>
+    <tech color="blue" prereq="Antimass Deflectors">
+        <name>Striker Fleets</name>
+        <effect>Your destroyers may now move through nebulae. When moving through a hazard, destroyers receive +1 on all combat rolls.</effect>
+    </tech>
+    <tech color="blue" prereq="Antimass Deflectors">
+        <name>XRD Transporters</name>
+        <effect>Your carriers and dreadnoughts receive +1 movement.</effect>
+    </tech>
+    <tech color="blue" prereq="XRD Transpoters" prereqAND="Hylar V Assault Laser">
+        <name>Fighter Bays</name>
+        <effect>Your dreadnoughts now have a fighter capacity of three.</effect>
+    </tech>
+    <tech color="blue" prereq="XRD Transporters" prereqAND="Neural Computing">
+        <name>Type IV Drive</name>
+        <effect>Your cruisers and flagships now receive +1 movement.</effect>
+    </tech>
+    <tech color="blue" prereq="Type IV Drive">
+        <name>Advanced Fighters</name>
+        <effect>Your fighters may now move independently with a movement rate of two and receive +1 on all combat rolls.</effect>
+    </tech>
+    <tech color="blue" prereq="Arkan Iridium" prereqOR="Integrated Economy">
+        <name>Fleet Logistics</name>
+        <effect>Once per round, you may flip one of your command counters on the board. Your ships may leave that system, but you may not activate it again for the remainder of the round.</effect>
+    </tech>
+    <tech color="blue" prereq="Striker Fleets" prereqAND="Magen Defence Grid">
+        <name>Wave Deflectors</name>
+        <effect>Your ships may now pass through systems containing enemy fleets and continue their movement to the activated system.</effect>
+    </tech>
+    
+    <tech color="green" prereq="Enviro Compensator" prereqOR="Antimass Deflectors">
+        <name>Stasis Capsules</name>
+        <effect>Your cruisers and dreadnoughts may now carry one ground force unit each.</effect>
+    </tech>
+    <tech color="green" prereq="Stasis Capsules" prereqAND="Enviro Compensator">
+        <name>Hydroponics</name>
+        <effect>Your fleet supply is increased by one in all systems that don't contain any of your capital ships.</effect>
+    </tech>
+    <tech color="green" prereq="Stasis Capsules" prereqOR="Antimass Deflectors">
+        <name>Cybernetics</name>
+        <effect>Each of your fighters receives +1 on all combat rolls.</effect>
+    </tech>
+    <tech color="green" prereq="Cybernetics">
+        <name>Biomechanical Circuits</name>
+        <effect>Your command pool is permanently increased by one.</effect>
+    </tech>
+    <tech color="green" prereq="Cybernetics">
+        <name>Xeno Psychology</name>
+        <effect>Receive two additional votes for each unique personnel you have.</effect>
+    </tech>
+    <tech color="green" prereq="Xeno Psychology">
+        <name>Neural Computing</name>
+        <effect>Once per development phase, you may spend six resources to research a random technology advance (for which you have the necessary prerequisites).</effect>
+    </tech>
+    <tech color="green" prereq="Hydroponics" prereqOR="Xeno Psychology">
+        <name>Biosphere Influence</name>
+        <effect>Each of your planets without a space dock has a production capacity equal to its resource value and a fighter capacity equal to its influence value.</effect>
+    </tech>
+    <tech color="green" prereq="Assault Cannon">
+        <name>Organ Printing</name>
+        <effect>Each of your dreadnoughts has a production capacity of one.</effect>
+    </tech>
+    
+    <tech color="yellow">
+        <name>Enviro Compensator</name>
+        <effect>The production capacity of your space docks is increased by one.</effect>
+    </tech>
+    <tech color="yellow" prereq="Enviro Compensator">
+        <name>Transfabrication</name>
+        <effect>Upon losing a dreadnought, immediately replace it with a destroyer. At the end of combat, if at least one such destroyer remains, you may replace one of them with a damaged dreadnought.</effect>
+    </tech>
+    <tech color="yellow" prereq="Enviro Compensator">
+        <name>Sarween Tools</name>
+        <effect>Whenever you produce units at any space dock, you now receive one additional resource with which to build units.</effect>
+    </tech>
+    <tech color="yellow" prereq="Transfabrication" prereqAND="ADT">
+        <name>Duranium Armor</name>
+        <effect>After taking casualties, you may repair one damaged ship.</effect>
+    </tech>
+    <tech color="yellow" prereq="Sarween Tools" prereqAND="Ion Cannons">
+        <name>War Sun</name>
+        <effect>You may now produce war suns. War suns receive one bonus movement if they do not end their turn in a system containing enemy ships.</effect>
+    </tech>
+    <tech color="yellow" prereq="Cybernetics" prereqAND="Sarween Tools">
+        <name>Arkan Iridium</name>
+        <effect>The cost of your space docks is reduced by two. You may build at your space docks immediately after construction.</effect>
+    </tech>
+    <tech color="yellow" prereq="Sarween Tools" prereqAND="XRD Transporters">
+        <name>Space Gates</name>
+        <effect>When leaving or moving through a system containing a friendly space dock towards a destination without enemy ships, friendly ships receive three bonus movement.</effect>
+    </tech>
+    <tech color="yellow" prereq="Ion Cannons" prereqAND="Cybernetics">
+        <name>Integrated Economy</name>
+        <effect>When building ships at a space dock, you may place the newly constructed units in friendly or empty adjacent systems.</effect>
+    </tech>
+
+</technology>

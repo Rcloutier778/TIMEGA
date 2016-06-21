@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<shipparts>
+    
+    <core>
+        <name>Depricated Core</name>
+    </core>
+    
+    <weapon>
+        <name>Hylar IV Attack Laser</name>
+    </weapon>
+    <weapon>
+        <name>Hylar V Assault Laser</name>
+    </weapon>
+    <weapon>
+        <name>Antimatter Missiles</name>
+    </weapon>
+    <weapon>
+        <name>Automated Defence Turrets</name>
+    </weapon>
+    <weapon>
+        <name>Assault Cannon</name>
+    </weapon>
+    <weapon>
+        <name>Hylar VI Flak Cannon</name>
+    </weapon>
+    <weapon>
+        <name>Antimatter Splitter</name>
+    </weapon>
+    <weapon>
+        <name>Deep Space Cannon</name>
+    </weapon>
+    
+    <armor>
+        <name>Titanium Shielding</name>
+    </armor>
+    <armor>
+        <name>Plutonium Shielding</name>
+    </armor>
+    <armor>
+        <name>Reactive Armor</name>
+    </armor>
+    <armor>
+        <name>Living Hull</name>
+    </armor>
+    <armor>
+        <name>Iridium Nanofilaments</name>
+    </armor>
+    <armor>
+        <name>Aluminum Supports</name>
+    </armor>
+    <armor>
+        <name>Antimass Armor</name>
+    </armor>
+    <armor>
+        <name>Adamantite Reinforcements</name>
+    </armor>
+    <armor>
+        <name>Scrap Shield</name>
+    </armor>
+    <armor>
+        <name>Static Hull</name>
+    </armor>
+    
+    <shield>
+        <name>Plasma Bubble</name>
+    </shield>
+    <shield>
+        <name>Electron Diffuser</name>
+    </shield>
+    <shield>
+        <name>Magnetic Lock</name>
+    </shield>
+    <shield>
+        <name>Antimass Bubble</name>
+    </shield>
+    <shield>
+        <name>Shield Capacitor</name>
+    </shield>
+    <shield>
+        <name>Rift Shield</name>
+    </shield>
+    
+    <drive>
+        <name>Fusion Drive</name>
+    </drive>
+    <drive>
+        <name>Gravity Well</name>
+    </drive>
+    <drive>
+        <name>Antimass Drive</name>
+    </drive>
+    <drive>
+        <name>Dimensional Looper</name>
+    </drive>
+    <drive>
+        <name>Rift Splitter</name>
+    </drive>
+    <drive>
+        <name>Storm Rider</name>
+    </drive>
+
+    <computer>
+        <name>Weapon Optimizer</name>
+    </computer>
+    <computer>
+        <name>Stasis Capsule</name>
+    </computer>
+    <computer>
+        <name>Hangar</name>
+    </computer>
+
+</shipparts>
