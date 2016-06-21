@@ -47,9 +47,9 @@ public class Client {
 		_status._root.setDisable(true);
 		_council._root.setDisable(true);
 		_combat._root.setDisable(true);	//should be true
-		
+
 		// formatting
-		_root.setTabMinWidth(96);
+		_root.setTabMinWidth(90);
 		_root.getTabs().addAll(_controls._root, _map._root, _planets._root, _research._root, _personnel._root, _empire._root, _status._root, _council._root, _combat._root);
 
 	}

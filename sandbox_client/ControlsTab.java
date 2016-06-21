@@ -103,8 +103,8 @@ public class ControlsTab {
 		grid.add(_statusEnabled, 1, 12);
 		grid.add(new Text("Council Tab:    "), 0, 13);
 		grid.add(_councilEnabled, 1, 13);
-		grid.add(new Text("Combat Tab:    "), 0, 13);
-		grid.add(_combatEnabled, 1, 13);
+		grid.add(new Text("Combat Tab:    "), 0, 14);
+		grid.add(_combatEnabled, 1, 14);
 		
 		// add a spacer
 		Pane spacer = new Pane();
