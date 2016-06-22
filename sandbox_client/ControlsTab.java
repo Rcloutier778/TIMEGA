@@ -76,7 +76,7 @@ public class ControlsTab extends AbstractTab {
 		grid.add(new Text("Map:   "), 0, 6);
 		grid.add(_map, 1, 6);
 		for(int i=0; i<Client.NUM_TABS; i++) {
-			if(i == Client.STATUS) continue;
+			if(i == Client.CONTROLS) continue;
 			grid.add(new Text(Client.TAB_NAMES[i] + " Tab:    "), 0, i+7);
 			grid.add(_enabled[i], 1, i+7);
 		}

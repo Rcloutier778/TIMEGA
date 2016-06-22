@@ -11,6 +11,8 @@ import javafx.scene.control.TabPane;
 
 public class Client {
 	
+	public static final int TAB_WIDTH = 85;
+	
 	// indices of tabs
 	public static final int CONTROLS = 0;
 	public static final int MAP = 1;
@@ -62,7 +64,7 @@ public class Client {
 
 
 		// formatting
-		_root.setTabMinWidth(90);
+		_root.setTabMinWidth(TAB_WIDTH);
 		_root.getTabs().addAll(_controls._root, _map._root, _planets._root, _research._root,
 				_personnel._root, _empire._root, _status._root, _council._root, _simulator._root);
 
