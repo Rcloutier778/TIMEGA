@@ -296,12 +296,12 @@ public class Database {
 	@SuppressWarnings("unchecked")
 	private static final ArrayList<String>[] TECH_NAMES = new ArrayList[4];
 		// ^ holds a list of all technology names
-	private static final HashMap<String,Integer> TECH_CONJUNCTIONS = new HashMap<String,Integer>();
-		// ^ maps a tech name to its conjunction (see below)
-	public static final int NO_PREREQS = 0, ONE_PREREQ = 1, AND = 2, OR = 3;
-		// ^ aforementioned conjunctions
 	private static final HashMap<String,String> PREREQUISITES = new HashMap<String,String>();
-		// ^ maps a tech name to its prerequisites (joined by & if appropriate)
+		// ^ maps a tech name to its first prerequisite, if any
+	private static final HashMap<String,String> PREREQ_AND = new HashMap<String,String>();
+		// ^ maps a tech name to its second prerequisite, if conjoined by "and"
+	private static final HashMap<String,String> PREREQ_OR = new HashMap<String,String>();
+		// ^ maps a tech name to its second prerequisite, if conjoined by "or"
 	
 	
 	// add a technology to the local queue
@@ -384,6 +384,43 @@ public class Database {
 		}
 	}
 	
+	// add a tech to the database
+	public static void addTechToDatabase(String name, String color, String effect,
+			String prereq1, String prereqand, String prereqor) {
+		int colorIndex = -1;
+		color = color.toLowerCase();
+		if(color.equals("red")) {
+			colorIndex = RED;
+		} else if(color.equals("blue")) {
+			colorIndex = BLUE;
+		} else if(color.equals("green")) {
+			colorIndex = GREEN;
+		} else if(color.equals("yellow")) {
+			colorIndex = YELLOW;
+		}
+		
+		synchronized(TECH_NAMES) {
+			TECH_NAMES[colorIndex].add(name);
+		}
+		
+		synchronized(DESCRIPTIONS) {
+			DESCRIPTIONS.put(name, effect);
+		}
+		
+		synchronized(PREREQUISITES) {
+			PREREQUISITES.put(name, prereq1);
+		}
+		
+		synchronized(PREREQ_AND) {
+			PREREQ_AND.put(name, prereqand);
+		}
+		
+		synchronized(PREREQ_OR) {
+			PREREQ_OR.put(name, prereqor);
+		}		
+
+	}
+	
 	// return the description of a given tech name
 	public static String descriptionOf(String tech) {
 		synchronized(DESCRIPTIONS) {
@@ -398,17 +435,10 @@ public class Database {
 		}
 	}
 	
-	// given the name of a tech, return its conjunction
-	public static int conjunctionOfTech(String tech) {
-		synchronized(TECH_CONJUNCTIONS) {
-			return TECH_CONJUNCTIONS.get(tech);
-		}
-	}
-	
 	// given the name of a tech, return its prerequisites
-	public static String prereqsOfTech(String tech) {
+	public static String[] prereqsOfTech(String tech) {
 		synchronized(PREREQUISITES) {
-			return PREREQUISITES.get(tech);
+			return new String[]{PREREQUISITES.get(tech), PREREQ_AND.get(tech), PREREQ_OR.get(tech)};
 		}
 	}
 	
@@ -735,142 +765,7 @@ public class Database {
 		
 		
 		
-		// let's add some names and prereqs
-		TECH_NAMES[RED].add("Hylar V Assault Laser");
-			TECH_CONJUNCTIONS.put("Hylar V Assault Laser", NO_PREREQS);
-		TECH_NAMES[RED].add("Ion Cannons");
-			TECH_CONJUNCTIONS.put("Ion Cannons", ONE_PREREQ);
-			PREREQUISITES.put("Ion Cannons", "Hylar V Assault Laser");
-		TECH_NAMES[RED].add("ADT");
-			TECH_CONJUNCTIONS.put("ADT", ONE_PREREQ);
-			PREREQUISITES.put("ADT", "Hylar V Assault Laser");
-		TECH_NAMES[RED].add("Hyper Metabolism");
-			TECH_CONJUNCTIONS.put("Hyper Metabolism", OR);
-			PREREQUISITES.put("Hyper Metabolism", "Hylar V Assault Laser&Cybernetics");
-		TECH_NAMES[RED].add("Magen Defence Grid");
-			TECH_CONJUNCTIONS.put("Magen Defence Grid", AND);
-			PREREQUISITES.put("Magen Defence Grid", "Ion Cannons&Enviro Compensator");
-		TECH_NAMES[RED].add("Auxiliary Drones");
-			TECH_CONJUNCTIONS.put("Auxiliary Drones", ONE_PREREQ);
-			PREREQUISITES.put("Auxiliary Drones", "Magen Defence Grid");
-		TECH_NAMES[RED].add("Assault Cannon");
-			TECH_CONJUNCTIONS.put("Assault Cannon", AND);
-			PREREQUISITES.put("Assault Cannon", "Magen Defence Grid&Cybernetics");
-		TECH_NAMES[RED].add("Deep Space Cannon");
-			TECH_CONJUNCTIONS.put("Deep Space Cannon", AND);
-			PREREQUISITES.put("Deep Space Cannon", "Ion Cannons&Fighter Bays");
 		
-		TECH_NAMES[BLUE].add("Antimass Deflectors");
-			TECH_CONJUNCTIONS.put("Antimass Deflectors", NO_PREREQS);
-		TECH_NAMES[BLUE].add("Striker Fleets");
-			TECH_CONJUNCTIONS.put("Striker Fleets", ONE_PREREQ);
-			PREREQUISITES.put("Striker Fleets", "Antimass Deflectors");
-		TECH_NAMES[BLUE].add("XRD Transporters");
-			TECH_CONJUNCTIONS.put("XRD Transporters", ONE_PREREQ);
-			PREREQUISITES.put("XRD Transporters", "Antimass Deflectors");
-		TECH_NAMES[BLUE].add("Fighter Bays");
-			TECH_CONJUNCTIONS.put("Fighter Bays", AND);
-			PREREQUISITES.put("Fighter Bays", "XRD Transporters&Hylar V Assault Laser");
-		TECH_NAMES[BLUE].add("Type IV Drive");
-			TECH_CONJUNCTIONS.put("Type IV Drive", AND);
-			PREREQUISITES.put("Type IV Drive", "XRD Transporters&Neural Computing");
-		TECH_NAMES[BLUE].add("Advanced Fighters"); 
-			TECH_CONJUNCTIONS.put("Advanced Fighters", ONE_PREREQ);
-			PREREQUISITES.put("Advanced Fighters", "Type IV Drive");
-		TECH_NAMES[BLUE].add("Fleet Logistics");
-			TECH_CONJUNCTIONS.put("Fleet Logistics", OR);
-			PREREQUISITES.put("Fleet Logistics", "Arkan Iridium&Integrated Economy");
-		TECH_NAMES[BLUE].add("Wave Deflectors");
-			TECH_CONJUNCTIONS.put("Wave Deflectors", AND);
-			PREREQUISITES.put("Wave Deflectors", "Striker Fleets&Magen Defence Grid");
-		
-		TECH_NAMES[GREEN].add("Stasis Capsules");
-			TECH_CONJUNCTIONS.put("Stasis Capsules", OR);
-			PREREQUISITES.put("Stasis Capsules", "Enviro Compensator&Antimass Deflectors");
-		TECH_NAMES[GREEN].add("Hydroponics");
-			TECH_CONJUNCTIONS.put("Hydroponics", AND);
-			PREREQUISITES.put("Hydroponics", "Stasis Capsules&Enviro Compensator");
-		TECH_NAMES[GREEN].add("Cybernetics");
-			TECH_CONJUNCTIONS.put("Cybernetics", OR);
-			PREREQUISITES.put("Cybernetics", "Stasis Capsules&Antimass Deflectors");
-		TECH_NAMES[GREEN].add("Biomechanical Circuits");
-			TECH_CONJUNCTIONS.put("Biomechanical Circuits", ONE_PREREQ);
-			PREREQUISITES.put("Biomechanical Circuits", "Cybernetics");
-		TECH_NAMES[GREEN].add("Xeno Psychology");
-			TECH_CONJUNCTIONS.put("Xeno Psychology", ONE_PREREQ);
-			PREREQUISITES.put("Xeno Psychology", "Cybernetics");
-		TECH_NAMES[GREEN].add("Neural Computing");
-			TECH_CONJUNCTIONS.put("Neural Computing", ONE_PREREQ);
-			PREREQUISITES.put("Neural Computing", "Xeno Psychology");
-		TECH_NAMES[GREEN].add("Biosphere Influence");
-			TECH_CONJUNCTIONS.put("Biosphere Influence", OR);
-			PREREQUISITES.put("Biosphere Influence", "Hydroponics&Xeno Psychology");
-		TECH_NAMES[GREEN].add("Organ Printing");
-			TECH_CONJUNCTIONS.put("Organ Printing", ONE_PREREQ);
-			PREREQUISITES.put("Organ Printing", "Assault Cannon");
-		
-		TECH_NAMES[YELLOW].add("Enviro Compensator");
-			TECH_CONJUNCTIONS.put("Enviro Compensator", NO_PREREQS);
-		TECH_NAMES[YELLOW].add("Transfabrication");
-			TECH_CONJUNCTIONS.put("Transfabrication", ONE_PREREQ);
-			PREREQUISITES.put("Transfabrication", "Enviro Compensator");
-		TECH_NAMES[YELLOW].add("Sarween Tools");
-			TECH_CONJUNCTIONS.put("Sarween Tools", ONE_PREREQ);
-			PREREQUISITES.put("Sarween Tools", "Enviro Compensator");
-		TECH_NAMES[YELLOW].add("Duranium Armor");
-			TECH_CONJUNCTIONS.put("Duranium Armor", AND);
-			PREREQUISITES.put("Duranium Armor", "Transfabrication&ADT");
-		TECH_NAMES[YELLOW].add("War Sun");
-			TECH_CONJUNCTIONS.put("War Sun", AND);
-			PREREQUISITES.put("War Sun", "Sarween Tools&Ion Cannons");
-		TECH_NAMES[YELLOW].add("Arkan Iridium");
-			TECH_CONJUNCTIONS.put("Arkan Iridium", AND);
-			PREREQUISITES.put("Arkan Iridium", "Cybernetics&Sarween Tools");
-		TECH_NAMES[YELLOW].add("Space Gates");
-			TECH_CONJUNCTIONS.put("Space Gates", AND);
-			PREREQUISITES.put("Space Gates", "Sarween Tools&XRD Transporters");
-		TECH_NAMES[YELLOW].add("Integrated Economy");
-			TECH_CONJUNCTIONS.put("Integrated Economy", AND);
-			PREREQUISITES.put("Integrated Economy", "Ion Cannons&Cybernetics");
-
-		
-		// and now add some tech descriptions
-		DESCRIPTIONS.put("Hylar V Assault Laser", "Each of your cruisers and destroyers receives +1 on all combat rolls.");
-		DESCRIPTIONS.put("Ion Cannons", "Each of your dreadnoughts receives +2 on all combat rolls.");
-		DESCRIPTIONS.put("ADT", "Each of your destroyers receives +1 on anti-fighter barrage, further increased by one for every fifth enemy fighter.");
-		DESCRIPTIONS.put("Hyper Metabolism", "All tier i personnel are unlocked.");
-		DESCRIPTIONS.put("Magen Defence Grid", "You may now build spaceborne artillery systems. Your dreadnoughts have a spaceborne artillery system capacity of one.");
-		DESCRIPTIONS.put("Auxiliary Drones", "Your fleets that contain at least one dreadnought roll an additional combat die at 9+. This die benefits from all modifiers to dreadnought combat dice.");
-		DESCRIPTIONS.put("Assault Cannon", "Up to two of your cruisers may take one pre-combat shot each at +1.");
-		DESCRIPTIONS.put("Deep Space Cannon", "During your turns, dreadnoughts in adjacent systems may immediately take two shots. These hits will cause double casualties against fighters.");
-
-		DESCRIPTIONS.put("Antimass Deflectors", "Your ships may move through asteroid field and ion storm systems. Your ships suffer no movement penalty when leaving nebulae.");
-		DESCRIPTIONS.put("Striker Fleets", "Your destroyers may now move through nebulae. When moving through a hazard, destroyers receive +1 on all combat rolls.");
-		DESCRIPTIONS.put("XRD Transporters", "Your carriers and dreadnoughts receive +1 movement.");
-		DESCRIPTIONS.put("Fighter Bays", "Your dreadnoughts now have a fighter capacity of three.");
-		DESCRIPTIONS.put("Type IV Drive", "Your cruisers and flagship now receive +1 movement.");
-		DESCRIPTIONS.put("Advanced Fighters", "Your fighters may now move independently with a movement rate of 2 and receive +1 on all combat rolls.");
-		DESCRIPTIONS.put("Fleet Logistics", "Once per round, you may flip one of your command counters on the board. Your ships may leave that system, but you may not activate it again for the remainder of the round.");
-		DESCRIPTIONS.put("Wave Deflectors", "Your ships may now pass through systems containing enemy fleets and continue their movement to the activated system.");		
-		
-		DESCRIPTIONS.put("Stasis Capsules", "Your cruisers and dreadnoughts may now carry one ground force unit each.");
-		DESCRIPTIONS.put("Hydroponics", "Your fleet supply is increased by one in all systems that don't contain any of your capital ships.");
-		DESCRIPTIONS.put("Cybernetics", "Each of your fighters receives +1 on all combat rolls.");
-		DESCRIPTIONS.put("Biomechanical Circuits", "Your command pool is permanently increased by one.");
-		DESCRIPTIONS.put("Xeno Psychology", "Receive two additional vote for each unique personnel you have.");
-		DESCRIPTIONS.put("Neural Computing", "Once per development phase, you may spend six resources to research a random technology advance (for which you have the necessary prerequisites).");
-		DESCRIPTIONS.put("Biosphere Influence", "Each of your planets without a space dock has a production capacity equal to its resource value and a fighter capacity equal to its influence value.");
-		DESCRIPTIONS.put("Organ Printing", "Each of your dreadnoughts has a production capacity of one.");
-
-		DESCRIPTIONS.put("Enviro Compensator", "The production capacity of your space docks is increased by one.");
-		DESCRIPTIONS.put("Transfabrication", "Upon losing a dreadnought, immediately replace it with a destroyer. At the end of combat, if at least one such destroyer remains, you may replace one of them with a damaged dreadnought.");
-		DESCRIPTIONS.put("Sarween Tools", "Whenever you produce units at any space dock, you now receive one additional resource with which to build units.");
-		DESCRIPTIONS.put("Duranium Armor", "After taking casualties, you may repair one damaged ship.");
-		DESCRIPTIONS.put("War Sun", "You may now produce war suns. War suns receive one bonus movement if they do not end their turn in a system containing enemy ships.");
-		DESCRIPTIONS.put("Arkan Iridium", "The cost of your space docks is reduced by two. You may build at your space docks immediately after construction.");
-		DESCRIPTIONS.put("Space Gates", "When leaving or moving through a system containing a friendly space dock towards a destination without enemy ships, friendly ships receive three bonus movement.");
-		DESCRIPTIONS.put("Integrated Economy", "When building ships at a space dock, you may place the newly constructed units in friendly or empty adjacent systems.");
-
 		// and some personnel descriptions
 		DESCRIPTIONS.put("Fleet Control", "Increase your fleet supply by one in systems containing at least one of your space docks.");
 		DESCRIPTIONS.put("Moneylender", "After building ships, you may exhaust any number of space docks to receive their resource value in destroyers in that system. When refreshing a space dock, exhaust its planet.");

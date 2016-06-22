@@ -22,7 +22,7 @@ public class Tile {
 		String s = "TIMEGA/assets/planets.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new SAXHandler());
+			p.parse(s, new TileSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

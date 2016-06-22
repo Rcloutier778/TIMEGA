@@ -355,25 +355,25 @@ public class ResearchTab extends AbstractTab {
 		}
 		
 		public void update(String tech) {
-			int code = Database.conjunctionOfTech(tech);
+			String[] prereqs = Database.prereqsOfTech(tech);
 			_root.getChildren().clear();
-			if(code == Database.NO_PREREQS) {
-				// leave it empty
-			} else if(code == Database.ONE_PREREQ) {
-				String prereqs = Database.prereqsOfTech(tech);
-				Text prereqText = new Text(prereqs);
-				prereqText.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs)]));
+			if(prereqs[0] == null) {
+				// no prereqs, leave it empty
+			} else if(prereqs[1] == null && prereqs[2] == null) {
+				Text prereqText = new Text(prereqs[0]);
+				prereqText.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs[0])]));
 				_root.getChildren().addAll(new Text("("), prereqText, new Text(")"));
 			} else {
-				String[] prereqs = Database.prereqsOfTech(tech).split("&");
 				Text prereq1 = new Text(prereqs[0]);
 				prereq1.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs[0])]));
-				Text prereq2 = new Text(prereqs[1]);
+				Text prereq2 = new Text();
 				prereq2.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs[1])]));
-				if(code == Database.AND) {
-					_root.getChildren().addAll(new Text("("), prereq1, new Text(" and "), prereq2, new Text(")"));
-				} else if(code == Database.OR) {
+				if(prereqs[1] == null) {
+					prereq2.setText(prereqs[2]);
 					_root.getChildren().addAll(new Text("("), prereq1, new Text(" or "), prereq2, new Text(")"));
+				} else if(prereqs[2] == null) {
+					prereq2.setText(prereqs[1]);
+					_root.getChildren().addAll(new Text("("), prereq1, new Text(" and "), prereq2, new Text(")"));
 				}
 			}
 			

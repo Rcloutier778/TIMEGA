@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
-public class SAXHandler extends DefaultHandler {
+public class TileSAXHandler extends DefaultHandler {
 	
 	private String _string;
 	private LinkedList<Tile> _tiles;
