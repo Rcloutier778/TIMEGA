@@ -3,6 +3,7 @@ package server;
 /**
  * An excellent example of how java might benefit from structs
  * 
+ * @author dmayans
  */
 
 public class Player {

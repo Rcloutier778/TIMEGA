@@ -2,22 +2,16 @@ package server;
 
 /**
  * Not encapsulated. Grab the information you need from the public information, but make sure the locks are held.
+ * 
+ * @author dmayans
  */
-
-import sandbox_client.Protocol;
 
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class ServerDatabase {
-	
-	// current list of tabs
-	public static String[] TABS = {"map", "planets", "research", "personnel", "empire", "players", "council", "combat"};
-	
-	// maps tabs to protocol
-	public static final HashMap<String,Integer> PROTOCOL = new HashMap<String, Integer>();
-
+		
 	// Holds the array of all 60 tiles
 	public static final ArrayList<Tile> TILES = new ArrayList<Tile>();
 	
@@ -85,24 +79,7 @@ public class ServerDatabase {
 		SPACEDOCKS.put("Mallice", false);
 		// PLANETS.put("Creuss", "none");
 		// SPACEDOCKS.put("Creuss", true);
-		
-		// populate protocol by hand :(
-		PROTOCOL.put("map_en", Protocol.EN_MAP);
-		PROTOCOL.put("map_dis", Protocol.DIS_MAP);
-		PROTOCOL.put("planets_en", Protocol.EN_PLANETS);
-		PROTOCOL.put("planets_dis", Protocol.DIS_PLANETS);
-		PROTOCOL.put("research_en", Protocol.EN_RESEARCH);
-		PROTOCOL.put("research_dis", Protocol.DIS_RESEARCH);
-		PROTOCOL.put("personnel_en", Protocol.EN_PERSONNEL);
-		PROTOCOL.put("personnel_dis", Protocol.DIS_PERSONNEL);
-		PROTOCOL.put("empire_en", Protocol.EN_EMPIRE);
-		PROTOCOL.put("empire_dis", Protocol.DIS_EMPIRE);
-		PROTOCOL.put("players_en", Protocol.EN_STATUS);
-		PROTOCOL.put("players_dis", Protocol.DIS_STATUS);
-		PROTOCOL.put("council_en", Protocol.EN_COUNCIL);
-		PROTOCOL.put("council_dis", Protocol.DIS_COUNCIL);
-		PROTOCOL.put("combat_en", Protocol.EN_COMBAT);
-		PROTOCOL.put("combat_dis", Protocol.DIS_COMBAT);
+
 	}
 	
 	public static void placeTech(Collection<String> tech) {

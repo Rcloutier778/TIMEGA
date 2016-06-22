@@ -1,5 +1,11 @@
 package server;
 
+/**
+ * Initializes program, handles the client list, broadcasts information to the client list, reads and responds to stdin
+ * 
+ * @author dmayans
+ */
+
 import sandbox_client.Protocol;
 
 import java.io.*;

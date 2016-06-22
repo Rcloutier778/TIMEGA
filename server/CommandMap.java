@@ -2,8 +2,11 @@ package server;
 
 /**
  * Maps command line input to the appropriate server-level instructions
+ * 
+ * @author dmayans
  */
 
+import sandbox_client.Client;
 import sandbox_client.Protocol;
 
 import java.util.HashMap;
@@ -21,7 +24,7 @@ public class CommandMap {
 	public CommandMap(Main main) {
 		// populate map
 		_main = main;
-		for(String tab : ServerDatabase.TABS) {
+		for(String tab : Client.TAB_NAMES) {
 			_enabled.put(tab, false);
 		}
 		_map.put("enable", new EnableCommand());
@@ -69,7 +72,7 @@ public class CommandMap {
 			
 			String tab = args[1];
 			boolean valid = false;
-			for(String tabName : ServerDatabase.TABS) {
+			for(String tabName : Client.TAB_NAMES) {
 				valid = valid || tabName.equals(tab);
 			}
 			
@@ -80,7 +83,7 @@ public class CommandMap {
 			} else if(_enabled.get(tab)) {
 				Main.writeColortext(tab + " tab is already enabled", Main.ERROR);
 			} else {
-				_main.broadcast(ServerDatabase.PROTOCOL.get(tab + "_en"));
+				_main.broadcast(Protocol.ENABLE, tab);
 				Main.writeColortext(tab + " tab enabled", Main.SERVEROUT);
 				_enabled.put(tab, true);
 			}
@@ -89,13 +92,13 @@ public class CommandMap {
 		// or, if "all" is given instead, enable all of them
 		private void enableAll() {
 			boolean any = false;
-			for(String tab : ServerDatabase.TABS) {
+			for(String tab : Client.TAB_NAMES) {
 				if(_enabled.get(tab)) {
 					// do nothing
 				} else {
 					any = true;
 					_enabled.put(tab, true);
-					_main.broadcast(ServerDatabase.PROTOCOL.get(tab + "_en"));
+					_main.broadcast(Protocol.ENABLE, tab);
 					Main.writeColortext(tab + " tab enabled", Main.SERVEROUT);
 				}
 			}
@@ -117,7 +120,7 @@ public class CommandMap {
 			
 			String tab = args[1];
 			boolean valid = false;
-			for(String tabName : ServerDatabase.TABS) {
+			for(String tabName : Client.TAB_NAMES) {
 				valid = valid || tabName.equals(tab);
 			}
 			
@@ -126,7 +129,7 @@ public class CommandMap {
 			} else if(!valid) {
 				Main.writeColortext("no tab " + tab, Main.ERROR);
 			} else if(_enabled.get(tab)) {
-				_main.broadcast(ServerDatabase.PROTOCOL.get(tab + "_dis"));
+				_main.broadcast(Protocol.DISABLE, tab);
 				Main.writeColortext(tab + " tab disabled", Main.SERVEROUT);
 				_enabled.put(tab, false);
 			} else {
@@ -137,11 +140,11 @@ public class CommandMap {
 		// or if "all" is given, disable all of them
 		private void disableAll() {
 			boolean none = true;
-			for(String tab : ServerDatabase.TABS) {
+			for(String tab : Client.TAB_NAMES) {
 				if(_enabled.get(tab)) {
 					none = false;
 					_enabled.put(tab, false);
-					_main.broadcast(ServerDatabase.PROTOCOL.get(tab + "_dis"));
+					_main.broadcast(Protocol.DISABLE, tab);
 					Main.writeColortext(tab + " tab disabled", Main.SERVEROUT);
 				}
 			}
