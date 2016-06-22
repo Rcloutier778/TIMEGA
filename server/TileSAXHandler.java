@@ -2,6 +2,8 @@ package server;
 
 /**
  * Reads information from the planets.xml file and sends the information back to the database.
+ * 
+ * @author dmayans
  */
 
 import java.util.LinkedList;

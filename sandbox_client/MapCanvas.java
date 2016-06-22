@@ -1,5 +1,12 @@
 package sandbox_client;
 
+/**
+ * Probably should have just been in MapTab, but this class manages the individual hexagons and instructs them what to draw. Some
+ * fun linear algebra to transform an x,y click into the corresponding u,v hex coordinate.
+ * 
+ * @author dmayans
+ */
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

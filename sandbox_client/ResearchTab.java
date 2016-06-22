@@ -13,7 +13,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -24,16 +23,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
-public class ResearchTab {
+public class ResearchTab extends AbstractTab {
 	
 	private static int PANE_WIDTH = 140;
 	private static int RECT_SIZE = 9;
 	
 	private Client _client;
 	private int _index;
-	
-	protected final Tab _root = new Tab("Research");
-	
+		
 	private GridPane _pane = new GridPane();
 	private TechButton _selected;
 	private Button _research;
@@ -57,9 +54,10 @@ public class ResearchTab {
 	private Label _techDescription;
 	
 	public ResearchTab(Client client) {
+		super(Client.RESEARCH);
+		
 		_client = client;
 		
-		_root.setClosable(false);
 		_root.setContent(_pane);
 		_pane.setHgap(50);
 		_pane.setVgap(12);

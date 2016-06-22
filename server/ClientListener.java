@@ -2,6 +2,8 @@ package server;
 
 /**
  * Thread that waits for new clients to connect and then forwards them to the main thread.
+ * 
+ * @author dmayans
  */
 
 import java.io.IOException;

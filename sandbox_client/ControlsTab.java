@@ -9,7 +9,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -18,9 +17,7 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ControlsTab {
-
-	protected final Tab _root = new Tab("Home");
+public class ControlsTab extends AbstractTab {
 	
 	private Client _client;
 	
@@ -32,18 +29,11 @@ public class ControlsTab {
 	private Text _error;
 	
 	// info fields
+	private Text[] _enabled = new Text[Client.NUM_TABS];
 	private Text _map;
-	private Text _mapEnabled;
-	private Text _planetsEnabled;
-	private Text _researchEnabled;
-	private Text _personnelEnabled;
-	private Text _empireEnabled;
-	private Text _statusEnabled;
-	private Text _councilEnabled;
-	private Text _combatEnabled;
 	
 	public ControlsTab(Client c) {
-		_root.setClosable(false);
+		super(Client.CONTROLS);
 		
 		_client = c;
 				
@@ -61,14 +51,10 @@ public class ControlsTab {
 		
 		// initializing info fields 
 		_map = new Text("<unknown>");
-		_mapEnabled = new Text("disabled");
-		_planetsEnabled = new Text("disabled");
-		_researchEnabled = new Text("disabled");
-		_personnelEnabled = new Text("disabled");
-		_empireEnabled = new Text("disabled");
-		_statusEnabled = new Text("disabled");
-		_councilEnabled = new Text("disabled");
-		_combatEnabled = new Text("disabled");
+		for(int i=0; i<Client.NUM_TABS; i++) {
+			if(i == Client.CONTROLS) continue;
+			_enabled[i] = new Text("disabled");
+		}
 
 		// formatting
 		GridPane grid = new GridPane();
@@ -89,22 +75,11 @@ public class ControlsTab {
 		// adding info fields
 		grid.add(new Text("Map:   "), 0, 6);
 		grid.add(_map, 1, 6);
-		grid.add(new Text("Map Tab:   "), 0, 7);
-		grid.add(_mapEnabled, 1, 7);
-		grid.add(new Text("Planets Tab:   "), 0, 8);
-		grid.add(_planetsEnabled, 1, 8);
-		grid.add(new Text("Research Tab:   "), 0, 9);
-		grid.add(_researchEnabled, 1, 9);
-		grid.add(new Text("Personnel Tab:    "), 0, 10);
-		grid.add(_personnelEnabled, 1, 10);
-		grid.add(new Text("Empire Tab:"), 0, 11);
-		grid.add(_empireEnabled, 1, 11);
-		grid.add(new Text("Players Tab:    "), 0, 12);
-		grid.add(_statusEnabled, 1, 12);
-		grid.add(new Text("Council Tab:    "), 0, 13);
-		grid.add(_councilEnabled, 1, 13);
-		grid.add(new Text("Combat Tab:    "), 0, 14);
-		grid.add(_combatEnabled, 1, 14);
+		for(int i=0; i<Client.NUM_TABS; i++) {
+			if(i == Client.CONTROLS) continue;
+			grid.add(new Text(Client.TAB_NAMES[i] + " Tab:    "), 0, i+7);
+			grid.add(_enabled[i], 1, i+7);
+		}
 		
 		// add a spacer
 		Pane spacer = new Pane();
@@ -242,34 +217,8 @@ public class ControlsTab {
 	}
 	
 	// update enabled/disabled labels
-	public void setEnabledMap(boolean enabled) {
-		threadsafeSetText(_mapEnabled, enabled ? "enabled" : "disabled");
+	public void setEnabledGeneric(boolean enabled, int index) {
+		threadsafeSetText(_enabled[index], enabled ? "enabled" : "disabled");
 	}
 	
-	public void setEnabledPlanets(boolean enabled) {
-		threadsafeSetText(_planetsEnabled, enabled ? "enabled" : "disabled");
-	}
-	
-	public void setEnabledResearch(boolean enabled) {
-		threadsafeSetText(_researchEnabled, enabled ? "enabled" : "disabled");
-	}
-	
-	public void setEnabledPersonnel(boolean enabled) {
-		threadsafeSetText(_personnelEnabled, enabled ? "enabled" : "disabled");
-	}
-	
-	public void setEnabledEmpire(boolean enabled) {
-		threadsafeSetText(_empireEnabled, enabled ? "enabled" : "disabled");
-	}
-	
-	public void setEnabledStatus(boolean enabled) {
-		threadsafeSetText(_statusEnabled, enabled ? "enabled" : "disabled");
-	}
-	
-	public void setEnabledCouncil(boolean enabled) {
-		threadsafeSetText(_councilEnabled, enabled ? "enabled" : "disabled");
-	}
-	public void setEnabledCombat(boolean enabled) {
-		threadsafeSetText(_combatEnabled, enabled ? "enabled" : "disabled");
-	}
 }

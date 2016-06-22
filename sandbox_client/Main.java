@@ -1,5 +1,11 @@
 package sandbox_client;
 
+/**
+ * Main class, constructs program, calls database initialization methods, etc.
+ * 
+ * @author dmayans
+ */
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;

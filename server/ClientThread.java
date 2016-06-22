@@ -2,6 +2,8 @@ package server;
 
 /**
  * Thread that handles reading from and writing to a single client.
+ * 
+ * @author dmayans
  */
 
 import java.io.BufferedReader;
@@ -11,6 +13,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
 
+import sandbox_client.Client;
 import sandbox_client.Protocol;
 
 public class ClientThread implements Runnable {
@@ -151,9 +154,10 @@ public class ClientThread implements Runnable {
 			}
 			
 			// report which tabs are enabled
-			for(String tab : ServerDatabase.TABS) {
+			for(String tab : Client.TAB_NAMES) {
 				if(_main.getEnabled(tab)) {
-					_out.write(ServerDatabase.PROTOCOL.get(tab + "_en"));
+					_out.write(Protocol.ENABLE);
+					_out.write(tab);
 				}
 			}
 			

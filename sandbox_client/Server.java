@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class Server implements Runnable {
 	
@@ -112,38 +113,13 @@ public class Server implements Runnable {
 			// sets up the last stuff that needs to be done
 			_client.databaseFinished();
 
-		} else if(message == Protocol.EN_MAP) {
-			_client.setEnabledMap(true);
-		} else if(message == Protocol.DIS_MAP) {
-			_client.setEnabledMap(false);
-		} else if(message == Protocol.EN_PLANETS) {
-			_client.setEnabledPlanets(true);
-		} else if(message == Protocol.DIS_PLANETS) {
-			_client.setEnabledPlanets(false);
-		} else if(message == Protocol.EN_RESEARCH) {
-			_client.setEnabledResearch(true);
-		} else if(message == Protocol.DIS_RESEARCH) {
-			_client.setEnabledResearch(false);
-		} else if(message == Protocol.EN_PERSONNEL) {
-			_client.setEnabledPersonnel(true);
-		} else if(message == Protocol.DIS_PERSONNEL) {
-			_client.setEnabledPersonnel(false);
-		} else if(message == Protocol.EN_EMPIRE) {
-			_client.setEnabledEmpire(true);
-		} else if(message == Protocol.DIS_EMPIRE) {
-			_client.setEnabledEmpire(false);
-		} else if(message == Protocol.EN_STATUS) {
-			_client.setEnabledStatus(true);
-		} else if(message == Protocol.DIS_STATUS) {
-			_client.setEnabledStatus(false);
-		} else if(message == Protocol.EN_COUNCIL) {
-			_client.setEnabledCouncil(true);
-		} else if(message == Protocol.DIS_COUNCIL) {
-			_client.setEnabledCouncil(false);
-		} else if(message == Protocol.EN_COMBAT) {
-			_client.setEnabledCombat(true);
-		} else if(message == Protocol.DIS_COMBAT) {
-			_client.setEnabledCombat(false);
+		} else if(message == Protocol.ENABLE) {
+			String tab = _in.readLine();
+			_client.setEnabledGeneric(true, Arrays.asList(Client.TAB_NAMES).indexOf(tab));
+		} else if(message == Protocol.DISABLE) {
+			String tab = _in.readLine();
+			_client.setEnabledGeneric(false, Arrays.asList(Client.TAB_NAMES).indexOf(tab));
+			
 		} else if(message == Protocol.PLANET_CHOWN) {
 			String planetName = _in.readLine();
 			String newOwner = _in.readLine();

@@ -1,18 +1,21 @@
 package sandbox_client;
 
+/**
+ * Holds information on all players of the game (race, current empire stage, technology, and personnel)
+ * 
+ * @author dmayans
+ */
+
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class StatusTab {
-
-	protected final Tab _root = new Tab("Players");
+public class StatusTab extends AbstractTab{
 			
 	private ToggleButton[] _players;
 	
@@ -25,8 +28,7 @@ public class StatusTab {
 	private String _player;
 	
 	public StatusTab(Client client) {
-		_root.setClosable(false);
-		
+		super(Client.STATUS);
 	}
 	
 	public void initialize() {
