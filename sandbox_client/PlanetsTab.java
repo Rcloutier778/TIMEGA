@@ -1,5 +1,11 @@
 package sandbox_client;
 
+/**
+ * Lists currently owned planets and their values. Allows players to track their resource and influence totals.
+ * 
+ * @author dmayans
+ */
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -11,7 +17,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,9 +24,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
-public class PlanetsTab {
+public class PlanetsTab extends AbstractTab {
 		
-	protected final Tab _root = new Tab("Planets");
 	private GridPane _pane = new GridPane();
 	private Client _client;
 	
@@ -40,7 +44,8 @@ public class PlanetsTab {
 	private Text _totalInfluenceText;
 		
 	public PlanetsTab(Client c) {
-		_root.setClosable(false);
+		super(Client.PLANETS);
+		
 		_root.setContent(_pane);
 		_client = c;
 		

@@ -1,7 +1,9 @@
 package sandbox_client;
 
 /**
- * Tab that tracks and updates personnel hiring by local player
+ * Tab that tracks and updates personnel hiring by local player.
+ * 
+ * @author dmayans
  */
 
 import java.util.HashMap;
@@ -12,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -22,15 +23,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-public class PersonnelTab {
+public class PersonnelTab extends AbstractTab {
 	
 	private static int PANE_WIDTH = 140;
 	private static int RECT_SIZE = 9;
 	
 	private Client _client;
 	private int _index;
-	
-	protected final Tab _root = new Tab("Personnel");
 	
 	private GridPane _pane = new GridPane();
 	private PersonnelButton _selected;
@@ -61,9 +60,10 @@ public class PersonnelTab {
 
 	
 	public PersonnelTab(Client client) {
-		_client = client;
+		super(Client.PERSONNEL);
 		
-		_root.setClosable(false);
+		_client = client;
+				
 		_root.setContent(_pane);
 		_pane.setHgap(110);
 		_pane.setVgap(12);

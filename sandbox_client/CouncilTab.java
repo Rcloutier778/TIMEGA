@@ -1,14 +1,17 @@
 package sandbox_client;
 
+/**
+ * Displays the current resolutions being voted on. WIP.
+ * 
+ * @author dmayans
+ */
+
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class CouncilTab {
-
-	protected final Tab _root = new Tab("Council");
+public class CouncilTab extends AbstractTab {
 	
 	private Text _name1;
 	private Label _pro1;
@@ -21,7 +24,7 @@ public class CouncilTab {
 	private Label _extra2;
 
 	public CouncilTab(Client client) {
-		_root.setClosable(false);
+		super(Client.COUNCIL);
 		
 		Pane pane = new Pane();
 		_root.setContent(pane);

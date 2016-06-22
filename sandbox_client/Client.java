@@ -1,14 +1,33 @@
 package sandbox_client;
 
 /**
- * Central organizer for the four main tabs. Passes information between the server object and the client tabs.
+ * Central organizer for main tabs. Passes information between the server object and the client tabs.
+ * 
+ * @author dmayans
  */
 
 import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 
 public class Client {
-		
+	
+	// indices of tabs
+	public static final int CONTROLS = 0;
+	public static final int MAP = 1;
+	public static final int PLANETS = 2;
+	public static final int RESEARCH = 3;
+	public static final int PERSONNEL = 4;
+	public static final int EMPIRE = 5;
+	public static final int STATUS = 6;
+	public static final int COUNCIL = 7;
+	public static final int SIMULATOR = 8;
+	public static final int NUM_TABS = 9;
+	
+	// and their names (keep synchronized)
+	public static final String[] TAB_NAMES = {"Home", "Map", "Planets", "Research",
+		"Personnel", "Empire", "Players", "Council", "Simulator"};
+	
+	// contained tabs
 	private ControlsTab _controls;
 	private MapTab _map;
 	private PlanetsTab _planets;
@@ -17,40 +36,35 @@ public class Client {
 	private EmpireTab _empire;
 	private StatusTab _status;
 	private CouncilTab _council;
-	private CombatSimTab _combat;
+	private CombatSimTab _simulator;
+	private AbstractTab[] _tabs = new AbstractTab[NUM_TABS];
 
+	// local name
 	private String _name;
 	
 	private Server _server;
 	
+	// graphics
 	protected final TabPane _root = new TabPane();
 
 	public Client() {
 		
 		// the tabs
-		_controls = new ControlsTab(this);
-		_map = new MapTab(this);
-		_planets = new PlanetsTab(this);
-		_research = new ResearchTab(this);
-		_personnel = new PersonnelTab(this);
-		_empire = new EmpireTab(this);
-		_status = new StatusTab(this);
-		_council = new CouncilTab(this);
-		_combat = new CombatSimTab(this);
-				
-		// set the initially disabled until input from server
-		_map._root.setDisable(true);
-		_planets._root.setDisable(true);
-		_research._root.setDisable(true);
-		_personnel._root.setDisable(true);
-		_empire._root.setDisable(true);
-		_status._root.setDisable(true);
-		_council._root.setDisable(true);
-		_combat._root.setDisable(true);	//should be true
+		_tabs[CONTROLS] = _controls = new ControlsTab(this);
+		_tabs[MAP] = _map = new MapTab(this);
+		_tabs[PLANETS] = _planets = new PlanetsTab(this);
+		_tabs[RESEARCH] = _research = new ResearchTab(this);
+		_tabs[PERSONNEL] = _personnel = new PersonnelTab(this);
+		_tabs[EMPIRE] = _empire = new EmpireTab(this);
+		_tabs[STATUS] = _status = new StatusTab(this);
+		_tabs[COUNCIL] = _council = new CouncilTab(this);
+		_tabs[SIMULATOR] = _simulator = new CombatSimTab(this);
+
 
 		// formatting
 		_root.setTabMinWidth(90);
-		_root.getTabs().addAll(_controls._root, _map._root, _planets._root, _research._root, _personnel._root, _empire._root, _status._root, _council._root, _combat._root);
+		_root.getTabs().addAll(_controls._root, _map._root, _planets._root, _research._root,
+				_personnel._root, _empire._root, _status._root, _council._root, _simulator._root);
 
 	}
 	
@@ -61,14 +75,10 @@ public class Client {
 	
 	// cleanly inform user about a disconnection
 	public void disconnection() {
-		this.setEnabledMap(false);
-		this.setEnabledPlanets(false);
-		this.setEnabledResearch(false);
-		this.setEnabledPersonnel(false);
-		this.setEnabledEmpire(false);
-		this.setEnabledStatus(false);
-		this.setEnabledCouncil(false);
-		this.setEnabledCombat(false);
+		for(int i=0; i<NUM_TABS; i++) {
+			if(i == STATUS) continue;
+			this.setEnabledGeneric(false, i);
+		}
 		_controls.disconnection();
 		Database.disconnection();
 	}
@@ -92,74 +102,18 @@ public class Client {
 				_status.initialize();
 				_research.initialize();
 				_personnel.initialize();
-				_combat.initialize();
+				_simulator.initialize();
 			}
 		}
 	);}
 	
 	// ENABLE/DISABLE COMMANDS
 	
-	public void setEnabledMap(boolean enabled) {
-		_map._root.setDisable(!enabled);
-		_controls.setEnabledMap(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _map._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledPlanets(boolean enabled) {
-		_planets._root.setDisable(!enabled);
-		_controls.setEnabledPlanets(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _planets._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledResearch(boolean enabled) {
-		_research._root.setDisable(!enabled);
-		_controls.setEnabledResearch(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _research._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledPersonnel(boolean enabled) {
-		_personnel._root.setDisable(!enabled);
-		_controls.setEnabledPersonnel(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _personnel._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledEmpire(boolean enabled) {
-		_empire._root.setDisable(!enabled);
-		_controls.setEnabledEmpire(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _empire._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledStatus(boolean enabled) {
-		_status._root.setDisable(!enabled);
-		_controls.setEnabledStatus(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _status._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-	
-	public void setEnabledCouncil(boolean enabled) {
-		_council._root.setDisable(!enabled);
-		_controls.setEnabledCouncil(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _council._root) {
-			_root.getSelectionModel().select(0);
-		}
-	}
-
-	public void setEnabledCombat(boolean enabled) {
-		_combat._root.setDisable(!enabled);
-		_controls.setEnabledCombat(enabled);
-		if(_root.getSelectionModel().getSelectedItem() == _combat._root) {
-			_root.getSelectionModel().select(0);
+	public void setEnabledGeneric(boolean enabled, int index) {
+		_tabs[index]._root.setDisable(!enabled);
+		_controls.setEnabledGeneric(enabled, index);
+		if(_root.getSelectionModel().getSelectedItem() == _tabs[index]._root) {
+			_root.getSelectionModel().select(CONTROLS);
 		}
 	}
 	

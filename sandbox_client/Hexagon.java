@@ -1,5 +1,11 @@
 package sandbox_client;
 
+/**
+ * Holds information about a single tile in the MapCanvas. Can draw itself and update its overlay.
+ * 
+ * @author dmayans
+ */
+
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;

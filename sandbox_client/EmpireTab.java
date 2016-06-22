@@ -1,15 +1,20 @@
 package sandbox_client;
 
+/**
+ * Holds information about the current stage of your empire and what you must do to advance.
+ * 
+ * @author dmayans
+ */
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class EmpireTab {
+public class EmpireTab extends AbstractTab {
 	
 	private int _stageIndex = 0;
 	public static String[] EMPIRE_STAGE = {"(game start)", "Coalition", "Federation", "Republic", "Empire", "Imperium Rex"};
@@ -20,9 +25,7 @@ public class EmpireTab {
 		"win six battles OR destroy thirty resources", "control the Mecatol Rex system", "-"};
 	private static String[] REWARDS = {"Reward: tier i policy", "Reward: tier ii policy", "Reward: flagship",
 		"Reward: tier iii policy", "Reward: victory", "Reward: -"};
-	
-	protected final Tab _root = new Tab("Empire");
-	
+		
 	private Text _stage;
 	private Text _commandPool;
 	private Text _fleetSupply;
@@ -35,7 +38,8 @@ public class EmpireTab {
 	private boolean _lock = false;
 	
 	public EmpireTab(Client client) {
-		_root.setClosable(false);
+		super(Client.EMPIRE);
+		
 		Pane pane = new Pane();
 		_root.setContent(pane);
 		

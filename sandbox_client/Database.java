@@ -1,5 +1,12 @@
 package sandbox_client;
 
+/**
+ * Records all relevant game information client-side. Updated by information sent from the server. All data structures are
+ * private, intended only to be acquired via accessors.
+ * 
+ * @author dmayans
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

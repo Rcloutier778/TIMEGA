@@ -1,26 +1,25 @@
 package sandbox_client;
 
 /**
- * Displays the map
+ * Holds the map canvas (which displays the map, overlays, and allows capturing planets and building space docks)
+ * 
+ * @author dmayans
  */
 
 import javafx.application.Platform;
-import javafx.scene.control.Tab;
 import javafx.scene.layout.Pane;
 
-public class MapTab {
-	
-	protected final Tab _root = new Tab("Map");
-	
+public class MapTab extends AbstractTab {
+		
 	private Pane _pane = new Pane();
 	private MapCanvas _map;
 		
 	public MapTab(Client client) {
-		// formatting
+		super(Client.MAP);
+		
 		_map = new MapCanvas(client);
 		_pane.getChildren().add(_map._root);
 		_root.setContent(_pane);
-		_root.setClosable(false);
 	}
 	
 	// update the map data
