@@ -23,11 +23,14 @@ public class Client {
 	public static final int STATUS = 6;
 	public static final int COUNCIL = 7;
 	public static final int SIMULATOR = 8;
-	public static final int NUM_TABS = 9;
 	
 	// and their names (keep synchronized)
 	public static final String[] TAB_NAMES = {"Home", "Map", "Planets", "Research",
 		"Personnel", "Empire", "Players", "Council", "Simulator"};
+	
+	public static final int NUM_TABS = TAB_NAMES.length;
+	
+	
 	
 	// contained tabs
 	private ControlsTab _controls;
@@ -39,6 +42,7 @@ public class Client {
 	private StatusTab _status;
 	private CouncilTab _council;
 	private CombatSimTab _simulator;
+	
 	private AbstractTab[] _tabs = new AbstractTab[NUM_TABS];
 
 	// local name
@@ -65,8 +69,9 @@ public class Client {
 
 		// formatting
 		_root.setTabMinWidth(TAB_WIDTH);
-		_root.getTabs().addAll(_controls._root, _map._root, _planets._root, _research._root,
-				_personnel._root, _empire._root, _status._root, _council._root, _simulator._root);
+		for(AbstractTab tab : _tabs) {
+			_root.getTabs().add(tab._root);
+		}
 
 	}
 	
@@ -95,8 +100,7 @@ public class Client {
 		_server.cleanup();
 	}
 	
-	// FINISH SETTING STUFF UP
-	
+	// initialize tabs based on player information from server
 	public void databaseFinished() {
 		Platform.runLater(new Runnable() {
 			@Override
@@ -109,8 +113,8 @@ public class Client {
 		}
 	);}
 	
-	// ENABLE/DISABLE COMMANDS
 	
+	// enables or disables a tab
 	public void setEnabledGeneric(boolean enabled, int index) {
 		_tabs[index]._root.setDisable(!enabled);
 		_controls.setEnabledGeneric(enabled, index);
@@ -119,8 +123,7 @@ public class Client {
 		}
 	}
 	
-	// NAME COMMANDS
-	
+	// handling player names
 	public void tryName(String name) {
 		_server.sendName(name);
 	}
@@ -153,7 +156,7 @@ public class Client {
 		_map.writeMap(mapdata);
 	}
 	
-	// SERVER WRITE COMMANDS
+	// write information to the server
 	public void write(int protocol, String text) {
 		_server.write(protocol, text);
 	}

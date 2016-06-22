@@ -38,13 +38,13 @@ public class SAXHandler extends DefaultHandler {
 			_currTile.addPlanet();
 			_currPlanetIndex++;
 		} else if(qName == "red") {
-			_currTile.addTech(_currPlanetIndex, Database.RED);
+			_currTile.addTechSpec(_currPlanetIndex, Database.RED);
 		} else if(qName == "blue") {
-			_currTile.addTech(_currPlanetIndex, Database.BLUE);
+			_currTile.addTechSpec(_currPlanetIndex, Database.BLUE);
 		} else if(qName == "green") {
-			_currTile.addTech(_currPlanetIndex, Database.GREEN);
+			_currTile.addTechSpec(_currPlanetIndex, Database.GREEN);
 		} else if(qName == "yellow") {
-			_currTile.addTech(_currPlanetIndex, Database.YELLOW);
+			_currTile.addTechSpec(_currPlanetIndex, Database.YELLOW);
 		}
 	}
 	

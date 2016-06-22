@@ -125,8 +125,8 @@ public class Tile {
 		_planets[index].influence = i;
 	}
 	
-	public void addTech(int index, int tech) {
-		Database.addTech(_planets[index].name, tech);
+	public void addTechSpec(int index, int tech) {
+		Database.addTechSpec(_planets[index].name, tech);
 	}
 	
 	
