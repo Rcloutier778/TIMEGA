@@ -35,6 +35,8 @@ public class Main extends Application {
 		Database.initialize();
 		Tile.generateTiles();
 		TechSAXHandler.generateTechs();
+		PersonnelSAXHandler.generatePersonnel();
+		ResolutionSAXHandler.generateResolutions();
 		
 		launch();
 	}

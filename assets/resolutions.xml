@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='us-ascii'?>
+<resolutions>
+    <resolution>
+        <name>Name</name>
+        <for>effect for</for>
+        <against>effect against</against>
+        <extra>extra stuff</extra>
+    </resolution>
+</resolutions>

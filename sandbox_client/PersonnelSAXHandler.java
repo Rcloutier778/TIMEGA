@@ -1,7 +1,7 @@
 package sandbox_client;
 
 /**
- * Reads information from the technology.xml file and sends the information back to the Database.
+ * Reads information from the personnel.xml file and sends the information back to the Database.
  * 
  * @author dmayans
  */
@@ -15,11 +15,11 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
-public class TechSAXHandler extends DefaultHandler {
+public class PersonnelSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the personnel.xml file
-	public static void generateTechs() {
-		String s = "TIMEGA/assets/technology.xml";
+	public static void generatePersonnel() {
+		String s = "TIMEGA/assets/personnel.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new TileSAXHandler());
@@ -36,9 +36,7 @@ public class TechSAXHandler extends DefaultHandler {
 	private String _color;
 	private String _name;
 	private String _effect;
-	private String _prereq;
-	private String _prereqand;
-	private String _prereqor;
+	private String _tier;
 	
 	@Override
 	public void startDocument() {
@@ -47,11 +45,9 @@ public class TechSAXHandler extends DefaultHandler {
 	
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
-		if(qName=="tech") {
+		if(qName=="person") {
 			_color = atts.getValue("color");
-			_prereq = atts.getValue("prereq");
-			_prereqand = atts.getValue("prereqAND");
-			_prereqor = atts.getValue("prereqOR");
+			_tier = atts.getValue("tier");
 		}
 	}
 	
@@ -61,8 +57,8 @@ public class TechSAXHandler extends DefaultHandler {
 			_name = _string;
 		} else if(qName.equals("effect")) {
 			_effect = _string;
-		} else if(qName.equals("tech")) {
-			Database.addTechToDatabase(_name, _color, _effect, _prereq, _prereqand, _prereqor);
+		} else if(qName.equals("person")) {
+			Database.addPersonnelToDatabase(_name, _color, _effect, _tier);
 		}
 		_string = "";
 	}
