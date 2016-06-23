@@ -24,7 +24,7 @@ public class Main {
 	
 	public static final int ERROR = RED;
 	public static final int STDIN = GREEN;
-	static final int SERVEROUT = BLACK;
+	public static final int SERVEROUT = BLACK;
 	public static final int CLIENTOUT = BLUE;
 	
 	private static void setOutColor(int color) {
@@ -247,11 +247,14 @@ public class Main {
 	    // time to read the game file (stored as a text file in in assets/server/)
 	    BufferedReader reader;
 	    try {
-			reader = new BufferedReader(new FileReader("../assets/server/" + args[0] + ".txt"));
+			reader = new BufferedReader(new FileReader("assets/server/" + args[0] + ".txt"));
 
 		} catch (FileNotFoundException e) {
 			writeColortext("file not found", Main.ERROR);
-			writeColortext("(looking in " + System.getProperty("user.dir") + "/assets/server) ", Main.ERROR);
+			File f = new File("assets/server/test.txt");
+			System.out.println(f.getAbsolutePath());
+			System.out.println(f.exists());
+			//writeColortext("(looking in " + System.getProperty("user.dir") + "/assets/server) ", Main.ERROR);
 			return;
 		}
 	    
@@ -281,7 +284,7 @@ public class Main {
 		}
 		
 		// given a mapfile name, try to read the map data
-		String map = System.getProperty("user.dir") + "/assets/maps/" + _mapname + ".map";
+		String map = "assets/maps/" + _mapname + ".map";
 		try {
 			BufferedReader mapfile = new BufferedReader(new FileReader(map));
 			// haha, look at me being optimistic that the program can still handle three-ring maps
