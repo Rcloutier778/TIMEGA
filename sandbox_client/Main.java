@@ -27,6 +27,11 @@ public class Main extends Application {
 	 * 10) allow a client to connect, then choose name from drop down list
 	 * 11) have client load style choices from local text file
 	 * 12) sort technology/personnel on players page
+	 * 
+	 * Bugs:
+	 * 1) Server should send lowercase tab names
+	 * 2) Server shouldn't be able to disable home tab
+	 * 3) Personnel list should have separators by tier
 	 */
 
 	public static void main(String[] args) {
