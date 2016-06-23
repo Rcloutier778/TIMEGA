@@ -158,6 +158,7 @@ public class ClientThread implements Runnable {
 				if(_main.getEnabled(tab)) {
 					_out.write(Protocol.ENABLE);
 					_out.write(tab);
+					_out.write("\n");
 				}
 			}
 			

@@ -83,7 +83,7 @@ public class CommandMap {
 			} else if(_enabled.get(tab)) {
 				Main.writeColortext(tab + " tab is already enabled", Main.ERROR);
 			} else {
-				_main.broadcast(Protocol.ENABLE, tab);
+				_main.broadcast(Protocol.ENABLE, tab + "\n");
 				Main.writeColortext(tab + " tab enabled", Main.SERVEROUT);
 				_enabled.put(tab, true);
 			}
@@ -98,7 +98,7 @@ public class CommandMap {
 				} else {
 					any = true;
 					_enabled.put(tab, true);
-					_main.broadcast(Protocol.ENABLE, tab);
+					_main.broadcast(Protocol.ENABLE, tab + "\n");
 					Main.writeColortext(tab + " tab enabled", Main.SERVEROUT);
 				}
 			}
@@ -129,7 +129,7 @@ public class CommandMap {
 			} else if(!valid) {
 				Main.writeColortext("no tab " + tab, Main.ERROR);
 			} else if(_enabled.get(tab)) {
-				_main.broadcast(Protocol.DISABLE, tab);
+				_main.broadcast(Protocol.DISABLE, tab + "\n");
 				Main.writeColortext(tab + " tab disabled", Main.SERVEROUT);
 				_enabled.put(tab, false);
 			} else {
@@ -144,7 +144,7 @@ public class CommandMap {
 				if(_enabled.get(tab)) {
 					none = false;
 					_enabled.put(tab, false);
-					_main.broadcast(Protocol.DISABLE, tab);
+					_main.broadcast(Protocol.DISABLE, tab + "\n");
 					Main.writeColortext(tab + " tab disabled", Main.SERVEROUT);
 				}
 			}
