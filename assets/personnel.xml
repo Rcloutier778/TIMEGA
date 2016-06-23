@@ -2,7 +2,7 @@
 <personnel>
     <person color="red" tier="1">
         <name>Fleet Control</name>
-        <effect>Increase your fleet supply by one in systems containing at least one of your space docks.</effect>
+        <effect>You may have one more ship than your fleet supply would normally allow in systems con- taining a friendly space dock.</effect>
     </person>
     <person color="red" tier="1">
         <name>Moneylender</name>
@@ -10,7 +10,7 @@
     </person>
     <person color="red" tier="2">
         <name>Marauder</name>
-        <effect>Receive one mercenary in any friendly or empty system containing one of your units or planets.</effect>
+        <effect>If your mercenary is not on the board, place it in any friendly system, if able. If your mercenary is on the board, you may move it to any friendly system.</effect>
     </person>
     <person color="red" tier="2">
         <name>Cultist</name>
@@ -18,20 +18,20 @@
     </person>
     <person color="red" tier="3">
         <name>Usurper</name>
-        <effect>Receive bonus votes equal to the number of capital ships you control in or adjacent to Mecatol Rex, up to a maximum of six.</effect>
+        <effect>Receive two bonus votes for each of your capital ships in or adjacent to Mecatol Rex, up to a maximum of six.</effect>
     </person>
     <person color="red" tier="3">
         <name>Advisor</name>
-        <effect>Increase your command pool by one. The first time you activate a system each round, you may activate it twice. Each of your ships in that system receives +1 during the first round of space combat.</effect>
+        <effect>At the beginning of each action phase, receive one bonus command counter in your command pool. The first time you activate a system each round, you may place a second command counter from your command pool. Each of your ships in that system receives +1 during the first round of space combat.</effect>
     </person>
     <person color="red" tier="4">
         <name>Conqueror</name>
-        <effect>Choose a type of ship (except fighters). Whenever you destroy a ship of that type, set it aside. Return them after the development phase.</effect>
+        <effect>Choose a type of ship. Whenever you destroy a ship of that type, set it aside. Return them after the development phase.</effect>
     </person>
     
     <person color="blue" tier="1">
         <name>Astronomer</name>
-        <effect>Your carriers may collect deep space tokens. Upon collecting your third, receive one blue technology at no cost, ignoring all of its prerequisites. (Do not collect any more deep space tokens.)</effect>
+        <effect>Your carriers may collect deep space tokens. Upon collecting your third, receive one blue technology at no cost, ignoring all of its prerequisites.</effect>
     </person>
     <person color="blue" tier="1">
         <name>Lookout</name>
@@ -39,15 +39,15 @@
     </person>
     <person color="blue" tier="2">
         <name>Cartographer</name>
-        <effect>Your ships may travel to the wormhole nexus.</effect>
+        <effect>Your ships may travel to and from the wormhole nexus.</effect>
     </person>
     <person color="blue" tier="2">
         <name>Scavenger</name>
-        <effect>Your ships may travel to the wormhole nexus.</effect>
+        <effect>Each time one of your fleets moves through an asteroid field, it receives two fighters.</effect>
     </person>
     <person color="blue" tier="3">
         <name>Admiral</name>
-        <effect>Each of your capital ships receives +1 movement if its destination does not have any enemy ships.</effect>
+        <effect>Each of your ships receives +1 movement when traveling towards neutral systems.</effect>
     </person>
     <person color="blue" tier="3">
         <name>Technician</name>
@@ -60,11 +60,11 @@
     
     <person color="green" tier="1">
         <name>Envoy</name>
-        <effect>Immediately after the speaker votes, you may cast two free votes in the same way.</effect>
+        <effect>When voting, you may cast two free votes for each resolution as long as they follow the speaker’s intent.</effect>
     </person>
     <person color="green" tier="1">
         <name>Salvager</name>
-        <effect>When scuttling non-fighter ships, receive one bonus resource each during the upcoming development phase.</effect>
+        <effect>When scuttling non-fighter ships, receive one bonus resource each the next time you build units.</effect>
     </person>
     <person color="green" tier="2">
         <name>Engineer</name>
@@ -72,11 +72,11 @@
     </person>
     <person color="green" tier="2">
         <name>Mechanic</name>
-        <effect>Each of your SASs may fire one pre-combat shot as if it were a cruiser.</effect>
+        <effect>Each of your SASs roll two dice each combat round.</effect>
     </person>
     <person color="green" tier="3">
         <name>Chancellor</name>
-        <effect>Each round, the first time a system containing one of your ships is activated by another player, it must be activated twice.</effect>
+        <effect>Each round, the first time a system containing one of your ships is activated by another player, he must place a second command counter from his command pool, if able.</effect>
     </person>
     <person color="green" tier="3">
         <name>Explorer</name>

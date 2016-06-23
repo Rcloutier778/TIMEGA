@@ -1,9 +1,86 @@
 <?xml version='1.0' encoding='us-ascii'?>
 <resolutions>
     <resolution>
-        <name>Name</name>
-        <for>effect for</for>
-        <against>effect against</against>
-        <extra>extra stuff</extra>
+        <name>Vote of No Confidence</name>
+        <for>The player who cast the most votes for this resolution becomes the speaker.</for>
+        <against>All players who voted for this resolution must choose two planets. Those planets are not refreshed this development phase.</against>
+        <extra>After resolving this agenda, immediately reveal and resolve another. Only the speaker may vote on this agenda.</extra>
+    </resolution>
+    <resolution>
+        <name>Imperial Peace</name>
+        <for>Mecatol Rex may not be invaded this round.</for>
+        <against>Mecatol Rex is the only planet that may be invaded this round.</against>
+        <extra>While this agenda is in play, no player may advance his empire.</extra>
+    </resolution>
+    <resolution>
+        <name>New Constitution</name>
+        <for>Clear all resolutions in play. Players that voted for this resolution may immediately exhaust planets for more votes. Flip over two new resolutions and vote on them.</for>
+        <against>All planets exhausted for votes this round are not refreshed this development phase.</against>
+        <extra>While this agenda is under deliberation, no other agendas may be revealed. This agenda may not be vetoed.</extra>
+    </resolution>
+    <resolution>
+        <name>Wormhole Reconstruction</name>
+        <for>All systems containing a wormhole are considered adjacent to all other systems containing a wormhole.</for>
+        <against>All ships in systems containing a wormhole are destroyed.</against>
+    </resolution>
+    <resolution>
+        <name>Closing the Wormholes</name>
+        <for>No players may travel through wormholes.</for>
+        <against>All ships in systems containing a wormhole are destroyed.</against>
+    </resolution>
+    <resolution>
+        <name>Technology Tariffs</name>
+        <for>The cost of all red technology is increased by two.</for>
+        <against>During the next development phase, only red technology may be bought.</against>
+        <extra>While this agenda is under deliberation, no player may research red technology.</extra>
+    </resolution>
+    <resolution>
+        <name>Research Grant</name>
+        <for>Technology credits may be spent towards any color technology.</for>
+        <against>The player with the fewest technologies chooses one technology advance. All players receive that technology advance, ignoring all prerequisites.</against>
+    </resolution>
+    <resolution>
+        <name>War Funding</name>
+        <for>During the action phase, all players may ignore fleet supply restrictions.</for>
+        <against>All fighters receive +1 on all combat rolls.</against>
+        <extra>While this agenda is under deliberation, fighters and destroyers cost double their usual price.</extra>
+    </resolution>
+    <resolution>
+        <name>Ancient Artifact</name>
+        <for>Roll a die. On 6+, all players with a ship in or adjacent to the Mecatol Rex system receive one free technology. On 5-, all units in or adjacent to the Mecatol Rex system are destroyed.</for>
+        <against>The Winnaran guards receive an extra dreadnought and +2 on all combat rolls.</against>
+    </resolution>
+    <resolution>
+        <name>Holder of Mecatol Rex</name>
+        <for>The player controlling Mecatol Rex may choose any resolution in play and discard it.</for>
+        <against>The player controlling Mecatol Rex may add a biohazard counter to the planet.</against>
+        <extra>When invading a planet with a biohazard counter, the first shock troop, mechanized unit, or three ground forces that attempt to invade are instead destroyed. If the planet is successfully invaded, remove the biohazard counter.</extra>
+    </resolution>
+    <resolution>
+        <name>Humane Labor</name>
+        <for>Each space dock may produce at most four units per round.</for>
+        <against>Each space dock that does not produce at least four units each round is destroyed.</against>
+    </resolution>
+    <resolution>
+        <name>Repeal</name>
+        <for>Discard the chosen law.</for>
+        <against>The current speaker cannot keep the speaker token at the end of this round.</against>
+        <extra>Upon revealing this agenda, the speaker chooses a resolution in play.</extra>
+    </resolution>
+    <resolution>
+        <name>Revote</name>
+        <for/>
+        <against/>
+        <extra>Upon revealing this agenda, the speaker chooses a law that is in play or discarded. Revote on that agenda instead.</extra>
+    </resolution>
+    <resolution>
+        <name>Subsidized Industry</name>
+        <for>Each player receives up to two free space docks.</for>
+        <against>All space docks have +1 production capacity.</against>
+    </resolution>
+    <resolution>
+        <name>Arms Reduction</name>
+        <for>Each player's dreadnought plastic supply is reduced to two and cruiser plastic supply to three until the end of the round.</for>
+        <against>Do not refresh planets with red technology specialties this development phase.</against>
     </resolution>
 </resolutions>
