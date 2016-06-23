@@ -5,7 +5,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -39,7 +38,7 @@ public class CombatSimTab extends AbstractTab{
     private Button _start;
     private GridPane scenepane = new GridPane();
     private Text PlayerName;
-    private ComboBox eOptions;
+    private ComboBox<String> eOptions;
     private GridPane _pane;
 
     //make values cleared when you click on another tab
@@ -98,7 +97,7 @@ public class CombatSimTab extends AbstractTab{
             GridPane.setHalignment(_start, HPos.CENTER);
 
             //drop down menue for enemies
-            eOptions = new ComboBox();
+            eOptions = new ComboBox<String>();
 
             //Add things to grid
             _pane.add(pfighter, 1, 2);

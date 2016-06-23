@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
 
-public class SAXHandler extends DefaultHandler {
+public class TileSAXHandler extends DefaultHandler {
 	
 	private String _string;
 	private LinkedList<Tile> _tiles;
@@ -30,35 +30,35 @@ public class SAXHandler extends DefaultHandler {
 	
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
-		if(qName=="tile") {
+		if(qName.equals("tile")) {
 			_currTile = new Tile();
 			_currTile.setPath(new String(atts.getValue("path")));
 			_currPlanetIndex = -1;
-		} else if(qName=="planet") {
+		} else if(qName.equals("planet")) {
 			_currTile.addPlanet();
 			_currPlanetIndex++;
-		} else if(qName == "red") {
-			_currTile.addTech(_currPlanetIndex, Database.RED);
-		} else if(qName == "blue") {
-			_currTile.addTech(_currPlanetIndex, Database.BLUE);
-		} else if(qName == "green") {
-			_currTile.addTech(_currPlanetIndex, Database.GREEN);
-		} else if(qName == "yellow") {
-			_currTile.addTech(_currPlanetIndex, Database.YELLOW);
+		} else if(qName.equals("red")) {
+			_currTile.addTechSpec(_currPlanetIndex, Database.RED);
+		} else if(qName.equals("blue")) {
+			_currTile.addTechSpec(_currPlanetIndex, Database.BLUE);
+		} else if(qName.equals("green")) {
+			_currTile.addTechSpec(_currPlanetIndex, Database.GREEN);
+		} else if(qName.equals("yellow")) {
+			_currTile.addTechSpec(_currPlanetIndex, Database.YELLOW);
 		}
 	}
 	
 	@Override
 	public void endElement(String uri, String localName, String qName) {
-		if(qName=="title") {
+		if(qName.equals("title")) {
 			_currTile.setTitle(new String(_string));
-		} else if(qName=="name") {
+		} else if(qName.equals("name")) {
 			_currTile.setPlanetName(_currPlanetIndex, new String(_string));
-		} else if(qName == "resources") {
+		} else if(qName.equals("resources")) {
 			_currTile.setPlanetResources(_currPlanetIndex, new String(_string));
-		} else if(qName=="influence") {
+		} else if(qName.equals("influence")) {
 			_currTile.setPlanetInfluence(_currPlanetIndex, new String(_string));
-		} else if(qName=="tile") {
+		} else if(qName.equals("tile")) {
 			_tiles.addLast(_currTile);
 		} 
 		_string = "";

@@ -19,6 +19,9 @@ import java.net.Socket;
 
 public class ControlsTab extends AbstractTab {
 	
+	private static final String DEFAULT_HOST = "104.236.42.194";
+	private static final String DEFAULT_PORT = "4040";
+	
 	private Client _client;
 	
 	// connection fields
@@ -34,15 +37,16 @@ public class ControlsTab extends AbstractTab {
 	
 	public ControlsTab(Client c) {
 		super(Client.CONTROLS);
+		_root.setDisable(false);
 		
 		_client = c;
 				
 		// initializing connection fields
 		_name = new TextField();
 		_host = new TextField();
-		_host.setText("104.236.42.194");
+		_host.setText(DEFAULT_HOST);
 		_port = new NumberTextField();
-		_port.setText("4040");
+		_port.setText(DEFAULT_PORT);
 		_connect = new Button("Connect");
 		_connect.setOnAction(e -> tryConnection());
 		GridPane.setHalignment(_connect, HPos.CENTER);
@@ -86,7 +90,7 @@ public class ControlsTab extends AbstractTab {
 		spacer.setPrefWidth(200);
 		grid.add(spacer, 2, 0);
 		
-		// adding some text fields
+		// adding some text fields (dev phase order and market)
 		Label order = new Label("Development phase order:\n\t-Advance empire\n\t-Research technology\n\t-Hire personnel\n\t-Build ships\n\t-Build space docks\n\t-Return command counters\n\t-Vote on agendas\n\t-Refill command pool\n\t-Repair ships\n\t-Refresh planets\n\t-Refresh space docks\n\t-Reveal new agendas");
 		order.setWrapText(true);
 		grid.add(order, 3, 0, 1, 6);
@@ -98,6 +102,7 @@ public class ControlsTab extends AbstractTab {
 		_root.setContent(grid);
 	}
 	
+	// fooooocusssssssss
 	public void finishInitialization() {
 		_name.requestFocus();
 	}
@@ -148,6 +153,7 @@ public class ControlsTab extends AbstractTab {
 	
 	// helper method to attempt to connect
 	private void tryConnection() {
+		// print a helpful error message if it fails
 		if(_port.getText().equals("")) {
 			_error.setText("Must specify port");
 			return;
@@ -159,9 +165,9 @@ public class ControlsTab extends AbstractTab {
 			return;
 		}
 		
+		// try to connect
 		this.disableConnectionAttempt(true);
 		_error.setText("Connecting...");
-		
 		new ServerListener().start();
 	}
 	

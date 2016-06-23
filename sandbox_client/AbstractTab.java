@@ -1,7 +1,7 @@
 package sandbox_client;
 
 /**
- * Holds generic methods for the tabs so that the Client can handle them generically when appropriate
+ * Holds common functionality for the tabs so that the Client can handle them when appropriate
  * 
  * @author dmayans
  */

@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -22,7 +23,7 @@ public class Tile {
 		String s = "TIMEGA/assets/planets.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new SAXHandler());
+			p.parse(s, new TileSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -47,7 +48,7 @@ public class Tile {
 	
 	// tile accessors
 	public String getPath() {
-		return "file:assets/Systems/" + _path;
+		return "file:TIMEGA/assets/Systems/" + _path;
 	}
 	
 	public String getTitle() {
@@ -125,8 +126,8 @@ public class Tile {
 		_planets[index].influence = i;
 	}
 	
-	public void addTech(int index, int tech) {
-		Database.addTech(_planets[index].name, tech);
+	public void addTechSpec(int index, int tech) {
+		Database.addTechSpec(_planets[index].name, tech);
 	}
 	
 	
