@@ -347,6 +347,7 @@ public class Main {
 		Tile.generateTiles();
 		TechSAXHandler.generateTech();
 		PersonnelSAXHandler.generatePersonnel();
+		ResolutionSAXHandler.generateResolutions();
 		
 		try {
 			reader.close();

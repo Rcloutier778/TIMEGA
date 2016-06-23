@@ -1,7 +1,7 @@
 package server;
 
 /**
- * Reads information from the technology.xml file and sends the information back to the database.
+ * Reads information from the resolutions.xml file and sends the information back to the database.
  * 
  * @author dmayans
  */
@@ -15,14 +15,14 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class TechSAXHandler extends DefaultHandler {
+public class ResolutionSAXHandler extends DefaultHandler {
 	
-	// Called at the beginning of the program to read the technology.xml file
-	public static void generateTech() {
-		String s = System.getProperty("user.dir") + "/assets/technology.xml";
+	// Called at the beginning of the program to read the resolutions.xml file
+	public static void generateResolutions() {
+		String s = System.getProperty("user.dir") + "/assets/resolutions.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new TechSAXHandler());
+			p.parse(s, new ResolutionSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -38,13 +38,13 @@ public class TechSAXHandler extends DefaultHandler {
 	private String _string;
 	
 	// holds the techs temporarily
-	private LinkedList<String> _tech;
+	private LinkedList<String> _resolutions;
 	
 	// when doc is opened: initialize variables
 	@Override
 	public void startDocument() {
 		_string = "";
-		_tech = new LinkedList<String>();
+		_resolutions = new LinkedList<String>();
 	}
 	
 	// on the end of an entry
@@ -52,7 +52,7 @@ public class TechSAXHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) {
 		// if that entry has name 'name', then whatever we read is the name of a tech
 		if(qName=="name") {
-			_tech.addLast(_string);
+			_resolutions.addLast(_string);
 		}
 		// in any case, _string should be cleared
 		_string = "";
@@ -65,10 +65,10 @@ public class TechSAXHandler extends DefaultHandler {
 		_string += new String(ch, start, length).trim();
 	}
 	
-	// once the document is finished, give the database our list of techs
+	// once the document is finished, give the database our list of resolutions
 	@Override
 	public void endDocument() {
-		ServerDatabase.placeTech(_tech);
+		ServerDatabase.placeResolutions(_resolutions);
 	}
 	
 }
