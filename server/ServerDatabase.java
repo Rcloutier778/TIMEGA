@@ -64,6 +64,7 @@ public class ServerDatabase {
 		}
 
 		for(String tab : Client.TAB_NAMES) {
+			if(tab.equals("Home")) continue;
 			TABS.put(tab.toLowerCase(), tab);
 		}
 		

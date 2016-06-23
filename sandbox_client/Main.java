@@ -30,9 +30,7 @@ public class Main extends Application {
 	 * 13) server should load resolutions from xml
 	 * 
 	 * Bugs:
-	 * 1) server should send lowercase tab names
-	 * 2) server shouldn't be able to disable home tab
-	 * 3) personnel list should have separators by tier
+	 * 1) personnel list should have separators by tier
 	 */
 
 	public static void main(String[] args) {
