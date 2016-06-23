@@ -37,6 +37,7 @@ public class ControlsTab extends AbstractTab {
 	
 	public ControlsTab(Client c) {
 		super(Client.CONTROLS);
+		_root.setDisable(false);
 		
 		_client = c;
 				

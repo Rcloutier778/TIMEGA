@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -47,7 +48,7 @@ public class Tile {
 	
 	// tile accessors
 	public String getPath() {
-		return "file:assets/Systems/" + _path;
+		return "file:TIMEGA/assets/Systems/" + _path;
 	}
 	
 	public String getTitle() {
