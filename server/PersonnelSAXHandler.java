@@ -65,7 +65,7 @@ public class PersonnelSAXHandler extends DefaultHandler {
 		_string += new String(ch, start, length).trim();
 	}
 	
-	// once the document is finished, give the database our list of tiles
+	// once the document is finished, give the database our list of personnel
 	@Override
 	public void endDocument() {
 		ServerDatabase.placePersonnel(_personnel);

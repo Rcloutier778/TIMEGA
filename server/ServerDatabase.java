@@ -68,22 +68,6 @@ public class ServerDatabase {
 			TABS.put(tab.toLowerCase(), tab);
 		}
 		
-		RESOLUTION_SET.add("Vote of No Confidence");
-		RESOLUTION_SET.add("Imperial Peace");
-		RESOLUTION_SET.add("New Constitution");
-		RESOLUTION_SET.add("Closing the Wormholes");
-		RESOLUTION_SET.add("Technology Tariffs");
-		RESOLUTION_SET.add("Research Grant");
-		RESOLUTION_SET.add("War Funding");
-		RESOLUTION_SET.add("Ancient Artifact");
-		RESOLUTION_SET.add("Holder of Mecatol Rex");
-		RESOLUTION_SET.add("Humane Labor");
-		RESOLUTION_SET.add("Repeal");
-		RESOLUTION_SET.add("Revote");
-		RESOLUTION_SET.add("Subsidized Industry");
-		RESOLUTION_SET.add("Arms Reduction");
-		RESOLUTION_SET.add("null");
-		
 		// Since Mallice and Creuss don't actually exist on the map, we kind of have to add them in by hard code :(
 		PLANETS.put("Mallice", "none");
 		SPACEDOCKS.put("Mallice", false);
@@ -101,6 +85,12 @@ public class ServerDatabase {
 	public static void placePersonnel(Collection<String> personnel) {
 		for(String p : personnel) {
 			PERSONNEL_SET.add(p);
+		}
+	}
+	
+	public static void placeResolutions(Collection<String> resolutions) {
+		for(String r : resolutions) {
+			RESOLUTION_SET.add(r);
 		}
 	}
 	
