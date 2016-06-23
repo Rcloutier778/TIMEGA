@@ -22,7 +22,7 @@ public class ResolutionSAXHandler extends DefaultHandler {
 		String s = "TIMEGA/assets/resolutions.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new TileSAXHandler());
+			p.parse(s, new ResolutionSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

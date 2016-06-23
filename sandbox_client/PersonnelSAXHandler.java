@@ -22,7 +22,7 @@ public class PersonnelSAXHandler extends DefaultHandler {
 		String s = "TIMEGA/assets/personnel.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new TileSAXHandler());
+			p.parse(s, new PersonnelSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {

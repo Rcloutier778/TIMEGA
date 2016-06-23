@@ -231,10 +231,10 @@ public class Main {
 	public static void main(String[] args) {
 		
 		// server needs a game file to read- see comments on game file parsing to understand format
-		//if(args.length < 1) {
-		//	System.err.println("Usage: server <game>");
-		//	return;
-		//}
+		if(args.length < 1) {
+			System.err.println("Usage: server <game>");
+			return;
+		}
 		
 		// make sure that when the JVM crashes for one reason or another, the terminal isn't stuck printing green
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
@@ -247,8 +247,7 @@ public class Main {
 	    // time to read the game file (stored as a text file in in assets/server/)
 	    BufferedReader reader;
 	    try {
-			//reader = new BufferedReader(new FileReader("../assets/server/" + args[0] + ".txt"));
-			reader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "/assets/server/test.txt"));
+			reader = new BufferedReader(new FileReader("../assets/server/" + args[0] + ".txt"));
 
 		} catch (FileNotFoundException e) {
 			writeColortext("file not found", Main.ERROR);

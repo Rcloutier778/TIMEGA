@@ -22,7 +22,7 @@ public class TechSAXHandler extends DefaultHandler {
 		String s = "TIMEGA/assets/technology.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new TileSAXHandler());
+			p.parse(s, new TechSAXHandler());
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
