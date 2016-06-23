@@ -35,6 +35,13 @@ public class PersonnelTab extends AbstractTab {
 	private PersonnelButton _selected;
 	private Button _hire;
 	
+	private static String[] RED = {"Fleet Control", "Moneylender", "<blank>", "Marauder",
+		"Cultist", "<blank>", "Usurper", "Advisor", "<blank>", "Conqueror"};
+	private static String[] BLUE = {"Astronomer", "placeholder_b2", "<blank>", "Cartographer",
+		"Scavenger", "<blank>", "Admiral", "Technician", "<blank>", "Champion"};
+	private static String[] GREEN = {"Envoy", "Salvager", "<blank", "Engineer",
+		"Mechanic", "<blank>", "Chancellor", "Explorer", "<blank>", "Tactician"};
+	
 	// {red, blue, green, yellow}
 	private static String[] BRIGHT = {"#C80000", "#000096", "#006400"};
 	private static String[] GRAYED = {"#aaa", "#aaa", "#aaa"};
@@ -76,15 +83,25 @@ public class PersonnelTab extends AbstractTab {
 				
 		_buttons = new HashMap<String, PersonnelButton>();
 		PersonnelButton b;
+		
+		for(int i=0; i<10; i++) {
+			if(i == 2 || i == 5 || i == 8) {
+				_pane.add(new Pane(), 0, i+2, 3, 1);
 				
-		int i=2;
-		for(int color=0; color<3; color++) {
-			for(String person : Database.personnelOfColor(color)) {
-				b = new PersonnelButton(person, color);
-				_pane.add(b, color, i);
-				_buttons.put(person, b);
-				i++;
+			} else {
+				b = new PersonnelButton(RED[i], 0);
+				_pane.add(b, 0, i+2);
+				_buttons.put(RED[i], b);
+				
+				b = new PersonnelButton(BLUE[i], 1);
+				_pane.add(b, 1, i+2);
+				_buttons.put(BLUE[i], b);
+				
+				b = new PersonnelButton(GREEN[i], 2);
+				_pane.add(b, 2, i+2);
+				_buttons.put(GREEN[i], b);
 			}
+			
 		}
 				
 		VBox v = new VBox(10);
@@ -107,7 +124,7 @@ public class PersonnelTab extends AbstractTab {
 		v.getChildren().addAll(_hbox, _hire, _personnelDescription);
 		
 				
-		_pane.add(v, 0, i, 3, 1);
+		_pane.add(v, 0, 12, 3, 1);
 	}
 	
 	public void initialize() {

@@ -112,7 +112,7 @@ public class StatusTab extends AbstractTab{
 		_tech.setText(techText);
 		
 		String personnelText = "Personnel:\n";
-		for(String personnel : Database.personnelOfPlayer(_player)) {
+		for(String personnel : Database.personnelOf(_player)) {
 			personnelText += "-" + personnel + "\n";
 		}
 		
