@@ -27,6 +27,10 @@ public class Main extends Application {
 	 * 10) allow a client to connect, then choose name from drop down list
 	 * 11) have client load style choices from local text file
 	 * 12) sort technology/personnel on players page
+	 * 13) server should load resolutions from xml
+	 * 
+	 * Bugs:
+	 * 1) client crashes on server disconnect (low priority)
 	 */
 
 	public static void main(String[] args) {

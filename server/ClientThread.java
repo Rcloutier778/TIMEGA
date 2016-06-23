@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
 
-import sandbox_client.Client;
 import sandbox_client.Protocol;
 
 public class ClientThread implements Runnable {
@@ -26,7 +25,7 @@ public class ClientThread implements Runnable {
 	private BufferedReader _in;
 	
 	// some client information
-	private String _name = null; // name of client as seen by 
+	private String _name = null; // name of client
 	private int _id = 0; // id number passed from ClientListener
 	private boolean _validated = false; // set to true when the client has gone through the laborious login protocol
 	private Object _idlock = new Object(); // generic object used for its implicit lock
@@ -154,10 +153,10 @@ public class ClientThread implements Runnable {
 			}
 			
 			// report which tabs are enabled
-			for(String tab : Client.TAB_NAMES) {
+			for(String tab : ServerDatabase.TABS.keySet()) {
 				if(_main.getEnabled(tab)) {
 					_out.write(Protocol.ENABLE);
-					_out.write(tab);
+					_out.write(ServerDatabase.TABS.get(tab));
 					_out.write("\n");
 				}
 			}

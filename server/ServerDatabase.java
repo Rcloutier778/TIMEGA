@@ -10,6 +10,8 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import sandbox_client.Client;
+
 public class ServerDatabase {
 		
 	// Holds the array of all 60 tiles
@@ -37,6 +39,9 @@ public class ServerDatabase {
 	public static final HashSet<String> TECH_SET = new HashSet<String>();
 	public static final HashSet<String> PERSONNEL_SET = new HashSet<String>();
 	public static final HashSet<String> RESOLUTION_SET = new HashSet<String>();
+	
+	
+	public static final HashMap<String,String> TABS = new HashMap<String,String>();
 
 	public static boolean hasName(String name) {
 		for(Player n : ServerDatabase.PLAYERS) {
@@ -58,6 +63,11 @@ public class ServerDatabase {
 			EMPIRE_STAGE.put(p.name, "");
 		}
 
+		for(String tab : Client.TAB_NAMES) {
+			if(tab.equals("Home")) continue;
+			TABS.put(tab.toLowerCase(), tab);
+		}
+		
 		RESOLUTION_SET.add("Vote of No Confidence");
 		RESOLUTION_SET.add("Imperial Peace");
 		RESOLUTION_SET.add("New Constitution");

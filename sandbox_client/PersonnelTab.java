@@ -77,15 +77,25 @@ public class PersonnelTab extends AbstractTab {
 		_buttons = new HashMap<String, PersonnelButton>();
 		PersonnelButton b;
 				
-		int i=2;
+		int i=2, maxTier = 0;
 		for(int color=0; color<3; color++) {
+			i = 2;
+			int tier = 1;
 			for(String person : Database.personnelOfColor(color)) {
 				b = new PersonnelButton(person, color);
+				int newTier = Database.tierOfPersonnel(person);
+				if(newTier > tier) {
+					_pane.add(new Pane(), color, i++);
+					tier = newTier;
+				}
 				_pane.add(b, color, i);
 				_buttons.put(person, b);
 				i++;
 			}
+			maxTier = maxTier > tier ? maxTier : tier;
 		}
+		
+		i = maxTier;
 				
 		VBox v = new VBox(10);
 		
