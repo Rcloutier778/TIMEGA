@@ -54,6 +54,13 @@ public class Database {
 		}
 	}
 	
+	// returns the index of a given player
+	public static int indexOf(String player) {
+		synchronized(INDICES) {
+			return INDICES.get(player);
+		}
+	}
+	
 	// returns the race of a given player
 	public static String raceOf(String player) {
 		synchronized(RACES) {
@@ -399,25 +406,11 @@ public class Database {
 			colorIndex = YELLOW;
 		}
 		
-		synchronized(TECH_NAMES) {
-			TECH_NAMES[colorIndex].add(name);
-		}
-		
-		synchronized(DESCRIPTIONS) {
-			DESCRIPTIONS.put(name, effect);
-		}
-		
-		synchronized(PREREQUISITES) {
-			PREREQUISITES.put(name, prereq1);
-		}
-		
-		synchronized(PREREQ_AND) {
-			PREREQ_AND.put(name, prereqand);
-		}
-		
-		synchronized(PREREQ_OR) {
-			PREREQ_OR.put(name, prereqor);
-		}		
+		TECH_NAMES[colorIndex].add(name);
+		DESCRIPTIONS.put(name, effect);
+		PREREQUISITES.put(name, prereq1);
+		PREREQ_AND.put(name, prereqand);
+		PREREQ_OR.put(name, prereqor);
 
 	}
 	
@@ -465,12 +458,12 @@ public class Database {
 	private static final HashMap<String,Integer> TIERS = new HashMap<String,Integer>();
 		// ^ maps a personnel to its tier
 	
-	// holds some policy tier info
-	// PERSONNEL_QUEUE SHARES A LOCK WITH PERSONNEL_MAP (use PERSONNEL_MAP's implicit lock)
 	private static final HashSet<String> PERSONNEL_QUEUE = new HashSet<String>();
-		// ^ holds changes to local personnel before it's sent to the server
+		// ^ holds changes to local personnel before it's sent to the server - SHARES LOCK WITH PERSONNEL_MAP
 	private static final HashMap<String,HashSet<String>> PERSONNEL_MAP = new HashMap<String,HashSet<String>>();
 		// ^ maps a player name to the set of owned personnel
+	@SuppressWarnings("unchecked")
+	private static final TreeSet<String>[] PERSONNEL_SET = new TreeSet[3];
 	
 	// returns the personnel tier of a given player for that color
 	public static int personnelTier(String player, int color) {
@@ -562,9 +555,16 @@ public class Database {
 	}
 	
 	// iterate over the personnel of the given player
-	public static Iterable<String> personnelOf(String player) {
+	public static Iterable<String> personnelOfPlayer(String player) {
 		synchronized(PERSONNEL_MAP) {
 			return new HashSet<String>(PERSONNEL_MAP.get(player));
+		}
+	}
+	
+	// iterate over personnel of a given color
+	public static Iterable<String> personnelOfColor(int color) {
+		synchronized(PERSONNEL_SET) {
+			return new LinkedList<String>(PERSONNEL_SET[color]);
 		}
 	}
 	
@@ -581,13 +581,19 @@ public class Database {
 	
 	// populate database from xml
 	public static void addPersonnelToDatabase(String name, String color, String effect, String tier) {
-		synchronized(DESCRIPTIONS) {
-			DESCRIPTIONS.put(name, effect);
+		DESCRIPTIONS.put(name, effect);
+		TIERS.put(name, Integer.parseInt(tier));
+		
+		int index = -1;
+		if(color.equals("red")) {
+			index = RED;
+		} else if(color.equals("blue")) {
+			index = BLUE;
+		} else if(color.equals("green")) {
+			index = GREEN;
 		}
 		
-		synchronized(TIERS) {
-			TIERS.put(name, Integer.parseInt(tier));
-		}
+		PERSONNEL_SET[index].add(name);
 	}
 	
 	// given the name of a person, return its tier
@@ -705,17 +711,8 @@ public class Database {
 		NAME = null;
 	}
 	
-
-		
-	
-	
-	
-	
-
 	
 	// initialization	
-	
-
 	
 	public static void addPlayer(Player player) {
 		
@@ -727,12 +724,6 @@ public class Database {
 		INDICES.put(player.name, PLAYERS.size());
 		PLAYERS.add(player);
 
-	}
-	
-	public static int indexOf(String player) {
-		synchronized(INDICES) {
-			return INDICES.get(player);
-		}
 	}
 	
 	
@@ -776,6 +767,10 @@ public class Database {
 			TECH[i] = new HashMap<String,Integer>();
 			TECH_NAMES[i] = new ArrayList<String>();
 		}
+		
+		for(int i=0; i<3; i++) {
+			PERSONNEL_SET[i] = new TreeSet<String>(ComparatorFactory.generatePersonnelComparator());
+		}
 	}
 	
 	public static int getHints(String planetName) {
@@ -785,5 +780,7 @@ public class Database {
 			return -1;
 		}
 	}
+	
+
 	
 }
