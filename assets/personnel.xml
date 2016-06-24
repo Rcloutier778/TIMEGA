@@ -1,8 +1,8 @@
-<?xml version='1.0' encoding='us-ascii'?>
+<?xml version='1.0' encoding='utf-8'?>
 <personnel>
     <person color="red" tier="1">
         <name>Fleet Control</name>
-        <effect>You may have one more ship than your fleet supply would normally allow in systems con- taining a friendly space dock.</effect>
+        <effect>You may have one more ship than your fleet supply would normally allow in systems containing a friendly space dock.</effect>
     </person>
     <person color="red" tier="1">
         <name>Moneylender</name>
