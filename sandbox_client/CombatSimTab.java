@@ -5,10 +5,13 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+
+import java.math.BigDecimal;
 
 
 /**
@@ -17,8 +20,15 @@ import javafx.scene.text.Text;
  */
 
 
-public class CombatSimTab extends AbstractTab{
+//todo: Remember all techs are most updated on pdf, not website
+/**
+ * 1) Update for hyper metabolism
+ * 3) Update for Xeno?
+  */
 
+public class CombatSimTab {
+
+    protected final Tab _root = new Tab("Combat");
     private Client _client;
 
     //Player units field
@@ -38,14 +48,12 @@ public class CombatSimTab extends AbstractTab{
     private Button _start;
     private GridPane scenepane = new GridPane();
     private Text PlayerName;
-    private ComboBox<String> eOptions;
+    private ComboBox eOptions;
     private GridPane _pane;
 
-    //make values cleared when you click on another tab
-    public CombatSimTab(Client client) {
-    	super(Client.SIMULATOR);
-    	
-        Platform.runLater(new Runnable() {
+        //make values cleared when you click on another tab
+        public CombatSimTab(Client client) {
+            Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
 
@@ -97,7 +105,7 @@ public class CombatSimTab extends AbstractTab{
             GridPane.setHalignment(_start, HPos.CENTER);
 
             //drop down menue for enemies
-            eOptions = new ComboBox<String>();
+            eOptions = new ComboBox();
 
             //Add things to grid
             _pane.add(pfighter, 1, 2);
@@ -293,10 +301,12 @@ public class CombatSimTab extends AbstractTab{
         //Player ADT
         if (_efighter > 3) {
             int pADT = 0;
-            if (Database.hasTech(_client.getName(), "Automated Defence Turrets")) {
-                for (int i = 0; i < (int) (_efighter / 4); i++) {
-                    if (DiceRoller() >= (_pfighterDam - 1 - (int) (_efighter / 5))) {
-                        pADT += 1;
+            if (Database.hasTech(_client.getName(), "ADT")) {
+                while(pADT < _pdestroyer || pADT < _efighter) {
+                    for (int i = 0; i < (int) (_efighter / 4); i++) {
+                        if (DiceRoller() >= (_pfighterDam - 1)) {
+                            pADT += 1;
+                        }
                     }
                 }
             } else {
@@ -311,10 +321,12 @@ public class CombatSimTab extends AbstractTab{
         //Enemy ADT
         if (_pfighter > 3) {
             int eADT = 0;
-            if (Database.hasTech(_client.getName(), "Automated Defence Turrets")) {
-                for (int i = 0; i < (int) (_pfighter / 4); i++) {
-                    if (DiceRoller() >= (_efighterDam - 1 - (int) (_pfighter / 5))) {
-                        eADT += 1;
+            if (Database.hasTech(enemy, "ADT")) {
+                while(eADT < _edestroyer || eADT < _pfighter) {
+                    for (int i = 0; i < (int) (_pfighter / 4); i++) {
+                        if (DiceRoller() >= (_efighterDam - 1)) {
+                            eADT += 1;
+                        }
                     }
                 }
             } else {
@@ -326,35 +338,23 @@ public class CombatSimTab extends AbstractTab{
             }
             _pfighter = _pfighter - eADT;
         }
+
         //Player Assault Cannons
-        if(Database.hasTech(_client.getName(), "Assault Cannon")) {
-            if (_pcruiser == 1) {
-                if (DiceRoller() >= (_pcruiserDam - 1)) {
-                    ppre = 1;
-                }
-            }
-            else if (_pcruiser >= 2) {
-                if (DiceRoller() >= (_pcruiserDam - 1)) {
-                    ppre = 1;
-                }
-                if (DiceRoller() >= (_pcruiserDam - 1)) {
+        ppre = 0;
+        if(Database.hasTech(_client.getName(), "Assault Cannon") && (_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 3) {
+            for(int i = 0; i<_pcruiser; i++){
+                if(DiceRoller() >= _pcruiserDam - 3){
                     ppre += 1;
                 }
             }
         }
-        //Enemy Assault Cannons
         else{ppre = 0;}
-        if(Database.hasTech(enemy, "Assault Cannon")) {
-            if (_ecruiser == 1) {
-                if (DiceRoller() >= (_ecruiserDam - 1)) {
-                    epre = 1;
-                }
-            }
-            else if (_ecruiser >= 2) {
-                if (DiceRoller() >= (_ecruiserDam - 1)) {
-                    epre = 1;
-                }
-                if (DiceRoller() >= (_ecruiserDam - 1)) {
+
+        //Enemy Assault Cannons
+        epre = 0;
+        if(Database.hasTech(enemy, "Assault Cannon")&& (_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 3) {
+            for(int i = 0; i<_ecruiser; i++){
+                if(DiceRoller() >= _ecruiserDam - 3){
                     epre += 1;
                 }
             }
@@ -377,6 +377,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_edread > 0){
                 ppre -= 1;
                 _edread -= 1;
+                if(Database.hasTech(enemy, "Transfabrication")){
+                    _edestroyer += 1;
+                }
             }
             else if(_ewar > 0){
                 ppre -= 1;
@@ -401,6 +404,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_pdread > 0){
                 epre -= 1;
                 _pdread -= 1;
+                if(Database.hasTech(_client.getName(), "Transfabrication")){
+                    _pdestroyer += 1;
+                }
             }
             else if(_pwar > 0){
                 epre -= 1;
@@ -417,56 +423,11 @@ public class CombatSimTab extends AbstractTab{
     public int ewarsus;
 
     /**
-     * Will take hits in the following order:
-     * Dreadnaught(sustain) > WarSun(sustain) > Fighter > Destroyer > Cruiser > Dreadnaught > WarSun
-     * Will not sustain hits to warsun or dreadnaught if there are enemy cruisers, will let other units take the hits
-     * if possible.
-     * Dreadnaught sustains first in order to prevent a targeted/direct hit on warsun. (look at me being in the meta)
-     * Assumes that all fighters will be destroyed before destroying carriers/dreadnaughts/warsuns.
+     * Normal combat (recursive)
+     * @return 1 = Win, 2 = Loss, 3 = Stalemate
      */
-    //todo make the simulator run 100 times and get the average losses on either side and win/loss ratio
-    public String CombatSim() {
-        enemy = new String();
-        try {
-            enemy = eOptions.getValue().toString(); //gets the value selected by the combobox
-        } catch (NullPointerException e) {
-            return "Enemy name field fucked";
-        }
-        if(setUnits() == false){
-            return "Error, setUnits returned false";
-        }
-        else {
-            System.out.println(Integer.parseInt(pfighter.getText().toString()));
-            //Pre-Combat
-            PreCombat();
-            if (ppre > 0 && (_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) > 0) {
-                return "You won in pre-combat with the remaining units: \n"
-                        .concat("Fighters: ").concat(Integer.toString(_pfighter)).concat("\n")
-                        .concat("Destroyers: ").concat(Integer.toString(_pdestroyer)).concat("\n")
-                        .concat("Cruisers: ").concat(Integer.toString(_pcruiser)).concat("\n")
-                        .concat("Dreadnaughts: ").concat(Integer.toString(_pdread)).concat("\n")
-                        .concat("Warsuns: ").concat(Integer.toString(_pwar));
-            }
-            if (epre > 0 && (_ewar + _edread + _ecruiser + _edestroyer + _efighter) > 0) {
-                return "You lost during pre-combat and the enemy has the following units: \n"
-                        .concat("Fighters: ").concat(Integer.toString(_efighter)).concat("\n")
-                        .concat("Destroyers: ").concat(Integer.toString(_edestroyer)).concat("\n")
-                        .concat("Cruisers: ").concat(Integer.toString(_ecruiser)).concat("\n")
-                        .concat("Dreadnaughts: ").concat(Integer.toString(_edread)).concat("\n")
-                        .concat("Warsuns: ").concat(Integer.toString(_ewar));
-            }
-            pdreadsus = _pdread;
-            pwarsus = _pwar;
-            edreadsus = _edread;
-            ewarsus = _ewar;
-            return Combat();
-        }
-    }
-
-    //Normal Combat (recursive rounds)
-    public String Combat(){
+    public int Combat(int HM){
         //Tally number of hits player makes
-        System.out.println("Combat");
         int phits = 0;
         int pcr = 0;
         for(int i = 0; i < _pfighter; i++){
@@ -491,6 +452,11 @@ public class CombatSimTab extends AbstractTab{
         }
         for(int i = 0; i < (_pwar*3); i++){
             if(DiceRoller() >= _pwarDam){
+                phits += 1;
+            }
+        }
+        if(Database.hasTech(_client.getName(),"Auxiliary Drones") && _pdread >0){
+            if(DiceRoller() >= 7){
                 phits += 1;
             }
         }
@@ -522,6 +488,11 @@ public class CombatSimTab extends AbstractTab{
                 ehits += 1;
             }
         }
+        if(Database.hasTech(enemy,"Auxiliary Drones") && _edread >0){
+            if(DiceRoller() >= 7){
+                ehits += 1;
+            }
+        }
         //Inflict player cruiser damage on enemy
         while(pcr > 0){
             if(_efighter > 0){
@@ -539,6 +510,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_edread > 0){
                 pcr -= 1;
                 _edread -= 1;
+                if(Database.hasTech(enemy, "Transfabrication")){
+                    _edestroyer += 1;
+                }
             }
             else if(_ewar > 0){
                 pcr -= 1;
@@ -563,6 +537,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_pdread > 0){
                 ecr -= 1;
                 _pdread -= 1;
+                if(Database.hasTech(_client.getName(), "Transfabrication")){
+                    _pdestroyer += 1;
+                }
             }
             else if(_pwar > 0){
                 ecr -= 1;
@@ -596,6 +573,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_edread > 0){
                 phits -= 1;
                 _edread -= 1;
+                if(Database.hasTech(enemy, "Transfabrication")){
+                    _edestroyer += 1;
+                }
             }
             else if(_ewar > 0){
                 phits -= 1;
@@ -628,6 +608,9 @@ public class CombatSimTab extends AbstractTab{
             else if(_pdread > 0){
                 ehits -= 1;
                 _pdread -= 1;
+                if(Database.hasTech(_client.getName(), "Transfabrication")){
+                    _pdestroyer += 1;
+                }
             }
             else if(_pwar > 0){
                 ehits -= 1;
@@ -636,24 +619,17 @@ public class CombatSimTab extends AbstractTab{
             else{break;}
         }
 
+        //Stalemate
         if(((_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 0) && ((_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 0)){
-            return "Stalemate";
+            return 3;
         }
+        //win
         else if((_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 0){
-            return "You won and have the following leftover units: \n"
-                    .concat("Fighters: ").concat(Integer.toString(_pfighter)).concat("\n")
-                    .concat("Destroyers: ").concat(Integer.toString(_pdestroyer)).concat("\n")
-                    .concat("Cruisers: ").concat(Integer.toString(_pcruiser)).concat("\n")
-                    .concat("Dreadnaughts: ").concat(Integer.toString(_pdread)).concat("\n")
-                    .concat("Warsuns: ").concat(Integer.toString(_pwar));
+            return 1;
         }
+        //lose
         else if((_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 0){
-            return "You lost and the enemy has the following leftover units: \n"
-                    .concat("Fighters: ").concat(Integer.toString(_efighter)).concat("\n")
-                    .concat("Destroyers: ").concat(Integer.toString(_edestroyer)).concat("\n")
-                    .concat("Cruisers: ").concat(Integer.toString(_ecruiser)).concat("\n")
-                    .concat("Dreadnaughts: ").concat(Integer.toString(_edread)).concat("\n")
-                    .concat("Warsuns: ").concat(Integer.toString(_ewar));
+            return 2;
         }
         if(Database.hasTech(_client.getName(), "Duranium Armor")){
             if(_pwar > pwarsus){
@@ -671,9 +647,143 @@ public class CombatSimTab extends AbstractTab{
                 edreadsus += 1;
             }
         }
-        return Combat();
+        if(Database.hasTech(_client.getName(),"Hyper Metabolism")){
+            _pdestroyerDam -= 1;
+        }
+        if(Database.hasTech(enemy, "Hyper Metabolism")){
+            _edestroyerDam -= 1;
+        }
+        return Combat(HM+=1);
     }
+
+    //Average remaining units
+    public float avgPfighter=0;
+    public float avgPdestroyer=0;
+    public float avgPcruiser=0;
+    public float avgPdread=0;
+    public float avgPwar=0;
+    public float avgEfighter=0;
+    public float avgEdestroyer=0;
+    public float avgEcruiser=0;
+    public float avgEdread=0;
+    public float avgEwar=0;
+    public float wins=0;
+    public float losses=0;
+    public float draw=0;
+
+    /**
+     * Will take hits in the following order:
+     * Dreadnaught(sustain) > WarSun(sustain) > Fighter > Destroyer > Cruiser > Dreadnaught > WarSun
+     * Will not sustain hits to warsun or dreadnaught if there are enemy cruisers, will let other units take the hits
+     * if possible.
+     * Dreadnaught sustains first in order to prevent a targeted/direct hit on warsun. (look at me being in the meta)
+     * Assumes that all fighters will be destroyed before destroying carriers/dreadnaughts/warsuns.
+     */
+    public String CombatSim() {
+        avgPfighter=0;
+        avgPdestroyer=0;
+        avgPcruiser=0;
+        avgPdread=0;
+        avgPwar=0;
+        avgEfighter=0;
+        avgEdestroyer=0;
+        avgEcruiser=0;
+        avgEdread=0;
+        avgEwar=0;
+        wins=0;
+        losses=0;
+        draw=0;
+        enemy = new String();
+        try {
+            enemy = eOptions.getValue().toString(); //gets the value selected by the combobox
+        } catch (NullPointerException e) {
+            return "Enemy name field fucked";
+        }
+        for(int i = 0; i<1000; i++){
+            if(setUnits() == false){
+                return "Error, setUnits returned false";
+            }
+            else {
+                //Pre-Combat
+                PreCombat();
+                pdreadsus = _pdread;
+                pwarsus = _pwar;
+                edreadsus = _edread;
+                ewarsus = _ewar;
+                int res = Combat(0);
+                if(res == 1){
+                    wins += 1;
+                }
+                else if(res == 2){
+                    losses += 1;
+                }
+                else if(res == 3){
+                    draw += 1;
+                }
+                else{
+                    return "Error";
+                }
+                avgPfighter += _pfighter;
+                avgPdestroyer += _pdestroyer;
+                avgPcruiser += _pcruiser;
+                avgPdread += _pdread;
+                avgPwar += _pwar;
+                avgEfighter += _efighter;
+                avgEdestroyer += _edestroyer;
+                avgEcruiser += _ecruiser;
+                avgEdread += _edread;
+                avgEwar += _ewar;
+                int premdread = _pdread;
+                int premdest = _pdestroyer;
+                int eremdread = _edread;
+                int eremdest = _edestroyer;
+                setUnits();
+                if(_pdread > premdread && premdest > 0){
+                    avgPdread += 1;
+                }
+                if(_edread > eremdread && eremdest > 0){
+                    avgEdread += 1;
+                }
+            }
+        }
+        avgPfighter /= 1000;
+        avgPdestroyer /= 1000;
+        avgPcruiser /= 1000;
+        avgPdread /= 1000;
+        avgPwar /= 1000;
+        avgEfighter /= 1000;
+        avgEdestroyer /= 1000;
+        avgEcruiser /= 1000;
+        avgEdread /= 1000;
+        avgEwar /= 1000;
+        wins /= 10;
+        losses /= 10;
+        draw /=10;
+        return "Out of 1000 trials, the results were: \n" +
+                "Victory = " + (new BigDecimal(Float.toString(wins)).setScale(1).toString()) + "%\n" +
+                "Defeat = " + new BigDecimal(Float.toString(losses)).setScale(1).toString() + "%\n" +
+                "Stalemate = " + new BigDecimal(Float.toString(draw)).setScale(1).toString() + "%\n" +
+                "You had the following average remaining units: \n"
+                .concat("Fighters: ").concat((new BigDecimal(Float.toString(avgPfighter)).setScale(2).toString())).concat("\n")
+                .concat("Destroyers: ").concat(new BigDecimal(Float.toString(avgPdestroyer)).setScale(2).toString()).concat("\n")
+                .concat("Cruisers: ").concat(new BigDecimal(Float.toString(avgPcruiser)).setScale(2).toString()).concat("\n")
+                .concat("Dreadnaughts: ").concat(new BigDecimal(Float.toString(avgPdread)).setScale(2).toString()).concat("\n")
+                .concat("Warsuns: ").concat(new BigDecimal(Float.toString(avgPwar)).setScale(2).toString()) + "\n" +
+                "The enemy had the following average remaining units: \n"
+                        .concat("Fighters: ").concat((new BigDecimal(Float.toString(avgEfighter)).setScale(2).toString())).concat("\n")
+                        .concat("Destroyers: ").concat(new BigDecimal(Float.toString(avgEdestroyer)).setScale(2).toString()).concat("\n")
+                        .concat("Cruisers: ").concat(new BigDecimal(Float.toString(avgEcruiser)).setScale(2).toString()).concat("\n")
+                        .concat("Dreadnaughts: ").concat(new BigDecimal(Float.toString(avgEdread)).setScale(2).toString()).concat("\n")
+                        .concat("Warsuns: ").concat(new BigDecimal(Float.toString(avgEwar)).setScale(2).toString());
+    }
+
+
+
 }
+
+
+
+
 
 
 
