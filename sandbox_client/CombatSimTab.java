@@ -26,37 +26,50 @@ import java.math.BigDecimal;
   */
 
 public class CombatSimTab extends AbstractTab {
+	
+	// TODO: move to database, add xml
+	public static final int FIGHTER = 0;
+	public static final int DESTROYER = 1;
+	public static final int CRUISER = 2;
+	public static final int DREADNOUGHT = 3;
+	public static final int WAR_SUN = 4;
+	
+	public static final int NUM_SHIPS = 5;
+	
+	public static final String[] SHIP_NAMES = {"Fighters", "Destroyers", "Cruisers", "Dreadnoughts", "War Suns"};
 
     private Client _client;
 
-    //Player units field
-    private TextField pfighter;
-    private TextField pdestroyer;
-    private TextField pcruiser;
-    private TextField pdread;
-    private TextField pwar;
-
-    //Enemy units field
-    private TextField efighter;
-    private TextField edestroyer;
-    private TextField ecruiser;
-    private TextField edread;
-    private TextField ewar;
+    // Units fields
+    private TextField[] _playerUnitFields = new TextField[NUM_SHIPS];
+    private TextField[] _enemyUnitFields = new TextField[NUM_SHIPS];
+    
+    //enemy name
+    private String enemy;
+    
+    //Number of each unit
+    private int[] _playerUnitCounts = new int[NUM_SHIPS];
+    private int[] _enemyUnitCounts = new int[NUM_SHIPS];
+    
+    //Damage values of each unit- TODO factor into xml
+    private int[] _playerUnitHitRate = {9, 9, 7, 6, 3};
+    private int[] _enemyUnitHitRate = {9, 9, 7, 6, 3};
 
     private Button _start;
     private GridPane scenepane = new GridPane();
     private Text PlayerName;
-    private ComboBox eOptions;
+    private ComboBox<String> eOptions;
     private GridPane _pane;
 
         //make values cleared when you click on another tab
         public CombatSimTab(Client client) {
             super(Client.SIMULATOR);
-            Platform.runLater(new Runnable() {
+            Platform.runLater(new Runnable() { // TODO bad- at least make an "initialize()" method to call in here instead of defining everything
                 @Override
                 public void run() {
 
-                    _client = client;
+                _client = client;
+            // TODO - whitespace is misaligned
             _root.setClosable(false);
             _root.setContent(scenepane);
 
@@ -68,28 +81,16 @@ public class CombatSimTab extends AbstractTab {
 
 
             //make new textfields
-            pfighter = new TextField();
-            pdestroyer = new TextField();
-            pcruiser = new TextField();
-            pdread = new TextField();
-            pwar = new TextField();
-            efighter = new TextField();
-            edestroyer = new TextField();
-            ecruiser = new TextField();
-            edread = new TextField();
-            ewar = new TextField();
+            for(int i=0; i<NUM_SHIPS; i++) {
+            	_playerUnitFields[i] = new TextField();
+            	_enemyUnitFields[i] = new TextField();
+            }
 
             //Set the prompt text
-            pfighter.setPromptText("Fighters");
-            pdestroyer.setPromptText("Destroyers");
-            pcruiser.setPromptText("Cruisers");
-            pdread.setPromptText("Dreadnaughts");
-            pwar.setPromptText("Warsuns");
-            efighter.setPromptText("Fighters");
-            edestroyer.setPromptText("Destroyers");
-            ecruiser.setPromptText("Cruisers");
-            edread.setPromptText("Dreadnaughts");
-            ewar.setPromptText("Warsuns");
+            for(int i=0; i<NUM_SHIPS; i++) {
+            	_playerUnitFields[i].setPromptText(SHIP_NAMES[i]);
+            	_enemyUnitFields[i].setPromptText(SHIP_NAMES[i]);
+            }
 
             //start button
             _start = new Button("Start");
@@ -103,19 +104,13 @@ public class CombatSimTab extends AbstractTab {
             GridPane.setHalignment(_start, HPos.CENTER);
 
             //drop down menue for enemies
-            eOptions = new ComboBox();
+            eOptions = new ComboBox<String>();
 
             //Add things to grid
-            _pane.add(pfighter, 1, 2);
-            _pane.add(pdestroyer, 1, 3);
-            _pane.add(pcruiser, 1, 4);
-            _pane.add(pdread, 1, 5);
-            _pane.add(pwar, 1, 6);
-            _pane.add(efighter, 2, 2);
-            _pane.add(edestroyer, 2, 3);
-            _pane.add(ecruiser, 2, 4);
-            _pane.add(edread, 2, 5);
-            _pane.add(ewar, 2, 6);
+            for(int i=0; i<NUM_SHIPS; i++) {
+            	_pane.add(_playerUnitFields[i], 1, i+2);
+            	_pane.add(_enemyUnitFields[i], 2, i+2);
+            }
             _pane.setAlignment(Pos.CENTER);
 
             Pane ResultsPane = new Pane();
@@ -153,19 +148,7 @@ public class CombatSimTab extends AbstractTab {
 
     }
 
-    //enemy name
-    private String enemy;
-    //Number of each unit
-    private int _pfighter;
-    private int _pdestroyer;
-    private int _pcruiser;
-    private int _pdread;
-    private int _pwar;
-    private int _efighter;
-    private int _edestroyer;
-    private int _ecruiser;
-    private int _edread;
-    private int _ewar;
+
 
     /**
      * Reads the values entered into the textfield and assignes them to the unit numbers
@@ -173,120 +156,68 @@ public class CombatSimTab extends AbstractTab {
      */
     public boolean setUnits() {
         try{
-            _pfighter =  Integer.parseInt(pfighter.getText().toString());
-            _pdestroyer =  Integer.parseInt(pdestroyer.getText().toString());
-            _pcruiser =  Integer.parseInt(pcruiser.getText().toString());
-            _pdread =  Integer.parseInt(pdread.getText().toString());
-            _pwar =  Integer.parseInt(pwar.getText().toString());
-            _efighter =  Integer.parseInt(efighter.getText().toString());
-            _edestroyer =  Integer.parseInt(edestroyer.getText().toString());
-            _ecruiser =  Integer.parseInt(ecruiser.getText().toString());
-            _edread =  Integer.parseInt(edread.getText().toString());
-            _ewar =  Integer.parseInt(ewar.getText().toString());
+        	for(int i=0; i<NUM_SHIPS; i++) {
+        		_playerUnitCounts[i] = Integer.parseInt(_playerUnitFields[i].getText().toString());
+        		_enemyUnitCounts[i] = Integer.parseInt(_enemyUnitFields[i].getText().toString());
+        	}
         } catch (NumberFormatException e) {
             System.out.println("Error in setUnits");
+            // TODO println doesn't actually work when run as a JAR
             return false;
         }
         return true;
     }
 
-
-    //Damage values of each unit
-    private int _pfighterDam;
-    private int _pdestroyerDam;
-    private int _pcruiserDam;
-    private int _pdreadDam;
-    private int _pwarDam;
-    private int _efighterDam;
-    private int _edestroyerDam;
-    private int _ecruiserDam;
-    private int _edreadDam;
-    private int _ewarDam;
-
     /**
      * Calculates damage values for units based on tech that the player and enemy have researched
      */
-    public void DamageVal () {
+    public void DamageVal () { //TODO stop it with capital method names
 
         String player = _client.getName();
 
         if(Database.hasTech(player, "Hylar V Assult Laser")){
-            _pdestroyerDam = 8;
-            _pcruiserDam = 6;
+        	_playerUnitHitRate[DESTROYER] -= 1;
+        	_playerUnitHitRate[CRUISER] -= 1;
+        } if(Database.hasTech(enemy, "Hylar V Assult Laser")){
+        	_enemyUnitHitRate[DESTROYER] -= 1;
+        	_enemyUnitHitRate[CRUISER] -= 1;
         }
-        else{
-            _pdestroyerDam = 9;
-            _pcruiserDam = 7;
-        }
-        if(Database.hasTech(enemy, "Hylar V Assult Laser")){
-            _edestroyerDam = 8;
-            _ecruiserDam = 6;
-        }
-        else{
-            _edestroyerDam = 9;
-            _ecruiserDam = 7;
-        }
+        
         if(Database.hasTech(player, "Ion Cannons")){
-            _pdreadDam = 4;
+            _playerUnitHitRate[DREADNOUGHT] -= 2;
+        } if(Database.hasTech(enemy, "Ion Cannons")){
+            _enemyUnitHitRate[DREADNOUGHT] -= 2;
         }
-        else{
-            _pdreadDam = 6;
+        
+        if(Database.hasTech(player, "Cybernetics")) {
+        	_playerUnitHitRate[FIGHTER] -= 1;
+        } if(Database.hasTech(enemy, "Cybernetics")) {
+        	_enemyUnitHitRate[FIGHTER] -= 1;
         }
-        if(Database.hasTech(enemy, "Ion Cannons")){
-            _edreadDam = 4;
+          
+        if(Database.hasTech(player, "Advanced Fighters")) {
+            _playerUnitHitRate[FIGHTER] -= 1;
+        } if(Database.hasTech(enemy, "Advanced Fighters")) {
+        	_enemyUnitHitRate[FIGHTER] -= 1;
         }
-        else{
-            _edreadDam = 6;
-        }
-        if(Database.hasTech(player, "Cybernetics")){
-            if(Database.hasTech(player, "Advanced Fighters")){
-                _pfighterDam = 7;
-            }
-            else {
-                _pfighterDam = 8;
-            }
-        }
-        else{
-            _pfighterDam = 9;
-        }
-        if(Database.hasTech(enemy, "Cybernetics")){
-            if(Database.hasTech(enemy, "Advanced Fighters")){
-                _efighterDam = 7;
-            }
-            else{
-                _efighterDam = 8;
-            }
-        }
-        else{
-            _efighterDam = 9;
-        }
+        
         if(Database.raceOf(player).equals("The Sardakk N'Orr")){
-            _pfighterDam -= 1;
-            _pdestroyerDam -= 1;
-            _pcruiserDam -= 1;
-            _pdreadDam -= 1;
-            _pwarDam = 2;
-        }
-        else{
-            _pwarDam = 3;
-        }
-        if(Database.raceOf(enemy).equals("The Sardakk N'Orr")){
-            _efighterDam -= 1;
-            _edestroyerDam -= 1;
-            _ecruiserDam -= 1;
-            _edreadDam -= 1;
-            _ewarDam = 2;
-        }
-        else{
-            _ewarDam = 3;
+        	for(int i=0; i<NUM_SHIPS; i++) {
+        		_playerUnitHitRate[i] -= 1;
+        	}
+        } if(Database.raceOf(enemy).equals("The Sardakk N'Orr")){
+        	for(int i=0; i<NUM_SHIPS; i++) {
+        		_enemyUnitHitRate[i] -= 1;
+        	}
         }
     }
 
     public int DiceRoller(){
-        int roll = (int) Math.round((Math.random() * 10));
-        return roll;
+        return (int) Math.round((Math.random() * 10));
     }
 
+    // TODO stop this, stop putting instance variables halfway through the class
+    // TODO and if you are going to make an instance variable, keep it consistent. Since everywhere else in the code uses _varName, that's what I'd recommend switching to.
     public int ppre; //Player pre combat hits
     public int epre; //Enemy pre combat hits
 
@@ -297,51 +228,51 @@ public class CombatSimTab extends AbstractTab {
     public void PreCombat () {
         DamageVal();
         //Player ADT
-        if (_efighter > 3) {
+        if (_enemyUnitCounts[FIGHTER] > 3) {
             int pADT = 0;
             if (Database.hasTech(_client.getName(), "ADT")) {
-                while(pADT < _pdestroyer || pADT < _efighter) {
-                    for (int i = 0; i < _efighter / 4; i++) {
-                        if (DiceRoller() >= (_pfighterDam - 1)) {
+                while(pADT < _playerUnitCounts[DESTROYER] || pADT < _enemyUnitCounts[FIGHTER]) {
+                    for (int i = 0; i < _enemyUnitCounts[FIGHTER] / 4; i++) {
+                        if (DiceRoller() >= (_playerUnitHitRate[FIGHTER] - 1)) {
                             pADT += 1;
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < _efighter / 4; i++) {
-                    if (DiceRoller() >= _pfighterDam) {
+                for (int i = 0; i < _enemyUnitCounts[FIGHTER] / 4; i++) {
+                    if (DiceRoller() >= _playerUnitHitRate[FIGHTER]) {
                         pADT +=+ 1;
                     }
                 }
             }
-            _efighter = _efighter - pADT;
+            _enemyUnitCounts[FIGHTER] = _enemyUnitCounts[FIGHTER] - pADT;
         }
         //Enemy ADT
-        if (_pfighter > 3) {
+        if (_playerUnitCounts[FIGHTER] > 3) {
             int eADT = 0;
             if (Database.hasTech(enemy, "ADT")) {
-                while(eADT < _edestroyer || eADT < _pfighter) {
-                    for (int i = 0; i < _pfighter / 4; i++) {
-                        if (DiceRoller() >= (_efighterDam - 1)) {
+                while(eADT < _enemyUnitCounts[DESTROYER] || eADT < _playerUnitCounts[FIGHTER]) {
+                    for (int i = 0; i < _playerUnitCounts[FIGHTER] / 4; i++) {
+                        if (DiceRoller() >= (_enemyUnitHitRate[FIGHTER] - 1)) {
                             eADT += 1;
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < _pfighter / 4; i++) {
-                    if (DiceRoller() >= _efighterDam) {
+                for (int i = 0; i < _playerUnitCounts[FIGHTER] / 4; i++) {
+                    if (DiceRoller() >= _enemyUnitHitRate[FIGHTER]) {
                         eADT += 1;
                     }
                 }
             }
-            _pfighter = _pfighter - eADT;
+            _playerUnitCounts[FIGHTER] = _playerUnitCounts[FIGHTER] - eADT;
         }
 
         //Player Assault Cannons
         ppre = 0;
-        if(Database.hasTech(_client.getName(), "Assault Cannon") && (_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 3) {
-            for(int i = 0; i<_pcruiser; i++){
-                if(DiceRoller() >= _pcruiserDam - 3){
+        if(Database.hasTech(_client.getName(), "Assault Cannon") && (_playerUnitCounts[WAR_SUN] + _playerUnitCounts[DREADNOUGHT]+ _playerUnitCounts[CRUISER] + _playerUnitCounts[DESTROYER] + _playerUnitCounts[FIGHTER]) <= 3) {
+            for(int i = 0; i<_playerUnitCounts[CRUISER]; i++){
+                if(DiceRoller() >= _playerUnitHitRate[CRUISER] - 3){
                     ppre += 1;
                 }
             }
@@ -350,9 +281,9 @@ public class CombatSimTab extends AbstractTab {
 
         //Enemy Assault Cannons
         epre = 0;
-        if(Database.hasTech(enemy, "Assault Cannon")&& (_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 3) {
-            for(int i = 0; i<_ecruiser; i++){
-                if(DiceRoller() >= _ecruiserDam - 3){
+        if(Database.hasTech(enemy, "Assault Cannon")&& (_enemyUnitCounts[WAR_SUN] + _enemyUnitCounts[DREADNOUGHT]+ _enemyUnitCounts[CRUISER] + _enemyUnitCounts[DESTROYER] + _enemyUnitCounts[FIGHTER]) <= 3) {
+            for(int i = 0; i<_enemyUnitCounts[CRUISER]; i++){
+                if(DiceRoller() >= _enemyUnitHitRate[CRUISER] - 3){
                     epre += 1;
                 }
             }
@@ -360,55 +291,55 @@ public class CombatSimTab extends AbstractTab {
         else{epre = 0;}
         //Applying player assault cannon hits to enemy
         while(ppre > 0){
-            if(_efighter > 0){
+            if(_enemyUnitCounts[FIGHTER] > 0){
                 ppre -= 1;
-                _efighter -= 1;
+                _enemyUnitCounts[FIGHTER] -= 1;
             }
-            else if(_edestroyer > 0){
+            else if(_enemyUnitCounts[DESTROYER] > 0){
                 ppre -= 1;
-                _edestroyer -= 1;
+                _enemyUnitCounts[DESTROYER] -= 1;
             }
-            else if(_ecruiser > 0){
+            else if(_enemyUnitCounts[CRUISER] > 0){
                 ppre -= 1;
-                _ecruiser -= 1;
+                _enemyUnitCounts[CRUISER] -= 1;
             }
-            else if(_edread > 0){
+            else if(_enemyUnitCounts[DREADNOUGHT]> 0){
                 ppre -= 1;
-                _edread -= 1;
+                _enemyUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(enemy, "Transfabrication")){
-                    _edestroyer += 1;
+                    _enemyUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_ewar > 0){
+            else if(_enemyUnitCounts[WAR_SUN] > 0){
                 ppre -= 1;
-                _ewar -= 1;
+                _enemyUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
         //Applying enemy assault cannon hits to player
         while(epre > 0){
-            if(_pfighter > 0){
+            if(_playerUnitCounts[FIGHTER] > 0){
                 epre -= 1;
-                _pfighter -= 1;
+                _playerUnitCounts[FIGHTER] -= 1;
             }
-            else if(_pdestroyer > 0){
+            else if(_playerUnitCounts[DESTROYER] > 0){
                 epre -= 1;
-                _pdestroyer -= 1;
+                _playerUnitCounts[DESTROYER] -= 1;
             }
-            else if(_pcruiser > 0){
+            else if(_playerUnitCounts[CRUISER] > 0){
                 epre -= 1;
-                _pcruiser -= 1;
+                _playerUnitCounts[CRUISER] -= 1;
             }
-            else if(_pdread > 0){
+            else if(_playerUnitCounts[DREADNOUGHT]> 0){
                 epre -= 1;
-                _pdread -= 1;
+                _playerUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(_client.getName(), "Transfabrication")){
-                    _pdestroyer += 1;
+                    _playerUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_pwar > 0){
+            else if(_playerUnitCounts[WAR_SUN] > 0){
                 epre -= 1;
-                _pwar -= 1;
+                _playerUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
@@ -424,36 +355,37 @@ public class CombatSimTab extends AbstractTab {
      * Normal combat (recursive)
      * @return 1 = Win, 2 = Loss, 3 = Stalemate
      */
-    public int Combat(int HM){
+    public int Combat(int HM){ // TODO stop this too, method names do NOT get capital first letters unless they hella important
         //Tally number of hits player makes
         int phits = 0;
         int pcr = 0;
-        for(int i = 0; i < _pfighter; i++){
-            if(DiceRoller() >= _pfighterDam){
+        // TODO = Now that everything's been moved to arrays, can we factor some of this redundant code out?
+        for(int i = 0; i < _playerUnitCounts[FIGHTER]; i++){
+            if(DiceRoller() >= _playerUnitHitRate[FIGHTER]){
                 phits += 1;
             }
         }
-        for(int i = 0; i < _pdestroyer; i++){
-            if(DiceRoller() >= _pdestroyerDam){
+        for(int i = 0; i < _playerUnitCounts[DESTROYER]; i++){
+            if(DiceRoller() >= _playerUnitHitRate[DESTROYER]){
                 phits += 1;
             }
         }
-        for(int i = 0; i < _pcruiser; i++){
-            if(DiceRoller() >= _pcruiserDam){
+        for(int i = 0; i < _playerUnitCounts[CRUISER]; i++){
+            if(DiceRoller() >= _playerUnitHitRate[CRUISER]){
                 pcr += 1;   //use pcr for cruiser
             }
         }
-        for(int i = 0; i < _pdread; i++){
-            if(DiceRoller() >= _pdreadDam){
+        for(int i = 0; i < _playerUnitCounts[DREADNOUGHT]; i++){
+            if(DiceRoller() >= _playerUnitHitRate[DREADNOUGHT]){
                 phits += 1;
             }
         }
-        for(int i = 0; i < (_pwar*3); i++){
-            if(DiceRoller() >= _pwarDam){
+        for(int i = 0; i < (_playerUnitCounts[WAR_SUN]*3); i++){
+            if(DiceRoller() >= _playerUnitHitRate[WAR_SUN]){
                 phits += 1;
             }
         }
-        if(Database.hasTech(_client.getName(),"Auxiliary Drones") && _pdread >0){
+        if(Database.hasTech(_client.getName(),"Auxiliary Drones") && _playerUnitCounts[DREADNOUGHT]>0){
             if(DiceRoller() >= 7){
                 phits += 1;
             }
@@ -461,87 +393,87 @@ public class CombatSimTab extends AbstractTab {
         //Tally number of hits enemy makes
         int ehits = 0;
         int ecr = 0;
-        for(int i = 0; i < _efighter; i++){
-            if(DiceRoller() >= _efighterDam){
+        for(int i = 0; i < _enemyUnitCounts[FIGHTER]; i++){
+            if(DiceRoller() >= _enemyUnitHitRate[FIGHTER]){
                 ehits += 1;
             }
         }
-        for(int i = 0; i < _edestroyer; i++){
-            if(DiceRoller() >= _edestroyerDam){
+        for(int i = 0; i < _enemyUnitCounts[DESTROYER]; i++){
+            if(DiceRoller() >= _enemyUnitHitRate[DESTROYER]){
                 ehits += 1;
             }
         }
-        for(int i = 0; i < _ecruiser; i++){
-            if(DiceRoller() >= _ecruiserDam){
+        for(int i = 0; i < _enemyUnitCounts[CRUISER]; i++){
+            if(DiceRoller() >= _enemyUnitHitRate[CRUISER]){
                 ecr += 1;   //use ecr for cruiser
             }
         }
-        for(int i = 0; i < _edread; i++){
-            if(DiceRoller() >= _edreadDam){
+        for(int i = 0; i < _enemyUnitCounts[DREADNOUGHT]; i++){
+            if(DiceRoller() >= _enemyUnitHitRate[DREADNOUGHT]){
                 ehits += 1;
             }
         }
-        for(int i = 0; i < (_ewar*3); i++){
-            if(DiceRoller() >= _ewarDam){
+        for(int i = 0; i < (_enemyUnitCounts[WAR_SUN]*3); i++){
+            if(DiceRoller() >= _enemyUnitHitRate[WAR_SUN]){
                 ehits += 1;
             }
         }
-        if(Database.hasTech(enemy,"Auxiliary Drones") && _edread >0){
+        if(Database.hasTech(enemy,"Auxiliary Drones") && _enemyUnitCounts[DREADNOUGHT]>0){
             if(DiceRoller() >= 7){
                 ehits += 1;
             }
         }
         //Inflict player cruiser damage on enemy
         while(pcr > 0){
-            if(_efighter > 0){
-                _efighter -= 1;
+            if(_enemyUnitCounts[FIGHTER] > 0){
+                _enemyUnitCounts[FIGHTER] -= 1;
                 pcr -= 1;
             }
-            else if(_edestroyer > 0){
+            else if(_enemyUnitCounts[DESTROYER] > 0){
                 pcr -= 1;
-                _edestroyer -= 1;
+                _enemyUnitCounts[DESTROYER] -= 1;
             }
-            else if(_ecruiser > 0){
+            else if(_enemyUnitCounts[CRUISER] > 0){
                 pcr -= 1;
-                _ecruiser -= 1;
+                _enemyUnitCounts[CRUISER] -= 1;
             }
-            else if(_edread > 0){
+            else if(_enemyUnitCounts[DREADNOUGHT]> 0){
                 pcr -= 1;
-                _edread -= 1;
+                _enemyUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(enemy, "Transfabrication")){
-                    _edestroyer += 1;
+                    _enemyUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_ewar > 0){
+            else if(_enemyUnitCounts[WAR_SUN] > 0){
                 pcr -= 1;
-                _ewar -= 1;
+                _enemyUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
         //Inflict enemy cruiser damage on player
         while(ecr > 0){
-            if(_pfighter > 0){
+            if(_playerUnitCounts[FIGHTER] > 0){
                 ecr -= 1;
-                _pfighter -= 1;
+                _playerUnitCounts[FIGHTER] -= 1;
             }
-            else if(_pdestroyer > 0){
+            else if(_playerUnitCounts[DESTROYER] > 0){
                 ecr -= 1;
-                _pdestroyer -= 1;
+                _playerUnitCounts[DESTROYER] -= 1;
             }
-            else if(_pcruiser > 0){
+            else if(_playerUnitCounts[CRUISER] > 0){
                 ecr -= 1;
-                _pcruiser -= 1;
+                _playerUnitCounts[CRUISER] -= 1;
             }
-            else if(_pdread > 0){
+            else if(_playerUnitCounts[DREADNOUGHT]> 0){
                 ecr -= 1;
-                _pdread -= 1;
+                _playerUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(_client.getName(), "Transfabrication")){
-                    _pdestroyer += 1;
+                    _playerUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_pwar > 0){
+            else if(_playerUnitCounts[WAR_SUN] > 0){
                 ecr -= 1;
-                _pwar -= 1;
+                _playerUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
@@ -556,28 +488,28 @@ public class CombatSimTab extends AbstractTab {
                 ewarsus -= 1;
                 phits -= 1;
             }
-            else if(_efighter > 0){
-                _efighter -= 1;
+            else if(_enemyUnitCounts[FIGHTER] > 0){
+                _enemyUnitCounts[FIGHTER] -= 1;
                 phits -= 1;
             }
-            else if(_edestroyer > 0){
+            else if(_enemyUnitCounts[DESTROYER] > 0){
                 phits -= 1;
-                _edestroyer -= 1;
+                _enemyUnitCounts[DESTROYER] -= 1;
             }
-            else if(_ecruiser > 0){
+            else if(_enemyUnitCounts[CRUISER] > 0){
                 phits -= 1;
-                _ecruiser -= 1;
+                _enemyUnitCounts[CRUISER] -= 1;
             }
-            else if(_edread > 0){
+            else if(_enemyUnitCounts[DREADNOUGHT]> 0){
                 phits -= 1;
-                _edread -= 1;
+                _enemyUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(enemy, "Transfabrication")){
-                    _edestroyer += 1;
+                    _enemyUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_ewar > 0){
+            else if(_enemyUnitCounts[WAR_SUN] > 0){
                 phits -= 1;
-                _ewar -= 1;
+                _enemyUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
@@ -591,70 +523,72 @@ public class CombatSimTab extends AbstractTab {
                 pwarsus -= 1;
                 ehits -= 1;
             }
-            else if(_pfighter > 0){
+            else if(_playerUnitCounts[FIGHTER] > 0){
                 ehits -= 1;
-                _pfighter -= 1;
+                _playerUnitCounts[FIGHTER] -= 1;
             }
-            else if(_pdestroyer > 0){
+            else if(_playerUnitCounts[DESTROYER] > 0){
                 ehits -= 1;
-                _pdestroyer -= 1;
+                _playerUnitCounts[DESTROYER] -= 1;
             }
-            else if(_pcruiser > 0){
+            else if(_playerUnitCounts[CRUISER] > 0){
                 ehits -= 1;
-                _pcruiser -= 1;
+                _playerUnitCounts[CRUISER] -= 1;
             }
-            else if(_pdread > 0){
+            else if(_playerUnitCounts[DREADNOUGHT]> 0){
                 ehits -= 1;
-                _pdread -= 1;
+                _playerUnitCounts[DREADNOUGHT]-= 1;
                 if(Database.hasTech(_client.getName(), "Transfabrication")){
-                    _pdestroyer += 1;
+                    _playerUnitCounts[DESTROYER] += 1;
                 }
             }
-            else if(_pwar > 0){
+            else if(_playerUnitCounts[WAR_SUN] > 0){
                 ehits -= 1;
-                _pwar -= 1;
+                _playerUnitCounts[WAR_SUN] -= 1;
             }
             else{break;}
         }
 
+        // TODO - and maybe keep a running count of the total number of units for each player
         //Stalemate
-        if(((_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 0) && ((_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 0)){
+        if(((_playerUnitCounts[WAR_SUN] + _playerUnitCounts[DREADNOUGHT]+ _playerUnitCounts[CRUISER] + _playerUnitCounts[DESTROYER] + _playerUnitCounts[FIGHTER]) <= 0) && ((_enemyUnitCounts[WAR_SUN] + _enemyUnitCounts[DREADNOUGHT]+ _enemyUnitCounts[CRUISER] + _enemyUnitCounts[DESTROYER] + _enemyUnitCounts[FIGHTER]) <= 0)){
             return 3;
         }
         //win
-        else if((_ewar + _edread + _ecruiser + _edestroyer + _efighter) <= 0){
+        else if((_enemyUnitCounts[WAR_SUN] + _enemyUnitCounts[DREADNOUGHT]+ _enemyUnitCounts[CRUISER] + _enemyUnitCounts[DESTROYER] + _enemyUnitCounts[FIGHTER]) <= 0){
             return 1;
         }
         //lose
-        else if((_pwar + _pdread + _pcruiser + _pdestroyer + _pfighter) <= 0){
+        else if((_playerUnitCounts[WAR_SUN] + _playerUnitCounts[DREADNOUGHT]+ _playerUnitCounts[CRUISER] + _playerUnitCounts[DESTROYER] + _playerUnitCounts[FIGHTER]) <= 0){
             return 2;
         }
+        
         if(Database.hasTech(_client.getName(), "Duranium Armor")){
-            if(_pwar > pwarsus){
+            if(_playerUnitCounts[WAR_SUN] > pwarsus){
                 pwarsus += 1;
             }
-            else if(_pdread > pdreadsus){
+            else if(_playerUnitCounts[DREADNOUGHT]> pdreadsus){
                 pdreadsus += 1;
             }
-        }
-        if(Database.hasTech(enemy, "Duranium Armor")){
-            if(_ewar > ewarsus){
+        } if(Database.hasTech(enemy, "Duranium Armor")){
+            if(_enemyUnitCounts[WAR_SUN] > ewarsus){
                 ewarsus += 1;
             }
-            else if(_edread > edreadsus){
+            else if(_enemyUnitCounts[DREADNOUGHT]> edreadsus){
                 edreadsus += 1;
             }
         }
+        
         if(Database.hasTech(_client.getName(),"Hyper Metabolism")){
-            _pdestroyerDam -= 1;
-        }
-        if(Database.hasTech(enemy, "Hyper Metabolism")){
-            _edestroyerDam -= 1;
+            _playerUnitHitRate[DESTROYER] -= 1;
+        } if(Database.hasTech(enemy, "Hyper Metabolism")){
+            _enemyUnitHitRate[DESTROYER] -= 1;
         }
         return Combat(HM+=1);
     }
 
     //Average remaining units
+    // TODO and turn this into an array too
     public float avgPfighter=0;
     public float avgPdestroyer=0;
     public float avgPcruiser=0;
@@ -665,6 +599,7 @@ public class CombatSimTab extends AbstractTab {
     public float avgEcruiser=0;
     public float avgEdread=0;
     public float avgEwar=0;
+    
     public float wins=0;
     public float losses=0;
     public float draw=0;
@@ -704,10 +639,10 @@ public class CombatSimTab extends AbstractTab {
             else {
                 //Pre-Combat
                 PreCombat();
-                pdreadsus = _pdread;
-                pwarsus = _pwar;
-                edreadsus = _edread;
-                ewarsus = _ewar;
+                pdreadsus = _playerUnitCounts[DREADNOUGHT];
+                pwarsus = _playerUnitCounts[WAR_SUN];
+                edreadsus = _enemyUnitCounts[DREADNOUGHT];
+                ewarsus = _enemyUnitCounts[WAR_SUN];
                 int res = Combat(0);
                 if(res == 1){
                     wins += 1;
@@ -721,25 +656,25 @@ public class CombatSimTab extends AbstractTab {
                 else{
                     return "Error";
                 }
-                avgPfighter += _pfighter;
-                avgPdestroyer += _pdestroyer;
-                avgPcruiser += _pcruiser;
-                avgPdread += _pdread;
-                avgPwar += _pwar;
-                avgEfighter += _efighter;
-                avgEdestroyer += _edestroyer;
-                avgEcruiser += _ecruiser;
-                avgEdread += _edread;
-                avgEwar += _ewar;
-                int premdread = _pdread;
-                int premdest = _pdestroyer;
-                int eremdread = _edread;
-                int eremdest = _edestroyer;
+                avgPfighter += _playerUnitCounts[FIGHTER];
+                avgPdestroyer += _playerUnitCounts[DESTROYER];
+                avgPcruiser += _playerUnitCounts[CRUISER];
+                avgPdread += _playerUnitCounts[DREADNOUGHT];
+                avgPwar += _playerUnitCounts[WAR_SUN];
+                avgEfighter += _enemyUnitCounts[FIGHTER];
+                avgEdestroyer += _enemyUnitCounts[DESTROYER];
+                avgEcruiser += _enemyUnitCounts[CRUISER];
+                avgEdread += _enemyUnitCounts[DREADNOUGHT];
+                avgEwar += _enemyUnitCounts[WAR_SUN];
+                int premdread = _playerUnitCounts[DREADNOUGHT];
+                int premdest = _playerUnitCounts[DESTROYER];
+                int eremdread = _enemyUnitCounts[DREADNOUGHT];
+                int eremdest = _enemyUnitCounts[DESTROYER];
                 setUnits();
-                if(_pdread > premdread && premdest > 0){
+                if(_playerUnitCounts[DREADNOUGHT]> premdread && premdest > 0){
                     avgPdread += 1;
                 }
-                if(_edread > eremdread && eremdest > 0){
+                if(_enemyUnitCounts[DREADNOUGHT]> eremdread && eremdest > 0){
                     avgEdread += 1;
                 }
             }
