@@ -19,7 +19,7 @@ public class TechSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the technology.xml file
 	public static void generateTech() {
-		String s = System.getProperty("user.dir") + "/assets/technology.xml";
+		String s = sandbox_client.Main.PATH_TO_ASSETS + "technology.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new TechSAXHandler());

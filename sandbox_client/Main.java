@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
+	public static final String PATH_TO_ASSETS = "assets/";
+	
 	/**
 	 * TODO list (it's not that long, I swear...)
 	 * 1) fix the mess that is the council room
@@ -28,10 +30,10 @@ public class Main extends Application {
 	 * 11) have client load style choices from local text file
 	 * 12) sort technology/personnel on players page
 	 * 13) clean up server SAX handlers
+	 * 14) use xml for empire stages
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)
-	 * 2) byte 226 in personnel.xml not ASCII
 	 */
 
 	public static void main(String[] args) {

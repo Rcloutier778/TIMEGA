@@ -19,7 +19,7 @@ public class ResolutionSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the resolutions.xml file
 	public static void generateResolutions() {
-		String s = "TIMEGA/assets/resolutions.xml";
+		String s = Main.PATH_TO_ASSETS + "resolutions.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new ResolutionSAXHandler());

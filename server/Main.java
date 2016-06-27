@@ -69,7 +69,7 @@ public class Main {
 					setOutColor(BLACK);
 					break;
 				}
-				// otherwise, remove all trailing whitespace and pass on the text to the CommandMap ot handle it
+				// otherwise, remove all trailing whitespace and pass on the text to the CommandMap to handle it
 				text = text.trim();
 				if(text.length() == 0) {
 					// do nothing
@@ -247,14 +247,9 @@ public class Main {
 	    // time to read the game file (stored as a text file in in assets/server/)
 	    BufferedReader reader;
 	    try {
-			reader = new BufferedReader(new FileReader("assets/server/" + args[0] + ".txt"));
-
+			reader = new BufferedReader(new FileReader(sandbox_client.Main.PATH_TO_ASSETS + "server/" + args[0] + ".txt"));
 		} catch (FileNotFoundException e) {
 			writeColortext("file not found", Main.ERROR);
-			File f = new File("assets/server/test.txt");
-			System.out.println(f.getAbsolutePath());
-			System.out.println(f.exists());
-			//writeColortext("(looking in " + System.getProperty("user.dir") + "/assets/server) ", Main.ERROR);
 			return;
 		}
 	    
@@ -284,7 +279,7 @@ public class Main {
 		}
 		
 		// given a mapfile name, try to read the map data
-		String map = "assets/maps/" + _mapname + ".map";
+		String map = sandbox_client.Main.PATH_TO_ASSETS + "maps/" + _mapname + ".map";
 		try {
 			BufferedReader mapfile = new BufferedReader(new FileReader(map));
 			// haha, look at me being optimistic that the program can still handle three-ring maps

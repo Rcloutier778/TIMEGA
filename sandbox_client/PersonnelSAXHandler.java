@@ -19,7 +19,7 @@ public class PersonnelSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the personnel.xml file
 	public static void generatePersonnel() {
-		String s = "TIMEGA/assets/personnel.xml";
+		String s = Main.PATH_TO_ASSETS + "personnel.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new PersonnelSAXHandler());
