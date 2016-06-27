@@ -20,7 +20,7 @@ public class Tile {
 			
 	// Called at the beginning of the program to read the planets.xml file
 	public static void generateTiles() {
-		String s = "TIMEGA/assets/planets.xml";
+		String s = Main.PATH_TO_ASSETS + "planets.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new TileSAXHandler());

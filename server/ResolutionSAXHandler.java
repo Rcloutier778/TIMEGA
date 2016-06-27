@@ -12,6 +12,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -19,7 +20,7 @@ public class ResolutionSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the resolutions.xml file
 	public static void generateResolutions() {
-		String s = System.getProperty("user.dir") + "/assets/resolutions.xml";
+		String s = sandbox_client.Main.PATH_TO_ASSETS + "resolutions.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new ResolutionSAXHandler());

@@ -19,7 +19,7 @@ public class TechSAXHandler extends DefaultHandler {
 	
 	// Called at the beginning of the program to read the personnel.xml file
 	public static void generateTechs() {
-		String s = "TIMEGA/assets/technology.xml";
+		String s = Main.PATH_TO_ASSETS + "technology.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new TechSAXHandler());

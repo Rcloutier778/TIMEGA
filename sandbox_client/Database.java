@@ -198,11 +198,11 @@ public class Database {
 	}
 	
 	// path to empty image
-	public static final String PATH_TO_NULL = "file:TIMEGA/assets/Icons/null.png";
+	public static final String PATH_TO_NULL = "file:" + Main.PATH_TO_ASSETS + "Icons/null.png";
 	
 	// path to image icon for given resource/influence amount
 	public static String iconPath(boolean resource, int amount) {
-		String output = "file:TIMEGA/assets/Icons/";
+		String output = "file:" + Main.PATH_TO_ASSETS + "Icons/";
 		if(resource) {
 			output += "resource_";
 		} else {

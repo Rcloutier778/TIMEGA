@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -19,7 +20,7 @@ public class Tile {
 	
 	// Called at the beginning of the program to read the planets.xml file
 	public static void generateTiles() {
-		String s = System.getProperty("user.dir") +"/assets/planets.xml";
+		String s = sandbox_client.Main.PATH_TO_ASSETS + "planets.xml";
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
 			p.parse(s, new TileSAXHandler());
