@@ -9,6 +9,8 @@ package server;
 import sandbox_client.Protocol;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Main {
@@ -240,7 +242,76 @@ public class Main {
 	    Runtime.getRuntime().addShutdownHook(new Thread() {
 	        @Override
 	        public void run() {
-	            setOutColor(BLACK);
+	            //add method to cache data
+				//dont need hook here
+				//everything in server database that has locks needs to be cached
+				//empire stage info stored is going to be changed at some point, probably int instead of string
+				//
+				BufferedWriter writer = null;
+				try {
+					//create a temporary file
+					String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+					File logFile = new File(timeLog);
+
+					// This will output the full path where the file will be written to...
+					System.out.println(logFile.getCanonicalPath());
+
+					writer = new BufferedWriter(new FileWriter(logFile));
+					//Write Planets
+					//Planet name
+					//Owner
+					writer.write("Planets\n");
+					for(String s : ServerDatabase.PLANETS.keySet()){
+						writer.write(s + "\n");
+						writer.write(ServerDatabase.PLANETS.get(s) + "\n");
+					}
+					//Spacedocks
+					writer.write("Spacedocks\n");
+					for(String s : ServerDatabase.SPACEDOCKS.keySet()){
+						writer.write(s + "\n");
+						writer.write(ServerDatabase.SPACEDOCKS.get(s) + "\n");
+					}
+
+					//Tech
+					//Player name
+					//tech 1
+					//...
+					//tech n
+					writer.write("Tech\n");
+					for(String s : ServerDatabase.TECH.keySet()){
+						writer.write(s + "\n");
+						for(String t : ServerDatabase.TECH.get(s)){
+							writer.write(t + "\n");
+						}
+					}
+
+					//Personnel
+					writer.write("Personnel\n");
+					for(String s : ServerDatabase.PERSONNEL.keySet()){
+						writer.write(s + "\n");
+						for(String t : ServerDatabase.PERSONNEL.get(s)){
+							writer.write(t + "\n");
+						}
+					}
+
+					//Empire stage
+					writer.write("Empire stage\n");
+					for(String s : ServerDatabase.EMPIRE_STAGE.keySet()){
+						writer.write(s + "\n");
+						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
+					}
+					writer.write("EndFile");
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				} finally {
+					try {
+						// Close the writer regardless of what happens...
+						writer.close();
+					} catch (Exception e) {
+					}
+				}
+				setOutColor(BLACK);
 	        }
 	    });
 		

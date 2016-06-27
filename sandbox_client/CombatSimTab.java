@@ -5,7 +5,6 @@ import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -26,9 +25,8 @@ import java.math.BigDecimal;
  * 3) Update for Xeno?
   */
 
-public class CombatSimTab {
+public class CombatSimTab extends AbstractTab {
 
-    protected final Tab _root = new Tab("Combat");
     private Client _client;
 
     //Player units field
@@ -53,12 +51,12 @@ public class CombatSimTab {
 
         //make values cleared when you click on another tab
         public CombatSimTab(Client client) {
+            super(Client.SIMULATOR);
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
 
-
-            _client = client;
+                    _client = client;
             _root.setClosable(false);
             _root.setContent(scenepane);
 
@@ -303,14 +301,14 @@ public class CombatSimTab {
             int pADT = 0;
             if (Database.hasTech(_client.getName(), "ADT")) {
                 while(pADT < _pdestroyer || pADT < _efighter) {
-                    for (int i = 0; i < (int) (_efighter / 4); i++) {
+                    for (int i = 0; i < _efighter / 4; i++) {
                         if (DiceRoller() >= (_pfighterDam - 1)) {
                             pADT += 1;
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < (int) (_efighter / 4); i++) {
+                for (int i = 0; i < _efighter / 4; i++) {
                     if (DiceRoller() >= _pfighterDam) {
                         pADT +=+ 1;
                     }
@@ -323,14 +321,14 @@ public class CombatSimTab {
             int eADT = 0;
             if (Database.hasTech(enemy, "ADT")) {
                 while(eADT < _edestroyer || eADT < _pfighter) {
-                    for (int i = 0; i < (int) (_pfighter / 4); i++) {
+                    for (int i = 0; i < _pfighter / 4; i++) {
                         if (DiceRoller() >= (_efighterDam - 1)) {
                             eADT += 1;
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < (int) (_pfighter / 4); i++) {
+                for (int i = 0; i < _pfighter / 4; i++) {
                     if (DiceRoller() >= _efighterDam) {
                         eADT += 1;
                     }
