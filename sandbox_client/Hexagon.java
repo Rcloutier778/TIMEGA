@@ -2,7 +2,7 @@ package sandbox_client;
 
 /**
  * Holds information about a single tile in the MapCanvas. Can draw itself and update its overlay.
- * 
+ *
  * @author dmayans
  */
 
@@ -15,52 +15,52 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 public class Hexagon {
-		
+
 	// useful fields to draw hexagons
 	protected static double RADIUS = 40;
 	protected static double XOFFSET = 60;
 	protected static double YOFFSET = 205;
-	
+
 	// usefule fields to draw circles and squares
 	protected static double CIRCLE_RADIUS = 12;
 	private static int NO_HINTS = 0;
 	private static int TOP_LEFT = 1;
 	private static int BOTTOM_RIGHT = 2;
 	protected static double SIDE_LENGTH = 8;
-	
+
 	protected final Polygon _shape = new Polygon();
-	
+
 	private double _xCenter, _yCenter;
 	private double[] _x, _y;
 	private int _id;
-	
+
 	private Overlay[] _overlay;
-			
+
 	public Hexagon(int u, int v, int id) {
 		_id = id;
-		
+
 		_xCenter = (3*v*RADIUS)/2;
 		_yCenter = (Math.sqrt(3)*u*RADIUS)-(Math.sqrt(3)*v*RADIUS)/2;
 		_xCenter += XOFFSET;
 		_yCenter += YOFFSET;
-		
+
 		this.initPoints();
-		
+
 		for(int i=0; i<6; i++) {
-			_shape.getPoints().addAll(new Double[]{_x[i], _y[i]});
+			_shape.getPoints().addAll(_x[i], _y[i]);
 		}
-		
+
 		if(_id > 0) {
 			_shape.setFill(new ImagePattern(new Image(Database.tile(_id).getPath())));
 		} else {
 			// do nothing
 		}
-		
+
 		this.initOverlay();
-						
+
 		_shape.setStrokeWidth(4);
 	}
-	
+
 	// sets up the six vertices of the hexagon
 	private void initPoints() {
 		_x = new double[]{0.5*RADIUS, RADIUS, 0.5*RADIUS, -0.5*RADIUS, -RADIUS, -0.5*RADIUS};
@@ -69,15 +69,15 @@ public class Hexagon {
 			_x[i] += _xCenter;
 			_y[i] += _yCenter;
 		}
-		
+
 	}
-	
+
 	// sets up the overlay
 	private void initOverlay() {
 		Tile t = Database.tile(_id);
 		int numPlanets = t.numPlanets();
 		_overlay = new Overlay[numPlanets];
-		
+
 		for(int i=0; i < numPlanets; i++) {
 			_overlay[i] = new Overlay();
 			_overlay[i].name = t.getPlanetName(i);
@@ -98,12 +98,12 @@ public class Hexagon {
 					hints = BOTTOM_RIGHT;
 				}
 			} else if(numPlanets == 3) {
-				
+
 			}
 			_overlay[i].center(hints);
 		}
 	}
-	
+
 	// draws a border around the hexagon
 	public void click() {
 		_shape.setStroke(Color.RED);
@@ -114,17 +114,17 @@ public class Hexagon {
 			_overlay[i].square.toFront();
 		}
 	}
-	
+
 	// clears the border
 	public void unclick() {
 		_shape.setStroke(null);
 	}
-	
+
 	// accessors
 	public int id() {
 		return _id;
 	}
-	
+
 	public Shape[] overlay() {
 		Shape[] output = new Shape[3*_overlay.length];
 		for(int i=0; i < _overlay.length; i++) {
@@ -134,7 +134,7 @@ public class Hexagon {
 		}
 		return output;
 	}
-	
+
 	// if b is true, then it colors the contained planets by their owner
 	// if b is false, it clears them
 	public void paintByPlayer(boolean b) {
@@ -145,7 +145,7 @@ public class Hexagon {
 			}
 		}
 	}
-	
+
 	// if b is true, then it draws space docks on the contained planets
 	// if b is false, it clears them
 	public void paintSD(boolean b) {
@@ -157,19 +157,19 @@ public class Hexagon {
 			}
 		}
 	}
-	
+
 	private class Overlay {
-		
+
 		public String name;
 		public Circle circle;
 		public Rectangle square;
 		public Rectangle border;
-		
+
 		// lots of magic numbers, sorry future david :(
 		public void center(int hints) {
 			double x = _xCenter;
 			double y = _yCenter;
-						
+
 			if(hints == TOP_LEFT) {
 				x -= 12;
 				y -= 12;
@@ -177,9 +177,9 @@ public class Hexagon {
 				x += 12;
 				y += 12;
 			}
-			
+
 			hints = Database.getHints(name);
-			
+
 			if(hints == Database.SINGLE_PLANET) {
 				y -= 5;
 			} else if(hints == Database.TOP_LEFT) {
@@ -244,21 +244,21 @@ public class Hexagon {
 				x += 14;
 				y += 6;
 			}
-			
+
 			circle.setCenterX(x);
 			circle.setCenterY(y);
-			
+
 			square.setLayoutX(x+3);
 			square.setLayoutY(y-13);
-			
+
 			border.setLayoutX(x+2);
 			border.setLayoutY(y-14);
 		}
-		
+
 		public void colorCircle() {
 			circle.setFill(Database.colorOfPlanet(name));
 		}
-		
+
 		public void colorSquare() {
 			if(!Database.hasSD(name)) {
 				square.setVisible(false);
@@ -267,8 +267,7 @@ public class Hexagon {
 				square.setFill(Database.colorOfPlanet(name));
 			}
 		}
-		
-	}
-	
-}
 
+	}
+
+}

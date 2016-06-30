@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
-	public static final String PATH_TO_ASSETS = "assets/";
+	public static final String PATH_TO_ASSETS = System.getProperty("user.dir") + "/assets/";
 	
 	/**
 	 * TODO list (it's not that long, I swear...)
@@ -22,7 +22,6 @@ public class Main extends Application {
 	 * 3) color/order technology and personnel (update language too) in status/players screen
 	 * 4) remove policy choices, update other deviations from new rules
 	 * 5) show progress in empire screen
-	 * 6) allow server to cache / reload old data (RICHARD)
 	 * 7) new tab: report battle data
 	 * 8) new tab: view battle statistics
 	 * 9) test reconnection of client a little bit more

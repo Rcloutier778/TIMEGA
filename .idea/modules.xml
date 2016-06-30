@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/toolkit.iml" filepath="$PROJECT_DIR$/toolkit.iml" />
+      <module fileurl="file://$PROJECT_DIR$/toolkit.iml" filepath="$PROJECT_DIR$/toolkit.iml" />
     </modules>
   </component>
 </project>

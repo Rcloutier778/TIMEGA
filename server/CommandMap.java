@@ -8,6 +8,7 @@ package server;
 
 import sandbox_client.Protocol;
 
+import java.io.File;
 import java.util.HashMap;
 
 public class CommandMap {
@@ -30,7 +31,7 @@ public class CommandMap {
 		_map.put("disable", new DisableCommand());
 		_map.put("clear", new ClearCommand());
 		_map.put("chown", new ChownCommand());
-		
+		_map.put("reload", new ReloadCommand());
 		_map.put("sync", new Command() {
 			@Override
 			public void run(String[] args) {
@@ -103,7 +104,25 @@ public class CommandMap {
 			}
 		}
 	}
-	
+	//Reload from txt file
+	private class ReloadCommand implements Command{
+		public void run(String[] args){
+			if(args.length < 2){
+				Main.writeColortext("usage: reload <file name>", Main.ERROR);
+				return;
+			}
+			String fname = args[1];
+
+			if(new File(System.getProperty("user.dir") + "/" + args[1] + ".txt").exists()){
+				_main.broadcastReload(args[1] + ".txt");
+			}
+			else{
+				Main.writeColortext("no file " + args[1], Main.ERROR);
+				return;
+			}
+		}
+	}
+
 	// disable a single tab
 	private class DisableCommand implements Command {
 
@@ -186,9 +205,9 @@ public class CommandMap {
 				this.broadcast(target, args[1], "[stdin] " + args[1] + " ", Main.SERVEROUT);
 			}
 		}
-		
+
 	}
-	
+
 	// change planet owner
 	private class ChownCommand extends BasicCommand {
 
