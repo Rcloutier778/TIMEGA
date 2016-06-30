@@ -11,6 +11,7 @@ import sandbox_client.Protocol;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Main {
@@ -137,7 +138,86 @@ public class Main {
 	}
 	
 	// EXPANDED PROTOCOLS: lots of them, not a lot of good ways of condensing them
-	
+
+	//Reloads server data from log file produced on shutdown.
+	public void broadcastReload(String filename){
+		try(BufferedReader br = new BufferedReader(new FileReader(filename))){
+			//Planets, Space Docks, Tech, Personnel, Empire Stage, End
+			boolean[] passed = {false, false, false, false, false, false};
+			ServerDatabase.PLANETS_LOCK.lock();
+			ServerDatabase.SPACEDOCKS_LOCK.lock();
+			ServerDatabase.TECH_LOCK.lock();
+			ServerDatabase.PERSONNEL_LOCK.lock();
+			ServerDatabase.EMPIRE_LOCK.lock();
+
+			for(String line; (line  = br.readLine()) != null;){
+				if(line.equals("Planets")){
+					passed[0] = true;
+					continue;
+				}
+				if(line.equals("Spacedocks")){
+					passed[1] = true;
+					continue;
+				}
+				if(line.equals("Tech")){
+					passed[2] = true;
+					continue;
+				}
+				if(line.equals("Personnel")){
+					passed[3] = true;
+					continue;
+				}
+				if(line.equals("Empire stage")){
+					passed[4] = true;
+					continue;
+				}
+				if(line.equals("EndFile")){
+					passed[5] = true;
+					break;
+				}
+				String[] splitline = line.split(" ");
+				//Planets: Name, owner
+				if(passed[0] && !passed[1]){
+					ServerDatabase.PLANETS.put(splitline[0],splitline[1]);
+				}
+				//Spacedocks: Planet_name, boolean
+				if(passed[1] && !passed[2]){
+					ServerDatabase.SPACEDOCKS.put(splitline[0],Boolean.parseBoolean(splitline[1]));
+				}
+				//Tech: Name Tech Tech Tech ...
+				if(passed[2] && !passed[3]){
+					HashSet<String> techs = new HashSet<>();
+					for(int i = 1; i<splitline.length-1; i++){
+						techs.add(splitline[i]);
+					}
+					ServerDatabase.TECH.put(splitline[0], techs);
+				}
+				//Personnel
+				if(passed[3] && !passed[4]){
+					HashSet<String> pers = new HashSet<>();
+					for(int i = 1; i<splitline.length-1; i++){
+						pers.add(splitline[i]);
+					}
+					ServerDatabase.PERSONNEL.put(splitline[0], pers);
+				}
+				//Empire Stage
+				if(passed[4] && !passed[5]){
+					ServerDatabase.EMPIRE_STAGE.put(splitline[0], splitline[1]);
+				}
+
+			}
+			ServerDatabase.PLANETS_LOCK.unlock();
+			ServerDatabase.SPACEDOCKS_LOCK.unlock();
+			ServerDatabase.TECH_LOCK.unlock();
+			ServerDatabase.PERSONNEL_LOCK.unlock();
+			ServerDatabase.EMPIRE_LOCK.unlock();
+		}catch (IOException e){
+			System.out.println("Error reading file to reload from");
+		}
+		writeColortext("Reload Successful", 255);
+		//this.broadcast(Protocol.RELOAD, );
+	}
+
 	// updates database for planet changing owner, prints info to stdout, and broadcasts info to all clients
 	public void broadcastChown(String planetName, String newOwner, String clientName, int color) {
 		ServerDatabase.PLANETS_LOCK.lock();
@@ -251,64 +331,66 @@ public class Main {
 				try {
 					//create a temporary file
 					String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-					File logFile = new File(timeLog);
+					File logFile = new File(timeLog + ".txt");
 
 					// This will output the full path where the file will be written to...
 					System.out.println(logFile.getCanonicalPath());
 
 					writer = new BufferedWriter(new FileWriter(logFile));
+
 					//Write Planets
-					//Planet name
-					//Owner
+					//Planet_name Owner
 					writer.write("Planets\n");
 					for(String s : ServerDatabase.PLANETS.keySet()){
-						writer.write(s + "\n");
+						writer.write(s + " ");
 						writer.write(ServerDatabase.PLANETS.get(s) + "\n");
 					}
 					//Spacedocks
+					//Planet_name boolean
 					writer.write("Spacedocks\n");
 					for(String s : ServerDatabase.SPACEDOCKS.keySet()){
-						writer.write(s + "\n");
+						writer.write(s + " ");
 						writer.write(ServerDatabase.SPACEDOCKS.get(s) + "\n");
 					}
 
 					//Tech
-					//Player name
-					//tech 1
-					//...
-					//tech n
+					//Player_name tech 1 ... tech n
 					writer.write("Tech\n");
 					for(String s : ServerDatabase.TECH.keySet()){
-						writer.write(s + "\n");
+						writer.write(s + " ");
 						for(String t : ServerDatabase.TECH.get(s)){
-							writer.write(t + "\n");
+							writer.write(t + " ");
 						}
 					}
+					writer.write("\n");
 
 					//Personnel
 					writer.write("Personnel\n");
 					for(String s : ServerDatabase.PERSONNEL.keySet()){
-						writer.write(s + "\n");
+						writer.write(s + " ");
 						for(String t : ServerDatabase.PERSONNEL.get(s)){
-							writer.write(t + "\n");
+							writer.write(t + " ");
 						}
 					}
+					writer.write("\n");
 
 					//Empire stage
 					writer.write("Empire stage\n");
 					for(String s : ServerDatabase.EMPIRE_STAGE.keySet()){
-						writer.write(s + "\n");
+						writer.write(s + " ");
 						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
 					}
 					writer.write("EndFile");
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.out.println("Caching Error");
 				} finally {
 					try {
 						// Close the writer regardless of what happens...
 						writer.close();
 					} catch (Exception e) {
+						System.out.println("Error closing writer");
 					}
 				}
 				setOutColor(BLACK);

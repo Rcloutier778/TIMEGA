@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
-	public static final String PATH_TO_ASSETS = "assets/";
+	public static final String PATH_TO_ASSETS = System.getProperty("user.dir") + "/assets/";
 	
 	/**
 	 * TODO list (it's not that long, I swear...)
