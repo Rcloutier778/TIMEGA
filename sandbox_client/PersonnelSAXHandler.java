@@ -2,21 +2,21 @@ package sandbox_client;
 
 /**
  * Reads information from the personnel.xml file and sends the information back to the Database.
- * 
+ *
  * @author dmayans
  */
 
-import java.io.IOException;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
+import java.io.IOException;
 
 public class PersonnelSAXHandler extends DefaultHandler {
-	
+
 	// Called at the beginning of the program to read the personnel.xml file
 	public static void generatePersonnel() {
 		String s = Main.PATH_TO_ASSETS + "personnel.xml";
@@ -31,18 +31,18 @@ public class PersonnelSAXHandler extends DefaultHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String _string;
 	private String _color;
 	private String _name;
 	private String _effect;
 	private String _tier;
-	
+
 	@Override
 	public void startDocument() {
 		_string = "";
 	}
-	
+
 	@Override
 	public void startElement(String namespaceURI, String localName, String qName, Attributes atts) {
 		if(qName=="person") {
@@ -50,7 +50,7 @@ public class PersonnelSAXHandler extends DefaultHandler {
 			_tier = atts.getValue("tier");
 		}
 	}
-	
+
 	@Override
 	public void endElement(String uri, String localName, String qName) {
 		if(qName.equals("name")) {
@@ -62,15 +62,15 @@ public class PersonnelSAXHandler extends DefaultHandler {
 		}
 		_string = "";
 	}
-	
+
 	@Override
 	public void characters(char[] ch, int start, int length) {
 		_string += new String(ch, start, length).trim();
 	}
-	
+
 	@Override
 	public void endDocument() {
-		
+
 	}
-	
+
 }
