@@ -114,6 +114,7 @@ public class CombatSimTab extends AbstractTab {
 
             PlayerName = new Text();
             PlayerName.setText("Click start");
+            _pane.add(eOptions, 2, 1);
             _pane.add(PlayerName, 1, 1);
             scenepane.add(ResultTitle, 2, 1);
             scenepane.add(_start, 1, 3);
@@ -137,10 +138,10 @@ public class CombatSimTab extends AbstractTab {
                 //drop down menu for enemies
                 if (eOptions.getItems().isEmpty()) {
                     for (int i = 0; i < Database.numPlayers(); i++) {
-                        eOptions.getItems().add(Database.getPlayer(i).name);
+                        if(!_client.getName().equals(Database.getPlayer(i).name)){
+                            eOptions.getItems().add(Database.getPlayer(i).name);
+                        }
                     }
-                    _pane.add(eOptions, 2, 1);
-
                 }
 
             }
