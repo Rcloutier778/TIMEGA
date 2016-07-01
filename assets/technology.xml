@@ -26,7 +26,7 @@
     </tech>
     <tech color="red" prereq="Magen Defence Grid" prereqAND="Cybernetics">
         <name>Assault Cannon</name>
-        <effect>If you have three or fewer ships present, each of your cruisers may roll on pre-combat die at +3.</effect>
+        <effect>If you have three or fewer ships present, each of your cruisers may roll one pre-combat die at +3.</effect>
     </tech>
     <tech color="red" prereq="Ion Cannons" prereqAND="Fighter Bays">
         <name>Deep Space Cannon</name>
@@ -39,7 +39,7 @@
     </tech>
     <tech color="blue" prereq="Antimass Deflectors">
         <name>Striker Fleets</name>
-        <effect>Your destroyers and cruisers receive a combat bonus equal to their remaining movement points when attacking in a small-scale battle.</effect>
+        <effect>Your destroyers and cruisers receive a combat bonus equal to their remaining movement points when attacking in a small battle.</effect>
     </tech>
     <tech color="blue" prereq="Antimass Deflectors">
         <name>XRD Transporters</name>
