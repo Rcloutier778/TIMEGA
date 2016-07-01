@@ -8,13 +8,13 @@ package sandbox_client;
 
 public class Protocol {
 	
-	public static final int EOM = 0; // not used
+	public static final int EOM = 0; // depricated
 	public static final int HELLO = 1; // usage: HELLO
 	public static final int WELCOME = 2; // usage: WELCOME
 	public static final int NAME = 3; // usage: NAME <name>
 	public static final int VALID = 4; // usage: VALID
 	public static final int INVALID = 5; // usage: INVALID
-	public static final int NEW_PLAYER = 6; // usage: NEW_PLAYER <name> <race> <r> <g> <b>
+	public static final int NEW_PLAYER = 6; // depricated (usage: NEW_PLAYER <name> <race> <r> <g> <b>)
 	
 	public static final int MAP = 10; // usage: MAP <name> <data as ints>
 	

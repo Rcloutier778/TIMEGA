@@ -41,6 +41,7 @@ public class Client {
 	private EmpireTab _empire;
 	private StatusTab _status;
 	private CouncilTab _council;
+	@SuppressWarnings("unused")
 	private CombatSimTab _simulator;
 	
 	private AbstractTab[] _tabs = new AbstractTab[NUM_TABS];
@@ -101,14 +102,13 @@ public class Client {
 	}
 	
 	// initialize tabs based on player information from server
-	public void databaseFinished() {
+	public void namesReceived() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				_status.initialize();
-				_research.initialize();
-				_personnel.initialize();
-				_simulator.initialize();
+				for(AbstractTab t : _tabs) {
+					t.addNames();
+				}
 			}
 		}
 	);}
@@ -125,12 +125,18 @@ public class Client {
 	
 	// handling player names
 	public void tryName(String name) {
-		_server.sendName(name);
+		_server.tryLogin(name);
 	}
 	
-	public void validName(boolean valid) {
-		if(valid) {
+	public void validName(String name) {
+		if(name != null) {
 			_controls.success();
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					_research.localName(name);
+				}
+			});
 		} else {
 			_controls.invalidName();
 		}

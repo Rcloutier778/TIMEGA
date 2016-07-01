@@ -62,91 +62,85 @@ public class CombatSimTab extends AbstractTab {
     private ComboBox<String> eOptions;
     private GridPane _pane;
 
-        //make values cleared when you click on another tab
-        public CombatSimTab(Client client) {
-            super(Client.SIMULATOR);
-            // TODO bad- at least make an "initialize()" method to call in here instead of defining everything
-            _client = client;
-            _root.setClosable(false);
-            _root.setContent(scenepane);
+    //make values cleared when you click on another tab
+    public CombatSimTab(Client client) {
+        super(Client.SIMULATOR);
+        // TODO bad- at least make an "initialize()" method to call in here instead of defining everything
+        _client = client;
+        _root.setClosable(false);
+        _root.setContent(scenepane);
 
-            _pane = new GridPane();
-            Text Results = new Text();
-            Results.setText("\nEnter data to view results");
-            Text ResultTitle = new Text();
-            ResultTitle.setText("Result of the battle:");
+        _pane = new GridPane();
+        Text Results = new Text();
+        Results.setText("\nEnter data to view results");
+        Text ResultTitle = new Text();
+        ResultTitle.setText("Result of the battle:");
 
 
-            //make new textfields
-            for(int i=0; i<NUM_SHIPS; i++) {
-            	_playerUnitFields[i] = new TextField();
-            	_enemyUnitFields[i] = new TextField();
-            }
-
-            //Set the prompt text
-            for(int i=0; i<NUM_SHIPS; i++) {
-            	_playerUnitFields[i].setPromptText(SHIP_NAMES[i]);
-            	_enemyUnitFields[i].setPromptText(SHIP_NAMES[i]);
-            }
-
-            //start button
-            _start = new Button("Start");
-            _start.setOnAction(e ->
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Results.setText("\n".concat(CombatSim()));
-                        }
-                    }));
-            GridPane.setHalignment(_start, HPos.CENTER);
-
-            eOptions = new ComboBox<String>();
-
-            //Add things to grid
-            for(int i=0; i<NUM_SHIPS; i++) {
-            	_pane.add(_playerUnitFields[i], 1, i+2);
-            	_pane.add(_enemyUnitFields[i], 2, i+2);
-            }
-            _pane.setAlignment(Pos.CENTER);
-
-            Pane ResultsPane = new Pane();
-            ResultsPane.getChildren().add(Results);
-
-            PlayerName = new Text();
-            PlayerName.setText("Click start");
-            _pane.add(eOptions, 2, 1);
-            _pane.add(PlayerName, 1, 1);
-            scenepane.add(ResultTitle, 2, 1);
-            scenepane.add(_start, 1, 3);
-            scenepane.add(ResultsPane, 2, 2);
-            scenepane.setAlignment(Pos.CENTER);
-            scenepane.add(_pane, 1, 2);
-
+        //make new textfields
+        for(int i=0; i<NUM_SHIPS; i++) {
+        	_playerUnitFields[i] = new TextField();
+        	_enemyUnitFields[i] = new TextField();
         }
+
+        //Set the prompt text
+        for(int i=0; i<NUM_SHIPS; i++) {
+        	_playerUnitFields[i].setPromptText(SHIP_NAMES[i]);
+        	_enemyUnitFields[i].setPromptText(SHIP_NAMES[i]);
+        }
+
+        //start button
+        _start = new Button("Start");
+        _start.setOnAction(e ->
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Results.setText("\n".concat(CombatSim()));
+                    }
+                }));
+        GridPane.setHalignment(_start, HPos.CENTER);
+
+        eOptions = new ComboBox<String>();
+
+        //Add things to grid
+        for(int i=0; i<NUM_SHIPS; i++) {
+        	_pane.add(_playerUnitFields[i], 1, i+2);
+        	_pane.add(_enemyUnitFields[i], 2, i+2);
+        }
+        _pane.setAlignment(Pos.CENTER);
+
+        Pane ResultsPane = new Pane();
+        ResultsPane.getChildren().add(Results);
+
+        PlayerName = new Text();
+        PlayerName.setText("Click start");
+        _pane.add(eOptions, 2, 1);
+        _pane.add(PlayerName, 1, 1);
+        scenepane.add(ResultTitle, 2, 1);
+        scenepane.add(_start, 1, 3);
+        scenepane.add(ResultsPane, 2, 2);
+        scenepane.setAlignment(Pos.CENTER);
+        scenepane.add(_pane, 1, 2);
+
+    }
 
     /**
      * Waits until database is synced to get names
      */
-    public void initialize(){
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                //Gets the name of the client (player)
-                PlayerName.setText(_client.getName());
-                //Gets the name of the opposing players
-                //TODO after ensuring that everything works with multiple clients, get rid of client name in enemy list.
-                //drop down menu for enemies
-                if (eOptions.getItems().isEmpty()) {
-                    for (int i = 0; i < Database.numPlayers(); i++) {
-                        if(!_client.getName().equals(Database.getPlayer(i).name)){
-                            eOptions.getItems().add(Database.getPlayer(i).name);
-                        }
-                    }
+    @Override
+    public void localName(String name) {
+        //Gets the name of the client (player)
+        PlayerName.setText(name);
+        //Gets the name of the opposing players
+        //TODO after ensuring that everything works with multiple clients, get rid of client name in enemy list.
+        //drop down menu for enemies
+        if (eOptions.getItems().isEmpty()) {
+            for (int i = 0; i < Database.numPlayers(); i++) {
+                if(!_client.getName().equals(Database.getPlayer(i).name)){
+                    eOptions.getItems().add(Database.getPlayer(i).name);
                 }
-
             }
-        });
-
+        }
     }
 
 
@@ -530,7 +524,7 @@ public class CombatSimTab extends AbstractTab {
      * Assumes that all fighters will be destroyed before destroying carriers/dreadnaughts/warsuns.
      */
     public String CombatSim() {
-        initialize();
+        addNames();
         avgUrem = new ArrayList<Float>(13);
         for (int i = 0; i < 13; i++) {
             avgUrem.add(new Float(0));

@@ -18,4 +18,7 @@ public abstract class AbstractTab {
 		_root.setText(Client.TAB_NAMES[index]);
 	}
 	
+	public void addNames() {}; // this method will be called as soon as the client is aware of the list of other players
+	public void localName(String name) {}; // this method will be called after addNames, as soon as the server has validated the local player's name
+	
 }

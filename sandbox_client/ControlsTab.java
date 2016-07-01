@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -25,7 +26,7 @@ public class ControlsTab extends AbstractTab {
 	private Client _client;
 	
 	// connection fields
-	private TextField _name;
+	private ComboBox<String> _name;
 	private TextField _host;
 	private NumberTextField _port;
 	private Button _connect;
@@ -42,11 +43,12 @@ public class ControlsTab extends AbstractTab {
 		_client = c;
 				
 		// initializing connection fields
-		_name = new TextField();
 		_host = new TextField();
 		_host.setText(DEFAULT_HOST);
 		_port = new NumberTextField();
 		_port.setText(DEFAULT_PORT);
+		_name = new ComboBox<String>();
+		_name.setDisable(true);
 		_connect = new Button("Connect");
 		_connect.setOnAction(e -> tryConnection());
 		GridPane.setHalignment(_connect, HPos.CENTER);
@@ -66,12 +68,12 @@ public class ControlsTab extends AbstractTab {
 		grid.setVgap(15);
 
 		// adding connection fields
-		grid.add(new Text("Name:   "), 0, 0);
-		grid.add(_name, 1, 0);
-		grid.add(new Text("Host:   "), 0, 1);
-		grid.add(_host, 1, 1);
-		grid.add(new Text("Port:   "), 0, 2);
-		grid.add(_port, 1, 2);
+		grid.add(new Text("Host:   "), 0, 0);
+		grid.add(_host, 1, 0);
+		grid.add(new Text("Port:   "), 0, 1);
+		grid.add(_port, 1, 1);
+		grid.add(new Text("Name:   "), 0, 2);
+		grid.add(_name, 1, 2);
 		grid.add(_connect, 0, 3, 2, 1);
 		grid.add(_error, 0, 4, 2, 1);
 		grid.add(new Text(), 0, 5, 2, 1);
@@ -100,17 +102,31 @@ public class ControlsTab extends AbstractTab {
 		grid.add(market, 3, 6, 1, 3);
 		
 		_root.setContent(grid);
+		
+	}
+	
+	// populate names list
+	@Override
+	public void addNames() {
+		_name.getItems().clear();
+		for(String player : Database.playerNames()) {
+			_name.getItems().add(player);
+		}
+		_name.setDisable(false);
 	}
 	
 	// fooooocusssssssss
 	public void finishInitialization() {
-		_name.requestFocus();
+		_connect.requestFocus();
+		_name.setMinWidth(_host.getWidth());
 	}
 	
 	// display connection failure
 	public void disconnection() {
 		this.threadsafeSetText(_error, "Connection error");
-		this.disableConnectionAttempt(false);
+		_name.setDisable(true);
+		_host.setDisable(false);
+		_port.setDisable(false);
 		_connect.setOnAction(e -> tryConnection());
 		this.threadsafeSetText(_connect, "Reconnect");
 		this.threadsafeSetText(_map, "<unknown>");
@@ -118,7 +134,7 @@ public class ControlsTab extends AbstractTab {
 	
 	// report the results of a connection attempt
 	public void success() {
-		this.threadsafeSetText(_error, "Connection successful!");
+		this.threadsafeSetText(_error, "Login successful!");
 		_connect.setDisable(false);
 		this.threadsafeSetText(_connect, "Disconnect");
 		_connect.setOnAction(e -> {
@@ -135,21 +151,12 @@ public class ControlsTab extends AbstractTab {
 		_name.setDisable(false);
 		this.threadsafeSetText(_connect, "Try again");
 		_connect.setOnAction(e -> {
-			this.threadsafeSetText(_connect, "Connect");
-			_connect.setText("Connect");
 			_connect.setDisable(true);
 			_name.setDisable(true);
-			_client.tryName(_name.getText());
+			_client.tryName(_name.getValue());
 		});
 	}
-	
-	// helper method to disable or enable all connection fields
-	private void disableConnectionAttempt(boolean state) {
-		_connect.setDisable(state);
-		_host.setDisable(state);
-		_port.setDisable(state);
-		_name.setDisable(state);
-	}
+
 	
 	// helper method to attempt to connect
 	private void tryConnection() {
@@ -160,15 +167,19 @@ public class ControlsTab extends AbstractTab {
 		} else if(_host.getText().equals("")) {
 			_error.setText("Must specify host");
 			return;
-		} else if(_name.getText().equals("")) {
-			_error.setText("Must enter username");
-			return;
 		}
 		
 		// try to connect
-		this.disableConnectionAttempt(true);
+		_host.setDisable(true);
+		_port.setDisable(true);
 		_error.setText("Connecting...");
 		new ServerListener().start();
+	}
+	
+	// helper method to attempt to log in
+	private void tryLogin() {
+		// TODO
+		return;
 	}
 	
 	// overloaded methods to allow the program to safely change the text in labels and buttons
@@ -203,15 +214,18 @@ public class ControlsTab extends AbstractTab {
 			
 			try {
 				Socket socket = new Socket(host, port);
-				Server server = new Server(socket, _client, ControlsTab.this, _name.getText());
+				Server server = new Server(socket, _client, ControlsTab.this);
 				_client.setServer(server);
-				_client.setName(_name.getText());
 				threadsafeSetText(_error, "Found server");
+				threadsafeSetText(_connect, "Login");
+				_connect.setOnAction(e -> tryLogin());
 				
 			} catch (IOException e) {
 				// e.printStackTrace();
 				threadsafeSetText(_error, "Error connecting to server");
-				disableConnectionAttempt(false);
+				_name.setDisable(true);
+				_host.setDisable(false);
+				_port.setDisable(false);
 			}			
 		}
 		
