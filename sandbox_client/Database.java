@@ -47,6 +47,17 @@ public class Database {
 		}
 	}
 	
+	// iterates over the list of player names
+	public static Iterable<String> playerNames() {
+		synchronized(PLAYERS) {
+			LinkedList<String> output = new LinkedList<String>();
+			for(Player p : PLAYERS) {
+				output.addLast(p.name);
+			}
+			return output;
+		}
+	}
+	
 	// returns the information for a given player
 	public static Player getPlayer(int i) {
 		synchronized(PLAYERS) {

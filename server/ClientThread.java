@@ -103,11 +103,20 @@ public class ClientThread implements Runnable {
 	
 	// assumes that the _out lock is already held when method is invoked- should only be called from the wrapper
 	private void parseCommand(int i) throws IOException {
-		// reply to each hello with a welcome- handshake optional as far as the server is concerned, 
-		// but the client will wait for the welcome before sending more information
+		// reply to each hello with a welcome and all player information
 		if(i == Protocol.HELLO) {
 			
 			_out.write(Protocol.WELCOME);
+			
+			_out.write(ServerDatabase.PLAYERS.length);
+			
+			for(Player p : ServerDatabase.PLAYERS) {
+				_out.write(p.name + "\n");
+				_out.write(p.race + "\n");
+				_out.write(p.red + "\n");
+				_out.write(p.green + "\n");
+				_out.write(p.blue + "\n");
+			}
 			
 			this.output("handshake");
 			return;
@@ -141,16 +150,6 @@ public class ClientThread implements Runnable {
 			}
 			
 			// after the client has been accepted, update it about all of the exciting new information it missed out on
-			
-			// player information
-			for(Player p : ServerDatabase.PLAYERS) {
-				_out.write(Protocol.NEW_PLAYER);
-				_out.write(p.name + "\n");
-				_out.write(p.race + "\n");
-				_out.write(p.red + "\n");
-				_out.write(p.green + "\n");
-				_out.write(p.blue + "\n");
-			}
 			
 			// report which tabs are enabled
 			for(String tab : ServerDatabase.TABS.keySet()) {

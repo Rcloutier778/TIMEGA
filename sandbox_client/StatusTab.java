@@ -31,7 +31,8 @@ public class StatusTab extends AbstractTab{
 		super(Client.STATUS);
 	}
 	
-	public void initialize() {
+	@Override
+	public void addNames() {
 		
 		_players = new ToggleButton[Database.numPlayers()];
 				
