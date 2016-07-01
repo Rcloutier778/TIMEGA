@@ -111,7 +111,6 @@ public class CommandMap {
 				Main.writeColortext("usage: reload <file name>", Main.ERROR);
 				return;
 			}
-			String fname = args[1];
 
 			if(new File(System.getProperty("user.dir") + "/" + args[1] + ".txt").exists()){
 				_main.broadcastReload(args[1] + ".txt");

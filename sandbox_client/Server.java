@@ -21,7 +21,7 @@ public class Server implements Runnable {
 	
 	private Client _client;
 	
-	public Server(Socket socket, Client client, ControlsTab tab, String name) {
+	public Server(Socket socket, Client client, ControlsTab tab) {
 		_client = client;
 
 		// set up a connection
@@ -35,13 +35,61 @@ public class Server implements Runnable {
 			
 			if(_in.read() == Protocol.WELCOME) {
 				// if handshake successful, try to connect
-				this.sendName(name);
-				Database.name(name);
+				this.readNames();
+				_client.namesReceived();
 			}
 						
 		} catch (IOException e) {
 			// e.printStackTrace();
 			_client.disconnection();
+		}
+		
+	}
+	
+	// get names from server
+	private void readNames() throws IOException {
+		
+		int numPlayers = _in.read();
+		for(int i=0; i<numPlayers; i++) {
+			Player p = new Player();
+			p.name = _in.readLine();
+			p.race = _in.readLine();
+			p.red = Integer.parseInt(_in.readLine());
+			p.green = Integer.parseInt(_in.readLine());
+			p.blue = Integer.parseInt(_in.readLine());
+			
+			Database.addPlayer(p);
+		}
+
+	}
+	
+	// try to log in
+	public void tryLogin(String name) {
+		_out.write(Protocol.NAME);
+		_out.write(name);
+		_out.write("\n");
+		_out.flush();
+		
+		int message = 0;
+		try {
+			message = _in.read();
+		} catch (IOException e) {
+			_client.disconnection();
+		}
+		
+		if(message == Protocol.VALID) {
+			_client.validName(name);
+			// request map
+			_out.write(Protocol.MAP);
+			_out.flush();
+			Thread t = new Thread(this);
+			t.setDaemon(true);
+			t.start();
+			Database.name(name);
+			return;
+		} else if(message == Protocol.INVALID) {
+			_client.validName(null);
+			return;
 		}
 		
 	}
@@ -84,19 +132,7 @@ public class Server implements Runnable {
 	// read and respond to a message
 	private synchronized void handle(int message) throws IOException {
 		
-		if(message == Protocol.NEW_PLAYER) {
-			
-			Player p = new Player();
-			
-			p.name = _in.readLine();
-			p.race = _in.readLine();
-			p.red = Integer.parseInt(_in.readLine());
-			p.green = Integer.parseInt(_in.readLine());
-			p.blue = Integer.parseInt(_in.readLine());			
-			
-			Database.addPlayer(p);
-			
-		} else if(message == Protocol.MAP) {
+		if(message == Protocol.MAP) {
 			String name = _in.readLine();
 			_client.nameMap(name);
 			int length = _in.read();
@@ -110,9 +146,6 @@ public class Server implements Runnable {
 			}
 			_client.writeMap(mapdata);
 			
-			// sets up the last stuff that needs to be done
-			_client.databaseFinished();
-
 		} else if(message == Protocol.ENABLE) {
 			String tab = _in.readLine();
 			_client.setEnabledGeneric(true, Arrays.asList(Client.TAB_NAMES).indexOf(tab));
@@ -210,37 +243,6 @@ public class Server implements Runnable {
 			
 			_client.resolution(resolution1, resolution2);
 		}
-	}
-	
-	public synchronized void sendName(String name) {
-		_out.write(Protocol.NAME);
-		_out.write(name);
-		_out.write("\n");
-		_out.flush();
-		
-		int message = 0;
-		try {
-			message = _in.read();
-		} catch (IOException e) {
-			_client.disconnection();
-		}
-		
-		if(message == Protocol.VALID) {
-			_client.validName(true);
-			// request map
-			_out.write(Protocol.MAP);
-			_out.flush();
-			Thread t = new Thread(this);
-			t.setDaemon(true);
-			t.start();
-			return;
-		} else if(message == Protocol.INVALID) {
-			_client.validName(false);
-			return;
-		}
-		
-		_client.disconnection();
-		
 	}
 	
 	public synchronized void write(int protocol, String text) {

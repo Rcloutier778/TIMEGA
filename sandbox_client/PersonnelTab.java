@@ -120,7 +120,8 @@ public class PersonnelTab extends AbstractTab {
 		_pane.add(v, 0, i, 3, 1);
 	}
 	
-	public void initialize() {
+	@Override
+	public void addNames() {
 		_boxes = new PersonnelLight[Database.numPlayers()];
 		for(int i=0; i<_boxes.length; i++) {
 			Player p = Database.getPlayer(i);
@@ -129,7 +130,11 @@ public class PersonnelTab extends AbstractTab {
 			_boxes[i].empty();
 			_boxes[i].setVisible(false);
 		}
-		_index = Database.indexOf(_client.getName());
+	}
+	
+	@Override
+	public void localName(String name) {
+		_index = Database.indexOf(name);
 	}
 	
 	
