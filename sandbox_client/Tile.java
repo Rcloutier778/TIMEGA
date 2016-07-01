@@ -48,7 +48,7 @@ public class Tile {
 
 	// tile accessors
 	public String getPath() {
-		return "file:TIMEGA/assets/Systems/" + _path;
+		return "file:" + Main.PATH_TO_ASSETS + "Systems/" + _path;
 	}
 
 	public String getTitle() {
