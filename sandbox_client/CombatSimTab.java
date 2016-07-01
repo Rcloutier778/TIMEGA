@@ -136,7 +136,7 @@ public class CombatSimTab extends AbstractTab {
         //drop down menu for enemies
         if (eOptions.getItems().isEmpty()) {
             for (int i = 0; i < Database.numPlayers(); i++) {
-                if(!_client.getName().equals(Database.getPlayer(i).name)){
+                if(!name.equals(Database.getPlayer(i).name)){
                     eOptions.getItems().add(Database.getPlayer(i).name);
                 }
             }

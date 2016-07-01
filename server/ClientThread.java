@@ -111,7 +111,6 @@ public class ClientThread implements Runnable {
 			_out.write(ServerDatabase.PLAYERS.length);
 			
 			for(Player p : ServerDatabase.PLAYERS) {
-				_out.write(Protocol.NEW_PLAYER);
 				_out.write(p.name + "\n");
 				_out.write(p.race + "\n");
 				_out.write(p.red + "\n");

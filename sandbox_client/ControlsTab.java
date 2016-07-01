@@ -97,7 +97,7 @@ public class ControlsTab extends AbstractTab {
 		order.setWrapText(true);
 		grid.add(order, 3, 0, 1, 6);
 		
-		Label market = new Label("Development phase marketplace:\n\t-Technology (8 resources each)\n\t-Personnel (2 influence each per round)\n\t-Votes (1 influence each)");
+		Label market = new Label("Development phase marketplace:\n\t-Technology (7 resources/credits each)\n\t-Personnel (1 influence per tier per round)\n\t-Votes (1 influence each)");
 		market.setWrapText(true);
 		grid.add(market, 3, 6, 1, 3);
 		
@@ -113,6 +113,7 @@ public class ControlsTab extends AbstractTab {
 			_name.getItems().add(player);
 		}
 		_name.setDisable(false);
+		_connect.setOnAction(e -> tryLogin());
 	}
 	
 	// fooooocusssssssss
@@ -178,8 +179,12 @@ public class ControlsTab extends AbstractTab {
 	
 	// helper method to attempt to log in
 	private void tryLogin() {
-		// TODO
-		return;
+		String name = _name.getValue();
+		if(name == null) {
+			_error.setText("Must enter name to login");
+		} else {
+			_client.tryName(name);
+		}
 	}
 	
 	// overloaded methods to allow the program to safely change the text in labels and buttons

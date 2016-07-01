@@ -134,7 +134,9 @@ public class Client {
 			Platform.runLater(new Runnable() {
 				@Override
 				public void run() {
-					_research.localName(name);
+					for(AbstractTab t : _tabs) {
+						t.localName(name);
+					}
 				}
 			});
 		} else {
