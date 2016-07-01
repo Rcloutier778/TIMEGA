@@ -23,6 +23,7 @@ import java.util.ArrayList;
 //todo: Remember all techs are most updated on pdf, not website
 /**
  * 1) Update for hyper metabolism
+ * 2) Flagships! :D :D :D (and home system combat bonus, but that'll be in the rulebook eventually...)
  * 3) Update for Xeno?
   */
 
@@ -45,16 +46,20 @@ public class CombatSimTab extends AbstractTab {
     private TextField[] _playerUnitFields = new TextField[NUM_SHIPS];
     private TextField[] _enemyUnitFields = new TextField[NUM_SHIPS];
 
-    //enemy name
+    // enemy name
     private String enemy;
 
-    //Number of each unit
+    // number of each unit
     private int[] _playerUnitCounts = new int[NUM_SHIPS];
     private int[] _enemyUnitCounts = new int[NUM_SHIPS];
 
-    //Damage values of each unit- TODO factor into xml
+    // damage values of each unit- TODO factor into xml
     private int[] _playerUnitHitRate = {9, 9, 7, 6, 3};
     private int[] _enemyUnitHitRate = {9, 9, 7, 6, 3};
+    
+    // dice rolled by each unit- factor this out too
+    private int[] _playerUnitDice = {1, 1, 1, 1, 3};
+    private int[] _enemyUnitDice = {1, 1, 1, 1, 3};
 
     private Button _start;
     private GridPane scenepane = new GridPane();
@@ -337,19 +342,15 @@ public class CombatSimTab extends AbstractTab {
         // TODO = Now that everything's been moved to arrays, can we factor some of this redundant code out?
         for (int i = 0; i < 5; i++) {
             for (int k = 0; k < _playerUnitCounts[i]; k++) {
-                if (i == 4) { //Warsuns 3 hits
-                    for (int l = 0; l < 3; l++) {
-                        if (DiceRoller() >= _playerUnitHitRate[i]) {
-                            phits += 1;
-                        }
-                    }
-                } else if (DiceRoller() >= _playerUnitHitRate[i]) {
-                    if (i == 2) { //Cruisers
-                        pcr += 1;
-                    } else {
-                        phits += 1;
-                    }
-                }
+            	for(int die = 0; die < _playerUnitDice[i]; die++) {
+            		if(DiceRoller() >= _playerUnitHitRate[i]) {
+            			if(i == CRUISER) {
+            				pcr++;
+            			} else {
+            				phits++;
+            			}
+            		}
+            	}
             }
         }
         if(Database.hasTech(_client.getName(),"Auxiliary Drones") && _playerUnitCounts[DREADNOUGHT]>0){
@@ -362,24 +363,20 @@ public class CombatSimTab extends AbstractTab {
         int ecr = 0;
         for (int i = 0; i < 5; i++) {
             for (int k = 0; k < _enemyUnitCounts[i]; k++) {
-                if (i == 4) { //Warsuns 3 hits
-                    for (int l = 0; l < 3; l++) {
-                        if (DiceRoller() >= _enemyUnitHitRate[i]) {
-                            ehits += 1;
-                        }
-                    }
-                } else if (DiceRoller() >= _enemyUnitHitRate[i]) {
-                    if (i == 2) { //Cruisers
-                        ecr += 1;
-                    } else {
-                        ehits += 1;
-                    }
-                }
+            	for(int die = 0; die < _enemyUnitDice[i]; die++) {
+            		if(DiceRoller() >= _enemyUnitHitRate[i]) {
+            			if(i == CRUISER) {
+            				pcr++;
+            			} else {
+            				phits++;
+            			}
+            		}
+            	}
             }
         }
         if(Database.hasTech(enemy,"Auxiliary Drones") && _enemyUnitCounts[DREADNOUGHT]>0){
             if(DiceRoller() >= 7){
-                ehits += 1;
+                ehits++;
             }
         }
 
@@ -387,11 +384,11 @@ public class CombatSimTab extends AbstractTab {
         for (int i = 0; i < 5; i++) {
             while (pcr > 0) {
                 if (_enemyUnitCounts[i] > 0) {
-                    _enemyUnitCounts[i] -= 1;
-                    pcr -= 1;
-                    if (i == 3) {
+                    _enemyUnitCounts[i]--;
+                    pcr--;
+                    if (i == DREADNOUGHT) {
                         if (Database.hasTech(enemy, "Transfabrication")) {
-                            _enemyUnitCounts[DESTROYER] += 1;
+                            _enemyUnitCounts[DESTROYER]++;
                             i -= 2;
                         }
                     }
@@ -405,11 +402,11 @@ public class CombatSimTab extends AbstractTab {
         for (int i = 0; i < 5; i++) {
             while (ecr > 0) {
                 if (_playerUnitCounts[i] > 0) {
-                    _playerUnitCounts[i] -= 1;
-                    ecr -= 1;
-                    if (i == 3) {
+                    _playerUnitCounts[i]--;
+                    ecr--;
+                    if (i == DREADNOUGHT) {
                         if (Database.hasTech(_client.getName(), "Transfabrication")) {
-                            _playerUnitCounts[DESTROYER] += 1;
+                            _playerUnitCounts[DESTROYER]++;
                             i -= 2;
                         }
                     }
@@ -623,49 +620,5 @@ public class CombatSimTab extends AbstractTab {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

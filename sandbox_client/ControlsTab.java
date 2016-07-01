@@ -108,12 +108,20 @@ public class ControlsTab extends AbstractTab {
 	// populate names list
 	@Override
 	public void addNames() {
+		System.out.println("add names invoked");
 		_name.getItems().clear();
 		for(String player : Database.playerNames()) {
 			_name.getItems().add(player);
 		}
 		_name.setDisable(false);
 		_connect.setOnAction(e -> tryLogin());
+	}
+	
+	// and clean up connection stuff
+	@Override
+	public void localName(String name) {
+		_name.setDisable(true);
+		_connect.setOnAction(e -> disconnection());
 	}
 	
 	// fooooocusssssssss

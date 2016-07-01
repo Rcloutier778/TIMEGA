@@ -146,9 +146,6 @@ public class Server implements Runnable {
 			}
 			_client.writeMap(mapdata);
 			
-			// sets up the last stuff that needs to be done
-			_client.namesReceived();
-
 		} else if(message == Protocol.ENABLE) {
 			String tab = _in.readLine();
 			_client.setEnabledGeneric(true, Arrays.asList(Client.TAB_NAMES).indexOf(tab));
