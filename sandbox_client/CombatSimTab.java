@@ -336,7 +336,7 @@ public class CombatSimTab extends AbstractTab {
      * Normal combat (recursive)
      * @return 1 = Win, 2 = Loss, 3 = Stalemate
      */
-    public int Combat(int HM){ // TODO stop this too, method names do NOT get capital first letters unless they hella important
+    public int Combat(){
         //Tally number of hits player makes
         int phits = 0;
         int pcr = 0;
@@ -515,7 +515,7 @@ public class CombatSimTab extends AbstractTab {
         } if(Database.hasTech(enemy, "Hyper Metabolism")){
             _enemyUnitHitRate[DESTROYER] -= 1;
         }
-        return Combat(HM+=1);
+        return Combat();
     }
 
     //Average remaining units, wins, losses
@@ -557,7 +557,7 @@ public class CombatSimTab extends AbstractTab {
                 pwarsus = _playerUnitCounts[WAR_SUN];
                 edreadsus = _enemyUnitCounts[DREADNOUGHT];
                 ewarsus = _enemyUnitCounts[WAR_SUN];
-                int res = Combat(0);
+                int res = Combat();
                 if(res == 1){
                     avgUrem.set(10, (avgUrem.get(10) + new Float(1)));
                 }
