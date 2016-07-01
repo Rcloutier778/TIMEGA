@@ -10,9 +10,10 @@ import sandbox_client.Protocol;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.LinkedList;
+//import server.CommandMap;
 
 public class Main {
 	
@@ -144,13 +145,17 @@ public class Main {
 		try(BufferedReader br = new BufferedReader(new FileReader(filename))){
 			//Planets, Space Docks, Tech, Personnel, Empire Stage, End
 			boolean[] passed = {false, false, false, false, false, false};
-			ServerDatabase.PLANETS_LOCK.lock();
-			ServerDatabase.SPACEDOCKS_LOCK.lock();
-			ServerDatabase.TECH_LOCK.lock();
-			ServerDatabase.PERSONNEL_LOCK.lock();
-			ServerDatabase.EMPIRE_LOCK.lock();
-
+			ArrayList<String> playernames = new ArrayList<>();
+			for(int i = 0; i<ServerDatabase.PLAYERS.length;i++) {
+				playernames.add(ServerDatabase.PLAYERS[i].name);
+			}
+			String pname = "none";
 			for(String line; (line  = br.readLine()) != null;){
+				String[] splitline = line.split(" ");
+				if(playernames.contains(line)){
+					pname = line;
+					continue;
+				}
 				if(line.equals("Planets")){
 					passed[0] = true;
 					continue;
@@ -175,42 +180,50 @@ public class Main {
 					passed[5] = true;
 					break;
 				}
-				String[] splitline = line.split(" ");
-				//Planets: Name, owner
+				//Planets: Owner, Planet name
 				if(passed[0] && !passed[1]){
-					ServerDatabase.PLANETS.put(splitline[0],splitline[1]);
+					_map.parse("chown " + line);
 				}
 				//Spacedocks: Planet_name, boolean
 				if(passed[1] && !passed[2]){
-					ServerDatabase.SPACEDOCKS.put(splitline[0],Boolean.parseBoolean(splitline[1]));
+					broadcastSD(splitline[0], Boolean.parseBoolean(splitline[1]), ServerDatabase.PLANETS.get(splitline[0]) + " ");
 				}
-				//Tech: Name Tech Tech Tech ...
+				//Tech
+				//Name
+				//Tech
+				//Tech
+				//Name2
+				//Tech ...
 				if(passed[2] && !passed[3]){
-					HashSet<String> techs = new HashSet<>();
-					for(int i = 1; i<splitline.length-1; i++){
-						techs.add(splitline[i]);
-					}
-					ServerDatabase.TECH.put(splitline[0], techs);
+					_map.parse("research " + pname + " " + line);
 				}
 				//Personnel
 				if(passed[3] && !passed[4]){
-					HashSet<String> pers = new HashSet<>();
-					for(int i = 1; i<splitline.length-1; i++){
-						pers.add(splitline[i]);
-					}
-					ServerDatabase.PERSONNEL.put(splitline[0], pers);
+					_map.parse("hire " + pname + " " + line);
 				}
 				//Empire Stage
 				if(passed[4] && !passed[5]){
-					ServerDatabase.EMPIRE_STAGE.put(splitline[0], splitline[1]);
+					if(splitline.length > 1) {
+						if (splitline[1].equals("coalition")) {
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+						} else if (splitline[1].equals("federation")) {
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+						} else if (splitline[1].equals("republic")) {
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+						} else if (splitline[1].equals("empire")) {
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+							broadcastAdvance(splitline[0], 1, splitline[0]);
+						}
+					}
+
 				}
 
 			}
-			ServerDatabase.PLANETS_LOCK.unlock();
-			ServerDatabase.SPACEDOCKS_LOCK.unlock();
-			ServerDatabase.TECH_LOCK.unlock();
-			ServerDatabase.PERSONNEL_LOCK.unlock();
-			ServerDatabase.EMPIRE_LOCK.unlock();
 		}catch (IOException e){
 			System.out.println("Error reading file to reload from");
 		}
@@ -342,8 +355,8 @@ public class Main {
 					//Planet_name Owner
 					writer.write("Planets\n");
 					for(String s : ServerDatabase.PLANETS.keySet()){
-						writer.write(s + " ");
-						writer.write(ServerDatabase.PLANETS.get(s) + "\n");
+						writer.write(ServerDatabase.PLANETS.get(s) + " ");
+						writer.write(s + "\n");
 					}
 					//Spacedocks
 					//Planet_name boolean
@@ -357,25 +370,27 @@ public class Main {
 					//Player_name tech 1 ... tech n
 					writer.write("Tech\n");
 					for(String s : ServerDatabase.TECH.keySet()){
-						writer.write(s + " ");
+						writer.write(s + "\n");
 						for(String t : ServerDatabase.TECH.get(s)){
-							writer.write(t + " ");
+							writer.write(t + "\n");
 						}
 					}
-					writer.write("\n");
 
 					//Personnel
+					//Player name, personnel
 					writer.write("Personnel\n");
 					for(String s : ServerDatabase.PERSONNEL.keySet()){
-						writer.write(s + " ");
+						writer.write(s + "\n");
 						for(String t : ServerDatabase.PERSONNEL.get(s)){
-							writer.write(t + " ");
+							writer.write(t + "\n");
 						}
 					}
-					writer.write("\n");
 
 					//Empire stage
 					writer.write("Empire stage\n");
+					System.out.println(ServerDatabase.EMPIRE_STAGE.keySet());
+					System.out.println(ServerDatabase.EMPIRE_STAGE.values());
+
 					for(String s : ServerDatabase.EMPIRE_STAGE.keySet()){
 						writer.write(s + " ");
 						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
