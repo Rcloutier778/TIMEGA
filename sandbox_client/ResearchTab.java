@@ -28,7 +28,6 @@ public class ResearchTab extends AbstractTab {
 	private static int PANE_WIDTH = 140;
 	private static int RECT_SIZE = 9;
 	
-	private Client _client;
 	private int _index;
 		
 	private GridPane _pane = new GridPane();
@@ -55,9 +54,7 @@ public class ResearchTab extends AbstractTab {
 	
 	public ResearchTab(Client client) {
 		super(Client.RESEARCH);
-		
-		_client = client;
-		
+				
 		_root.setContent(_pane);
 		_pane.setHgap(50);
 		_pane.setVgap(12);
@@ -173,7 +170,7 @@ public class ResearchTab extends AbstractTab {
 	}
 	
 	public void research(String player, String tech) {
-		if(player.equals(_client.getName())) {
+		if(player.equals(Database.getName())) {
 			_buttons.get(tech).brighten();
 			if(_selected != null && _selected.getText().equals(tech)) {
 				_research.setText("Remove");
@@ -188,7 +185,7 @@ public class ResearchTab extends AbstractTab {
 	}
 	
 	public void forget(String player, String tech) {
-		if(player.equals(_client.getName())) {
+		if(player.equals(Database.getName())) {
 			_buttons.get(tech).gray();
 			if(_selected != null && _selected.getText().equals(tech)) {
 				_research.setText("Research");
@@ -290,7 +287,7 @@ public class ResearchTab extends AbstractTab {
 				_research.setText("Remove");
 				_research.setDisable(false);
 				_boxes[_index].fill();
-			} else if(Database.hasTech(_client.getName(), _b.getText())) {
+			} else if(Database.hasTech(Database.getName(), _b.getText())) {
 				_research.setText("Remove");
 				_research.setDisable(true);
 				_boxes[_index].fill();

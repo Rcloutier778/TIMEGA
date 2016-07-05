@@ -146,7 +146,7 @@ public class MapCanvas {
 		int planet = Database.tile(_selected.id()).hasPlanet(planetName);
 		if(planet >= 0) {
 			Button b = _planets[planet];
-			if(newOwner.equals(_client.getName())) {
+			if(newOwner.equals(Database.getName())) {
 				b.setText("Release " + planetName);
 				b.setOnAction(new ButtonHandler(planetName, false));
 			} else {
@@ -199,7 +199,7 @@ public class MapCanvas {
 					_planets[i].setVisible(true);
 					_spacedocks[i].setVisible(true);
 
-					if(Database.ownerOf(name).equals(_client.getName())) {
+					if(Database.ownerOf(name).equals(Database.getName())) {
 						_planets[i].setText("Release " + name);
 						_planets[i].setOnAction(new ButtonHandler(name, false));
 					} else {
@@ -369,7 +369,7 @@ public class MapCanvas {
 		@Override
 		public void handle(ActionEvent e) {
 			if(_isCapture) {
-				_client.write(Protocol.PLANET_CHOWN, _name + "\n" + _client.getName());
+				_client.write(Protocol.PLANET_CHOWN, _name + "\n" + Database.getName());
 			} else {
 				_client.write(Protocol.PLANET_CHOWN, _name + "\n" + "none");
 			}

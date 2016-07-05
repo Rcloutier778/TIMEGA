@@ -28,7 +28,6 @@ public class PersonnelTab extends AbstractTab {
 	private static int PANE_WIDTH = 140;
 	private static int RECT_SIZE = 9;
 	
-	private Client _client;
 	private int _index;
 	
 	private GridPane _pane = new GridPane();
@@ -54,9 +53,7 @@ public class PersonnelTab extends AbstractTab {
 	
 	public PersonnelTab(Client client) {
 		super(Client.PERSONNEL);
-		
-		_client = client;
-				
+						
 		_root.setContent(_pane);
 		_pane.setHgap(110);
 		_pane.setVgap(12);
@@ -158,13 +155,13 @@ public class PersonnelTab extends AbstractTab {
 	}
 	
 	public void updateSD() {
-		_redTier.setText("tier: " + Database.personnelTier(_client.getName(), Database.RED));
-		_blueTier.setText("tier: " + Database.personnelTier(_client.getName(), Database.BLUE));
-		_greenTier.setText("tier: " + Database.personnelTier(_client.getName(), Database.GREEN));
+		_redTier.setText("tier: " + Database.personnelTier(Database.getName(), Database.RED));
+		_blueTier.setText("tier: " + Database.personnelTier(Database.getName(), Database.BLUE));
+		_greenTier.setText("tier: " + Database.personnelTier(Database.getName(), Database.GREEN));
 	}
 	
 	public void hire(String player, String person) {
-		if(player.equals(_client.getName())) {
+		if(player.equals(Database.getName())) {
 			_buttons.get(person).brighten();
 			if(_selected != null && _selected.getText().equals(person)) {
 				_hire.setText("Release");
@@ -178,7 +175,7 @@ public class PersonnelTab extends AbstractTab {
 	}
 	
 	public void release(String player, String person) {
-		if(player.equals(_client.getName())) {
+		if(player.equals(Database.getName())) {
 			_buttons.get(person).gray();
 			if(_selected != null && _selected.getText().equals(person)) {
 				_hire.setText("Hire");
@@ -274,7 +271,7 @@ public class PersonnelTab extends AbstractTab {
 			paintPersonnelBoxes(_b.getText());
 			_tier.setText("(tier " + Database.tierOfPersonnel(_b.getText()) + ")");
 			
-			if(Database.localHasPerson(_client.getName(), _b.getText())) {
+			if(Database.localHasPerson(Database.getName(), _b.getText())) {
 				_hire.setText("Release");
 				_boxes[_index].fill();
 			} else {

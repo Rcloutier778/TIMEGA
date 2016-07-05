@@ -87,7 +87,7 @@ public class Database {
 	}
 	
 	// set/change the name of the local player
-	public static void name(String name) {
+	public static void setName(String name) {
 		Integer n;
 		synchronized(PLANETS) {
 			
@@ -111,6 +111,10 @@ public class Database {
 				
 			}
 		}
+	}
+	
+	public static String getName() {
+		return NAME;
 	}
 	
 	

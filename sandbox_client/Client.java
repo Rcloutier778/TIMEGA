@@ -46,9 +46,6 @@ public class Client {
 	
 	private AbstractTab[] _tabs = new AbstractTab[NUM_TABS];
 
-	// local name
-	private String _name;
-	
 	private Server _server;
 	
 	// graphics
@@ -143,14 +140,6 @@ public class Client {
 			_controls.invalidName();
 		}
 	}
-	
-	public void setName(String name) {
-		_name = name;
-	}
-	
-	public String getName() {
-		return _name;
-	}
 		
 	// MAP COMMANDS
 	
@@ -236,7 +225,7 @@ public class Client {
 	
 	// EMPIRE
 	public void advancePlayer(String player) {
-		if(player.equals(_name)) {
+		if(player.equals(Database.getName())) {
 			_empire.advance();
 			_personnel.updateSD();
 		}

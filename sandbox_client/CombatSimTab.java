@@ -22,10 +22,9 @@ import java.util.ArrayList;
 
 //todo: Remember all techs are most updated on pdf, not website
 /**
- * 1) Update for hyper metabolism
- * 2) Flagships! :D :D :D (and home system combat bonus, but that'll be in the rulebook eventually...)
- * 3) Update for Xeno?
-  */
+ * 1) Flagships! :D :D :D (and home system combat bonus, but that'll be in the rulebook eventually...)
+ * 2) Update for Xeno?
+ */
 
 public class CombatSimTab extends AbstractTab {
 
@@ -36,11 +35,8 @@ public class CombatSimTab extends AbstractTab {
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
 
-	public static final int NUM_SHIPS = 5;
-
 	public static final String[] SHIP_NAMES = {"Fighters", "Destroyers", "Cruisers", "Dreadnoughts", "War Suns"};
-
-    private Client _client;
+	public static final int NUM_SHIPS = SHIP_NAMES.length;
 
     // Units fields
     private TextField[] _playerUnitFields = new TextField[NUM_SHIPS];
@@ -69,8 +65,6 @@ public class CombatSimTab extends AbstractTab {
     //make values cleared when you click on another tab
     public CombatSimTab(Client client) {
         super(Client.SIMULATOR);
-        // TODO bad- at least make an "initialize()" method to call in here instead of defining everything
-        _client = client;
         _root.setClosable(false);
         _root.setContent(scenepane);
 
@@ -133,10 +127,10 @@ public class CombatSimTab extends AbstractTab {
      */
     @Override
     public void localName(String name) {
-        //Gets the name of the client (player)
+        // Gets the name of the client (player)
         PlayerName.setText(name);
-        //Gets the name of the opposing players
-        //drop down menu for enemies
+        // Gets the name of the opposing players
+        // drop down menu for enemies
         if (eOptions.getItems().isEmpty()) {
             for (int i = 0; i < Database.numPlayers(); i++) {
                 if(!name.equals(Database.getPlayer(i).name)){
@@ -210,12 +204,11 @@ public class CombatSimTab extends AbstractTab {
     }
 
     public int diceRoller(){
-        return (int) Math.round((Math.random() * 10));
+        return (int) (Math.random() * 10) + 1;
     }
 
     public int[] totalUnits() {
-        int[] ret = {_playerUnitCounts[WAR_SUN] + _playerUnitCounts[DREADNOUGHT] + _playerUnitCounts[CRUISER] + _playerUnitCounts[DESTROYER] + _playerUnitCounts[FIGHTER], _enemyUnitCounts[WAR_SUN] + _enemyUnitCounts[DREADNOUGHT] + _enemyUnitCounts[CRUISER] + _enemyUnitCounts[DESTROYER] + _enemyUnitCounts[FIGHTER]};
-        return ret;
+        return new int[]{_playerUnitCounts[WAR_SUN] + _playerUnitCounts[DREADNOUGHT] + _playerUnitCounts[CRUISER] + _playerUnitCounts[DESTROYER] + _playerUnitCounts[FIGHTER], _enemyUnitCounts[WAR_SUN] + _enemyUnitCounts[DREADNOUGHT] + _enemyUnitCounts[CRUISER] + _enemyUnitCounts[DESTROYER] + _enemyUnitCounts[FIGHTER]};
     }
     /**
      * Calculates precombat (ADT, AFB, assault cannons)
@@ -336,7 +329,6 @@ public class CombatSimTab extends AbstractTab {
         //Tally number of hits player makes
         int phits = 0;
         int pcr = 0;
-        // TODO = Now that everything's been moved to arrays, can we factor some of this redundant code out?
         for (int i = 0; i < NUM_SHIPS; i++) {
             for (int k = 0; k < _playerUnitCounts[i]; k++) {
             	for(int die = 0; die < _playerUnitDice[i]; die++) {
@@ -544,16 +536,11 @@ public class CombatSimTab extends AbstractTab {
                 else{
                     return "Error";
                 }
-                avgUrem.set(0, avgUrem.get(0) +(_playerUnitCounts[FIGHTER]));
-                avgUrem.set(1, avgUrem.get(1) + (_playerUnitCounts[DESTROYER]));
-                avgUrem.set(2, avgUrem.get(2) + (_playerUnitCounts[CRUISER]));
-                avgUrem.set(3, avgUrem.get(3) + (_playerUnitCounts[DREADNOUGHT]));
-                avgUrem.set(4, avgUrem.get(4) + (_playerUnitCounts[WAR_SUN]));
-                avgUrem.set(5, avgUrem.get(5) + (_enemyUnitCounts[FIGHTER]));
-                avgUrem.set(6, avgUrem.get(6) + (_enemyUnitCounts[DESTROYER]));
-                avgUrem.set(7, avgUrem.get(7) + (_enemyUnitCounts[CRUISER]));
-                avgUrem.set(8, avgUrem.get(8) + (_enemyUnitCounts[DREADNOUGHT]));
-                avgUrem.set(9, avgUrem.get(9) + (_enemyUnitCounts[WAR_SUN]));
+                
+                for(int j=0; j<NUM_SHIPS; j++) {
+                	avgUrem.set(j, avgUrem.get(j) + (_playerUnitCounts[j]));
+                	avgUrem.set(j + NUM_SHIPS, avgUrem.get(j + NUM_SHIPS) + (_enemyUnitCounts[j]));
+                }
 
                 int premdread = _playerUnitCounts[DREADNOUGHT];
                 int premdest = _playerUnitCounts[DESTROYER];
@@ -561,27 +548,22 @@ public class CombatSimTab extends AbstractTab {
                 int eremdest = _enemyUnitCounts[DESTROYER];
                 setUnits();
                 if(_playerUnitCounts[DREADNOUGHT]> premdread && premdest > 0){
-                    avgUrem.set(3, avgUrem.get(3) + 1);
+                    avgUrem.set(DREADNOUGHT, avgUrem.get(DREADNOUGHT) + 1);
                 }
                 if(_enemyUnitCounts[DREADNOUGHT]> eremdread && eremdest > 0){
-                    avgUrem.set(8, avgUrem.get(8) + 1);
+                    avgUrem.set(DREADNOUGHT + NUM_SHIPS, avgUrem.get(DREADNOUGHT + NUM_SHIPS) + 1);
                 }
             }
         }
-        avgUrem.set(0, avgUrem.get(0) / 1000);
-        avgUrem.set(1, avgUrem.get(1) / 1000);
-        avgUrem.set(2, avgUrem.get(2) / 1000);
-        avgUrem.set(3, avgUrem.get(3) / 1000);
-        avgUrem.set(4, avgUrem.get(4) / 1000);
-        avgUrem.set(5, avgUrem.get(5) / 1000);
-        avgUrem.set(6, avgUrem.get(6) / 1000);
-        avgUrem.set(7, avgUrem.get(7) / 1000);
-        avgUrem.set(8, avgUrem.get(8) / 1000);
-        avgUrem.set(9, avgUrem.get(9) / 1000);
-        avgUrem.set(10, avgUrem.get(10) / 10);
-        avgUrem.set(11, avgUrem.get(11) / 10);
-        avgUrem.set(12, avgUrem.get(12) / 10);
-
+        
+        for(int i=0; i<10; i++) {
+        	avgUrem.set(i, avgUrem.get(i) / 1000);
+        }
+        
+        for(int i=10; i<13; i++) {
+        	avgUrem.set(i, avgUrem.get(i) / 10);
+        }
+        
         return "Out of 1000 trials, the results were: \n" +
                 "Victory = " + (new BigDecimal(Float.toString(avgUrem.get(10))).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString()) + "%\n" +
                 "Defeat = " + new BigDecimal(Float.toString(avgUrem.get(11))).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString() + "%\n" +
