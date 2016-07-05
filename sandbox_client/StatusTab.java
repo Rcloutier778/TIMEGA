@@ -27,7 +27,7 @@ public class StatusTab extends AbstractTab{
 	
 	private String _player;
 	
-	public StatusTab(Client client) {
+	public StatusTab() {
 		super(Client.STATUS);
 	}
 	

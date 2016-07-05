@@ -20,10 +20,9 @@ import java.util.ArrayList;
 
 //todo: Remember all techs are most updated on pdf, not website
 /**
- * 1) Update for hyper metabolism
- * 2) Flagships! :D :D :D (and home system combat bonus, but that'll be in the rulebook eventually...)
- * 3) Update for Xeno?
-  */
+ * 1) Flagships! :D :D :D (and home system combat bonus, but that'll be in the rulebook eventually...)
+ * 2) Update for Xeno?
+ */
 
 public class CombatSimTab extends AbstractTab {
 
@@ -38,8 +37,7 @@ public class CombatSimTab extends AbstractTab {
     public static final int NUM_MATCHED = 2;
 
 	public static final String[] SHIP_NAMES = {"Fighters", "Destroyers", "Cruisers", "Dreadnoughts", "War Suns"};
-
-    private Client _client;
+	public static final int NUM_SHIPS = SHIP_NAMES.length;
 
     // Units fields
     private NumberTextField[][] _UnitFields = new NumberTextField[2][NUM_SHIPS];
@@ -64,10 +62,8 @@ public class CombatSimTab extends AbstractTab {
     public String[] names = new String[2];
 
     //make values cleared when you click on another tab
-    public CombatSimTab(Client client) {
+    public CombatSimTab() {
         super(Client.SIMULATOR);
-        // TODO bad- at least make an "initialize()" method to call in here instead of defining everything
-        _client = client;
         _root.setClosable(false);
         _root.setContent(scenepane);
 
@@ -138,10 +134,10 @@ public class CombatSimTab extends AbstractTab {
      */
     @Override
     public void localName(String name) {
-        //Gets the name of the client (player)
+        // Gets the name of the client (player)
         PlayerName.setText(name);
-        //Gets the name of the opposing players
-        //drop down menu for enemies
+        // Gets the name of the opposing players
+        // drop down menu for enemies
         if (eOptions.getItems().isEmpty()) {
             for (int i = 0; i < Database.numPlayers(); i++) {
                 if(!name.equals(Database.getPlayer(i).name)){
@@ -201,7 +197,7 @@ public class CombatSimTab extends AbstractTab {
     }
 
     public int diceRoller(){
-        return (int) Math.round((Math.random() * 10));
+        return (int) (Math.random() * 10) + 1;
     }
 
     public int[] totalUnits() {
@@ -447,6 +443,7 @@ public class CombatSimTab extends AbstractTab {
                 else{
                     return "Error";
                 }
+
                 //Add number of ships remaining to average
                 for(int l = 0; l < NUM_SHIPS; l++){
                     avgUrem.set(l, avgUrem.get(l) + _UnitCounts[0][l]);

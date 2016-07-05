@@ -78,6 +78,7 @@ public class Server implements Runnable {
 		}
 		
 		if(message == Protocol.VALID) {
+			Database.setName(name);
 			_client.validName(name);
 			// request map
 			_out.write(Protocol.MAP);
@@ -85,7 +86,6 @@ public class Server implements Runnable {
 			Thread t = new Thread(this);
 			t.setDaemon(true);
 			t.start();
-			Database.name(name);
 			return;
 		} else if(message == Protocol.INVALID) {
 			_client.validName(null);
@@ -174,21 +174,21 @@ public class Server implements Runnable {
 			_client.endRoundStart();
 			
 			for(String tech : Database.getTechQueue()) {
-				this.write(Protocol.SEND_TECH, _client.getName() + "\n" + tech);
+				this.write(Protocol.SEND_TECH, Database.getName() + "\n" + tech);
 			}
 			
 			for(String person : Database.getPersonnelQueue()) {
-				if(Database.hasPerson(_client.getName(), person)) {
-					this.write(Protocol.REMOVE_PERSON, _client.getName() + "\n" + person);
+				if(Database.hasPerson(Database.getName(), person)) {
+					this.write(Protocol.REMOVE_PERSON, Database.getName() + "\n" + person);
 				} else {
-					this.write(Protocol.SEND_PERSON, _client.getName() + "\n" + person);
+					this.write(Protocol.SEND_PERSON, Database.getName() + "\n" + person);
 				}
 			}
 			
 			this.write(Protocol.END_ROUND);
 			
 			if(Database.isAdvancing()) {
-				this.write(Protocol.ADVANCE, _client.getName() + "\n" + Integer.toString(_client.getColor()));
+				this.write(Protocol.ADVANCE, Database.getName() + "\n" + Integer.toString(_client.getColor()));
 			}
 						
 			Database.clearTechQueue();

@@ -46,9 +46,6 @@ public class Client {
 	
 	private AbstractTab[] _tabs = new AbstractTab[NUM_TABS];
 
-	// local name
-	private String _name;
-	
 	private Server _server;
 	
 	// graphics
@@ -59,13 +56,13 @@ public class Client {
 		// the tabs
 		_tabs[CONTROLS] = _controls = new ControlsTab(this);
 		_tabs[MAP] = _map = new MapTab(this);
-		_tabs[PLANETS] = _planets = new PlanetsTab(this);
-		_tabs[RESEARCH] = _research = new ResearchTab(this);
-		_tabs[PERSONNEL] = _personnel = new PersonnelTab(this);
-		_tabs[EMPIRE] = _empire = new EmpireTab(this);
-		_tabs[STATUS] = _status = new StatusTab(this);
-		_tabs[COUNCIL] = _council = new CouncilTab(this);
-		_tabs[SIMULATOR] = _simulator = new CombatSimTab(this);
+		_tabs[PLANETS] = _planets = new PlanetsTab();
+		_tabs[RESEARCH] = _research = new ResearchTab();
+		_tabs[PERSONNEL] = _personnel = new PersonnelTab();
+		_tabs[EMPIRE] = _empire = new EmpireTab();
+		_tabs[STATUS] = _status = new StatusTab();
+		_tabs[COUNCIL] = _council = new CouncilTab();
+		_tabs[SIMULATOR] = _simulator = new CombatSimTab();
 
 
 		// formatting
@@ -142,14 +139,6 @@ public class Client {
 		} else {
 			_controls.invalidName();
 		}
-	}
-	
-	public void setName(String name) {
-		_name = name;
-	}
-	
-	public String getName() {
-		return _name;
 	}
 		
 	// MAP COMMANDS
@@ -236,7 +225,7 @@ public class Client {
 	
 	// EMPIRE
 	public void advancePlayer(String player) {
-		if(player.equals(_name)) {
+		if(player.equals(Database.getName())) {
 			_empire.advance();
 			_personnel.updateSD();
 		}

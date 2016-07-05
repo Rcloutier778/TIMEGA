@@ -23,7 +23,7 @@ public class CouncilTab extends AbstractTab {
 	private Label _con2;
 	private Label _extra2;
 
-	public CouncilTab(Client client) {
+	public CouncilTab() {
 		super(Client.COUNCIL);
 		
 		Pane pane = new Pane();

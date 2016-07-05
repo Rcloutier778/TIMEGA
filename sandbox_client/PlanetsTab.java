@@ -27,7 +27,6 @@ import java.util.LinkedList;
 public class PlanetsTab extends AbstractTab {
 
 	private GridPane _pane = new GridPane();
-	private Client _client;
 
 	private HashSet<String> _resourcePlanets = new HashSet<String>();
 	private HashSet<String> _influencePlanets = new HashSet<String>();
@@ -43,11 +42,10 @@ public class PlanetsTab extends AbstractTab {
 	private int _totalInfluence = 0;
 	private Text _totalInfluenceText;
 
-	public PlanetsTab(Client c) {
+	public PlanetsTab() {
 		super(Client.PLANETS);
 
 		_root.setContent(_pane);
-		_client = c;
 
 		_pane.setVgap(10);
 		_pane.setHgap(15);
@@ -66,7 +64,7 @@ public class PlanetsTab extends AbstractTab {
 	}
 
 	public void planetChown(String newOwner, String oldOwner) {
-		if(newOwner.equals(_client.getName()) || oldOwner.equals(_client.getName())) {
+		if(newOwner.equals(Database.getName()) || oldOwner.equals(Database.getName())) {
 			Platform.runLater(new Runnable() {
 				public void run() {
 					PlanetsTab.this.updatePlanets();
