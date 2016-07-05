@@ -37,7 +37,7 @@ public class EmpireTab extends AbstractTab {
 
 	private boolean _lock = false;
 	
-	public EmpireTab(Client client) {
+	public EmpireTab() {
 		super(Client.EMPIRE);
 		
 		Pane pane = new Pane();

@@ -51,7 +51,7 @@ public class PersonnelTab extends AbstractTab {
 	private HBox _hbox;
 
 	
-	public PersonnelTab(Client client) {
+	public PersonnelTab() {
 		super(Client.PERSONNEL);
 						
 		_root.setContent(_pane);

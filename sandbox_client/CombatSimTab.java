@@ -63,7 +63,7 @@ public class CombatSimTab extends AbstractTab {
     private ComboBox<String> eOptions;
     private GridPane _pane;
     //make values cleared when you click on another tab
-    public CombatSimTab(Client client) {
+    public CombatSimTab() {
         super(Client.SIMULATOR);
         _root.setClosable(false);
         _root.setContent(scenepane);

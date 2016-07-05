@@ -42,7 +42,7 @@ public class PlanetsTab extends AbstractTab {
 	private int _totalInfluence = 0;
 	private Text _totalInfluenceText;
 
-	public PlanetsTab(Client c) {
+	public PlanetsTab() {
 		super(Client.PLANETS);
 
 		_root.setContent(_pane);

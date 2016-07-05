@@ -78,6 +78,7 @@ public class Server implements Runnable {
 		}
 		
 		if(message == Protocol.VALID) {
+			Database.setName(name);
 			_client.validName(name);
 			// request map
 			_out.write(Protocol.MAP);
@@ -85,7 +86,6 @@ public class Server implements Runnable {
 			Thread t = new Thread(this);
 			t.setDaemon(true);
 			t.start();
-			Database.setName(name);
 			return;
 		} else if(message == Protocol.INVALID) {
 			_client.validName(null);

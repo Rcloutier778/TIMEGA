@@ -52,7 +52,7 @@ public class ResearchTab extends AbstractTab {
 	private ResearchLight[] _boxes;
 	private Label _techDescription;
 	
-	public ResearchTab(Client client) {
+	public ResearchTab() {
 		super(Client.RESEARCH);
 				
 		_root.setContent(_pane);
