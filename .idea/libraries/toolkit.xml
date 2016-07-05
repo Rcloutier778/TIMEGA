@@ -1,8 +1,7 @@
 <component name="libraryTable">
   <library name="toolkit">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/sandbox_client.jar!/" />
-      <root url="jar://$PROJECT_DIR$/mapmaker.jar!/" />
+      <root url="jar://$PROJECT_DIR$/client.jar!/" />
       <root url="jar://$PROJECT_DIR$/server.jar!/" />
     </CLASSES>
     <JAVADOC />
