@@ -6,7 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 import java.math.BigDecimal;
@@ -74,10 +73,9 @@ public class CombatSimTab extends AbstractTab {
 
         _pane = new GridPane();
         Text Results = new Text();
-        Results.setText("\nEnter data to view results");
+        Results.setText("Enter data to view results");
         Text ResultTitle = new Text();
         ResultTitle.setText("Result of the battle:");
-
 
         //make new textfields
         for(int i=0; i<NUM_MATCHED; i++) {
@@ -107,26 +105,32 @@ public class CombatSimTab extends AbstractTab {
         eOptions = new ComboBox<String>();
 
         //Add things to grid
-        for(int i=0; i<NUM_MATCHED; i++) {
-            for(int k=0; k<NUM_SHIPS; k++){
-                _pane.add(_UnitFields[i][k], i+1, k+2);
-            }
+        for(int k=0; k<NUM_SHIPS; k++){
+            _pane.add(_UnitFields[0][k], 1, k + 2);
+            _pane.add(_UnitFields[1][k], 2, k + 2);
         }
+
         _pane.setAlignment(Pos.CENTER);
 
-        Pane ResultsPane = new Pane();
-        ResultsPane.getChildren().add(Results);
+        GridPane ResultsPane = new GridPane();
+        ResultsPane.add(ResultTitle,1,1);
+        ResultsPane.add(Results,1,2);
+        ResultsPane.setMinWidth(240);
+        ResultsPane.setVgap(40);
 
+        _pane.setVgap(40);
+        _pane.setHgap(60);
         PlayerName = new Text();
         PlayerName.setText("Click start");
-        _pane.add(eOptions, 2, 1);
-        _pane.add(PlayerName, 1, 1);
-        scenepane.add(ResultTitle, 2, 1);
-        scenepane.add(_start, 1, 3);
-        scenepane.add(ResultsPane, 2, 2);
-        scenepane.setAlignment(Pos.CENTER);
-        scenepane.add(_pane, 1, 2);
 
+        _pane.add(PlayerName, 1, 1);
+        _pane.add(eOptions, 2, 1);
+        _pane.add(_start, 2, 7);
+        scenepane.add(ResultsPane, 2, 1);
+        scenepane.setAlignment(Pos.CENTER);
+        scenepane.add(_pane, 1, 1);
+
+        scenepane.setHgap(60);
     }
 
     /**
