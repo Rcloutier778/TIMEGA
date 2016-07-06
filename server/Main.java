@@ -204,20 +204,8 @@ public class Main {
 				//Empire Stage
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						if (splitline[1].equals("coalition")) {
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-						} else if (splitline[1].equals("federation")) {
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-						} else if (splitline[1].equals("republic")) {
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-						} else if (splitline[1].equals("empire")) {
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
-							broadcastAdvance(splitline[0], 1, splitline[0]);
+						for(int i=0; i<splitline[1].length(); i++){
+							broadcastAdvance(splitline[0], 0, "[" + splitline[0] + "] ");
 						}
 					}
 
@@ -399,9 +387,6 @@ public class Main {
 					//Empire stage
 					writer.write("Empire stage\n");
 					ServerDatabase.EMPIRE_LOCK.lock();
-					System.out.println(ServerDatabase.EMPIRE_STAGE.keySet());
-					System.out.println(ServerDatabase.EMPIRE_STAGE.values());
-
 					for(String s : ServerDatabase.EMPIRE_STAGE.keySet()){
 						writer.write(s + " ");
 						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
