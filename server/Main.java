@@ -354,40 +354,51 @@ public class Main {
 					//Write Planets
 					//Planet_name Owner
 					writer.write("Planets\n");
+					ServerDatabase.PLANETS_LOCK.lock();
 					for(String s : ServerDatabase.PLANETS.keySet()){
 						writer.write(ServerDatabase.PLANETS.get(s) + " ");
 						writer.write(s + "\n");
 					}
+					ServerDatabase.PLANETS_LOCK.unlock();
+
 					//Spacedocks
 					//Planet_name boolean
 					writer.write("Spacedocks\n");
+					ServerDatabase.SPACEDOCKS_LOCK.lock();
 					for(String s : ServerDatabase.SPACEDOCKS.keySet()){
 						writer.write(s + " ");
 						writer.write(ServerDatabase.SPACEDOCKS.get(s) + "\n");
 					}
+					ServerDatabase.SPACEDOCKS_LOCK.unlock();
 
 					//Tech
 					//Player_name tech 1 ... tech n
 					writer.write("Tech\n");
+					ServerDatabase.TECH_LOCK.lock();
 					for(String s : ServerDatabase.TECH.keySet()){
 						writer.write(s + "\n");
 						for(String t : ServerDatabase.TECH.get(s)){
 							writer.write(t + "\n");
 						}
 					}
+					ServerDatabase.TECH_LOCK.unlock();
 
 					//Personnel
 					//Player name, personnel
 					writer.write("Personnel\n");
+					ServerDatabase.PERSONNEL_LOCK.lock();
 					for(String s : ServerDatabase.PERSONNEL.keySet()){
 						writer.write(s + "\n");
 						for(String t : ServerDatabase.PERSONNEL.get(s)){
 							writer.write(t + "\n");
 						}
 					}
+					ServerDatabase.PERSONNEL_LOCK.unlock();
+
 
 					//Empire stage
 					writer.write("Empire stage\n");
+					ServerDatabase.EMPIRE_LOCK.lock();
 					System.out.println(ServerDatabase.EMPIRE_STAGE.keySet());
 					System.out.println(ServerDatabase.EMPIRE_STAGE.values());
 
@@ -395,6 +406,7 @@ public class Main {
 						writer.write(s + " ");
 						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
 					}
+					ServerDatabase.EMPIRE_LOCK.unlock();
 					writer.write("EndFile");
 
 				} catch (Exception e) {

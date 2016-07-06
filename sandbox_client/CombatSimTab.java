@@ -33,7 +33,6 @@ public class CombatSimTab extends AbstractTab {
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
 
-	public static final int NUM_SHIPS = 5;
     public static final int NUM_MATCHED = 2;
 
 	public static final String[] SHIP_NAMES = {"Fighters", "Destroyers", "Cruisers", "Dreadnoughts", "War Suns"};
@@ -408,6 +407,10 @@ public class CombatSimTab extends AbstractTab {
      */
     public String CombatSim() {
         avgUrem = new ArrayList<Float>(13);
+        System.out.println(Database.hasTech("Richard", "ADT"));
+        System.out.println(Database.hasTech("Richard", "Ion Cannons"));
+        System.out.println(Database.hasTech("Richard", "Assault Cannon"));
+
         for (int i = 0; i < 13; i++) {
             avgUrem.add(new Float(0));
         }
