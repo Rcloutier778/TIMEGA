@@ -661,7 +661,7 @@ public class Database {
 	private static ArrayList<String> STAGE_OBJECTIVES = new ArrayList<String>();
 		// ^ maps a stage index to its list of objectives
 	private static ArrayList<String> STAGE_REWARDS = new ArrayList<String>();
-		// ^ maps a stage index to its rewards
+		// ^ maps a stage index to the reward for reaching the next stage
 	
 	// add a new empire stage to the database
 	public static void addEmpireStage(String name, int commandPool, int fleetSupply, String objectives, String reward) {
@@ -670,6 +670,11 @@ public class Database {
 		STAGE_FLEET.add(fleetSupply);
 		STAGE_OBJECTIVES.add(objectives);
 		STAGE_REWARDS.add(reward);
+	}
+	
+	// returns the maximum number of empire stages
+	public static int numStages() {
+		return STAGE_NAMES.size();
 	}
 	
 	// accessors for empire stage info
@@ -689,7 +694,7 @@ public class Database {
 		return STAGE_OBJECTIVES.get(index);
 	}
 	
-	public static String rewardsOfStage(int index) {
+	public static String rewardsOfNextStage(int index) {
 		return STAGE_REWARDS.get(index);
 	}
 		
@@ -707,6 +712,9 @@ public class Database {
 	public static void advancePlayer(String player) {
 		synchronized(STAGE_MAP) {
 			int prevStage = STAGE_MAP.get(player);
+			if(prevStage == STAGE_MAP.size() - 1) {
+				return;
+			}
 			STAGE_MAP.put(player, prevStage + 1);
 		}
 	}

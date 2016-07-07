@@ -19,6 +19,7 @@ public class EmpireTab extends AbstractTab {
 	private Text _stage;
 	private Text _commandPool;
 	private Text _fleetSupply;
+	private Text _objectiveTitle;
 	private Text _objective;
 	private Text _reward;
 	
@@ -47,17 +48,17 @@ public class EmpireTab extends AbstractTab {
 		_fleetSupply.setLayoutX(50);
 		_fleetSupply.setLayoutY(100);
 		
-		Text objective = new Text("Objective:");
-		objective.setStyle("-fx-font-weight:bold;-fx-font-size: 14px");
-		objective.setLayoutX(50);
-		objective.setLayoutY(130);
+		_objectiveTitle = new Text("Next Objective:");
+		_objectiveTitle.setStyle("-fx-font-weight:bold;-fx-font-size: 14px");
+		_objectiveTitle.setLayoutX(50);
+		_objectiveTitle.setLayoutY(130);
 		
 		_objective = new Text(Database.objectivesOfStage(0));
 		_objective.setStyle("-fx-font-size: 14px");
-		_objective.setLayoutX(130);
+		_objective.setLayoutX(165);
 		_objective.setLayoutY(130);
 		
-		_reward = new Text(Database.rewardsOfStage(0));
+		_reward = new Text(Database.rewardsOfNextStage(0));
 		_reward.setStyle("-fx-font-size: 14px");
 		_reward.setLayoutX(50);
 		_reward.setLayoutY(160);
@@ -73,7 +74,7 @@ public class EmpireTab extends AbstractTab {
 			Database.setAdvancing(true);
 		});
 
-		pane.getChildren().addAll(_stage, _commandPool, _fleetSupply, objective, _objective, _reward, _advance);
+		pane.getChildren().addAll(_stage, _commandPool, _fleetSupply, _objectiveTitle, _objective, _reward, _advance);
 			
 	}
 	
@@ -88,12 +89,43 @@ public class EmpireTab extends AbstractTab {
 	}
 	
 	public void advance() {
-		int i = ++_stageIndex;
-		_stage.setText(Database.nameOfStage(i));
-		_commandPool.setText("Command Pool: " + Database.commandPoolOfStage(i));
-		_fleetSupply.setText("Fleet Supply: " + Database.fleetSupplyOfStage(i));
-		_objective.setText(Database.objectivesOfStage(i));
-		_reward.setText(Database.rewardsOfStage(i));
+		_stageIndex++;
+		
+		_stage.setText(Database.nameOfStage(_stageIndex));
+		
+		int i = Database.commandPoolOfStage(_stageIndex);
+		if(i >= 0) {
+			_commandPool.setText("Command Pool: " + i);
+		} else {
+			_commandPool.setText("");
+		}
+		
+		i = Database. fleetSupplyOfStage(_stageIndex);
+		if(i >= 0) {
+			_fleetSupply.setText("Fleet Supply: " + i);
+		} else {
+			_fleetSupply.setText("");
+		}
+
+		String s = Database.objectivesOfStage(_stageIndex);
+		if(s == null || s.equals("")) {
+			_objectiveTitle.setText("");
+			_objective.setText("");
+			_commandPool.setText("Victory!");
+		} else {
+			_objective.setText(s);
+		}
+		
+		s = Database.rewardsOfNextStage(_stageIndex);
+		if(s == null || s.equals("")) {
+			_reward.setText("");
+		} else {
+			_reward.setText("Reward: " + s);
+		}
+		
+		if(_stageIndex == Database.numStages() - 1) {
+			_advance.setDisable(true);
+		}
 	}
 	
 	public class ToggleHandler implements EventHandler<ActionEvent> {
