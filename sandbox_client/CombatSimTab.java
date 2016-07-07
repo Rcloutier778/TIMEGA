@@ -9,7 +9,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 
 
 /**
@@ -33,7 +32,6 @@ public class CombatSimTab extends AbstractTab {
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
 
-	public static final int NUM_SHIPS = 5;
     public static final int NUM_MATCHED = 2;
 
 	public static final String[] SHIP_NAMES = {"Fighters", "Destroyers", "Cruisers", "Dreadnoughts", "War Suns"};
@@ -395,8 +393,7 @@ public class CombatSimTab extends AbstractTab {
         return combat();
     }
 
-    //Average remaining units, wins, losses
-    public ArrayList<Float> avgUrem;
+
 
     /**
      * Will take hits in the following order:
@@ -407,11 +404,8 @@ public class CombatSimTab extends AbstractTab {
      * Assumes that all fighters will be destroyed before destroying carriers/dreadnaughts/warsuns.
      */
     public String CombatSim() {
-        avgUrem = new ArrayList<Float>(13);
-        for (int i = 0; i < 13; i++) {
-            avgUrem.add(new Float(0));
-        }
-        String enemy;
+        //Average remaining units, wins, losses
+        Float[] avgUrem = {(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0};
         try {
             names[0] = PlayerName.getText();
             names[1] = eOptions.getValue(); //gets the value selected by the combobox
@@ -432,13 +426,13 @@ public class CombatSimTab extends AbstractTab {
                 }
                 int res = combat();
                 if(res == 1){
-                    avgUrem.set(10, (avgUrem.get(10) + 1));
+                    avgUrem[10]++;
                 }
                 else if(res == 2){
-                    avgUrem.set(11, (avgUrem.get(11) + 1));
+                    avgUrem[11]++;
                 }
                 else if(res == 3){
-                    avgUrem.set(12, (avgUrem.get(12) + 1));
+                    avgUrem[12]++;
                 }
                 else{
                     return "Error";
@@ -446,43 +440,40 @@ public class CombatSimTab extends AbstractTab {
 
                 //Add number of ships remaining to average
                 for(int l = 0; l < NUM_SHIPS; l++){
-                    avgUrem.set(l, avgUrem.get(l) + _UnitCounts[0][l]);
-                    avgUrem.set(l+5, avgUrem.get(l+5) + _UnitCounts[1][l]);
+                    avgUrem[l] += _UnitCounts[0][l];
+                    avgUrem[l+5] += _UnitCounts[1][l];
                 }
 
                 int remdread[] = {_UnitCounts[0][DREADNOUGHT], _UnitCounts[1][DREADNOUGHT]};
                 int remdest[] = {_UnitCounts[0][DESTROYER], _UnitCounts[1][DESTROYER]};
                 setUnits();
                 if(Database.hasTech(names[0], "Transfabrication") && (_UnitCounts[0][DREADNOUGHT] > remdread[0]) && (remdest[0] > 0)){
-                    avgUrem.set(3, avgUrem.get(3) + 1);
+                    avgUrem[3]++;
                 }
                 if(Database.hasTech(names[1], "Transfabrication") && (_UnitCounts[1][DREADNOUGHT] > remdread[1]) && (remdest[1] > 0)){
-                    avgUrem.set(6, avgUrem.get(6) + 1);
+                    avgUrem[6]++;
                 }
             }
         }
         //Compute average
         for(int i = 0; i < 10; i++){
-            avgUrem.set(i, avgUrem.get(i) /1000);
+            avgUrem[i] /= 1000;
         }
-        avgUrem.set(10, avgUrem.get(10) / 10);
-        avgUrem.set(11, avgUrem.get(11) / 10);
-        avgUrem.set(12, avgUrem.get(12) / 10);
-
-        String results =
-                "Out of 1000 trials, the results were: \n" +
-                "Victory = " + (new BigDecimal(Float.toString(avgUrem.get(10))).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString()) + "%\n" +
-                "Defeat = " + new BigDecimal(Float.toString(avgUrem.get(11))).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString() + "%\n" +
-                "Stalemate = " + new BigDecimal(Float.toString(avgUrem.get(12))).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString() + "%\n";
-        results = results.concat("You had the following average remaining units: \n");
-        //Your average remaining
+        avgUrem[10] /= 10;
+        avgUrem[11] /= 10;
+        avgUrem[12] /= 10;
+        String[] prefix = {"Victory = ", "Defeat = ", "Stalemate = "};
+        String results = "Out of 1000 trials, the results were: \n";
+        for(int i=0; i<3; i++){
+            results = results.concat(prefix[i]) + (new BigDecimal(Float.toString(avgUrem[i+10])).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString()) + "%\n";
+        }
+        results = results.concat("You had the following average remaining units:\n");
         for(int i = 0; i<5; i++){
-            results = results.concat(SHIP_NAMES[i] + ": ").concat((new BigDecimal(Float.toString(avgUrem.get(i))).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
+            results = results.concat(SHIP_NAMES[i] + ": ").concat((new BigDecimal(Float.toString(avgUrem[i])).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
         }
         results = results.concat("The enemy had the following average remaining units: \n");
-        //Enemy average remaining
         for(int i = 0; i<5; i++){
-            results = results.concat(SHIP_NAMES[i] + ": ").concat((new BigDecimal(Float.toString(avgUrem.get(i+5))).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
+            results = results.concat(SHIP_NAMES[i] + ": ").concat((new BigDecimal(Float.toString(avgUrem[i+5])).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
         }
         return results;
     }
