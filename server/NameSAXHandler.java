@@ -1,7 +1,7 @@
 package server;
 
 /**
- * Reads information from the resolutions.xml file and sends the information back to the database.
+ * Reads names from the a given file and sends the information back to the database.
  * 
  * @author dmayans
  */
@@ -16,14 +16,14 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class ResolutionSAXHandler extends DefaultHandler {
+public class NameSAXHandler extends DefaultHandler {
 	
-	// Called at the beginning of the program to read the resolutions.xml file
-	public static void generateResolutions() {
-		String s = sandbox_client.Main.PATH_TO_ASSETS + "resolutions.xml";
+	// Called at the beginning of the program to read the given file
+	public static void generateNames(String file, int code) {
+		String s = sandbox_client.Main.PATH_TO_ASSETS + file;
 		try {
 			SAXParser p = SAXParserFactory.newInstance().newSAXParser();
-			p.parse(s, new ResolutionSAXHandler());
+			p.parse(s, new NameSAXHandler(code));
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
@@ -38,22 +38,29 @@ public class ResolutionSAXHandler extends DefaultHandler {
 	// the text it can, so _string is almost never rewritten).
 	private String _string;
 	
-	// holds the techs temporarily
-	private LinkedList<String> _resolutions;
+	// holds the info temporarily
+	private LinkedList<String> _list;
+	
+	// holds the code for which database the names should be added to
+	private int _code;
+	
+	public NameSAXHandler(int code) {
+		_code = code;
+	}
 	
 	// when doc is opened: initialize variables
 	@Override
 	public void startDocument() {
 		_string = "";
-		_resolutions = new LinkedList<String>();
+		_list = new LinkedList<String>();
 	}
 	
 	// on the end of an entry
 	@Override
 	public void endElement(String uri, String localName, String qName) {
-		// if that entry has name 'name', then whatever we read is the name of a tech
+		// if that entry has name 'name', then add that name to the list
 		if(qName=="name") {
-			_resolutions.addLast(_string);
+			_list.addLast(_string);
 		}
 		// in any case, _string should be cleared
 		_string = "";
@@ -66,10 +73,10 @@ public class ResolutionSAXHandler extends DefaultHandler {
 		_string += new String(ch, start, length).trim();
 	}
 	
-	// once the document is finished, give the database our list of resolutions
+	// once the document is finished, give the database our list of personnel
 	@Override
 	public void endDocument() {
-		ServerDatabase.placeResolutions(_resolutions);
+		ServerDatabase.placeNames(_list, _code);
 	}
 	
 }

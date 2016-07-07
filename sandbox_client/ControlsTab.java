@@ -222,7 +222,7 @@ public class ControlsTab extends AbstractTab {
 		@Override
 		public void run() {
 			String host = _host.getText();
-			int port = Integer.parseInt(_port.getText());
+			int port = _port.getNumber();
 			
 			try {
 				Socket socket = new Socket(host, port);

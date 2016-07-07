@@ -25,8 +25,7 @@ public class Main extends Application {
 	 * 6) show progress in empire screen
 	 * 7) test reconnection of client a little bit more
 	 * 8) have client load style choices from local text file
-	 * 9) clean up server SAX handlers
-	 * 10) add creuss (planet) to game if ghosts of creuss are a race
+	 * 9) add creuss (planet) to game if ghosts of creuss are a race
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)
