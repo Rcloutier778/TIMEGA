@@ -30,7 +30,7 @@ public class Protocol {
 	public static final int REMOVE_TECH = 37; // usage: REMOVE_TECH <player> <tech>
 	public static final int SEND_PERSON = 38; // usage: SEND_PERSON <player> <personnel>
 	public static final int REMOVE_PERSON = 39; // usage: REMOVE_PERSON <player> <personnel>
-	public static final int ADVANCE = 40; // usage: ADVANCE <name> <color> (TODO remove color)
+	public static final int ADVANCE = 40; // usage: ADVANCE <name>
 	public static final int ROUND_OK = 41; // usage: ROUND_OK (indicates that all responses have been received)
 	public static final int SEND_RESOLUTION = 42; // usage: SEND_RESOLUTION <resolution 1 name> <resolution 2 name>
 

@@ -32,7 +32,7 @@ public class ServerDatabase {
 	public static final HashMap<String,HashSet<String>> PERSONNEL = new HashMap<String,HashSet<String>>();
 	public static final Lock PERSONNEL_LOCK = new ReentrantLock();
 	
-	public static final HashMap<String,String> EMPIRE_STAGE = new HashMap<String,String>();
+	public static final HashMap<String,Integer> EMPIRE_STAGE = new HashMap<String,Integer>();
 	public static final Lock EMPIRE_LOCK = new ReentrantLock();
 	
 	
@@ -60,7 +60,7 @@ public class ServerDatabase {
 			PLAYERS[i++] = p;
 			TECH.put(p.name, new HashSet<String>());
 			PERSONNEL.put(p.name, new HashSet<String>());
-			EMPIRE_STAGE.put(p.name, "");
+			EMPIRE_STAGE.put(p.name, 0);
 		}
 
 		for(String tab : Client.TAB_NAMES) {

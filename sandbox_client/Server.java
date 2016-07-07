@@ -188,7 +188,7 @@ public class Server implements Runnable {
 			this.write(Protocol.END_ROUND);
 			
 			if(Database.isAdvancing()) {
-				this.write(Protocol.ADVANCE, Database.getName() + "\n" + Integer.toString(_client.getColor()));
+				this.write(Protocol.ADVANCE, Database.getName());
 			}
 						
 			Database.clearTechQueue();
@@ -230,9 +230,8 @@ public class Server implements Runnable {
 		
 		else if(message == Protocol.ADVANCE) {
 			String player = _in.readLine();
-			String color = _in.readLine();
 			
-			Database.advancePlayer(player, color);
+			Database.advancePlayer(player);
 			_client.advancePlayer(player);
 			
 		} else if(message == Protocol.ROUND_OK) {

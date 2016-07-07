@@ -232,10 +232,6 @@ public class Client {
 		_status.update();
 	}
 	
-	public int getColor() {
-		return _empire.getColor();
-	}
-	
 	// RESOLUTION
 	public void resolution(String resolution1, String resolution2) {
 		_council.resolved(resolution1, resolution2);
