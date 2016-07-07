@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ships>
+    <ship>
+        <name>Fighter</name>
+        <hitrate>9</hitrate>
+        <dice>1</dice>
+    </ship>
+    <ship>
+        <name>Destroyer</name>
+        <hitrate>9</hitrate>
+        <dice>1</dice>
+    </ship>
+    <ship>
+        <name>Cruiser</name>
+        <hitrate>7</hitrate>
+        <dice>1</dice>
+    </ship>
+    <ship>
+        <name>Dreadnought</name>
+        <hitrate>6</hitrate>
+        <dice>1</dice>
+    </ship>
+    <ship>
+        <name>War Sun</name>
+        <hitrate>3</hitrate>
+        <dice>3</dice>
+    </ship>
+</ships>

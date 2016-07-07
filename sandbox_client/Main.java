@@ -20,15 +20,14 @@ public class Main extends Application {
 	 * 1) add past resolutions to council room
 	 * 2) show racial abilities/flagship in status/players screen (and add XML)
 	 * 3) color technology and personnel in status/players screen
-	 * 4) remove policy choices, update other deviations from new rules
-	 * 5) show progress in empire screen
-	 * 6) new tab: report battle data
-	 * 7) new tab: view battle statistics
-	 * 8) test reconnection of client a little bit more
-	 * 9) have client load style choices from local text file
-	 * 10) clean up server SAX handlers
-	 * 11) use xml for empire stages and ships
-	 * 12) add creuss (planet) to game if ghosts of creuss are a race
+	 * 4) new tab: report battle data
+	 * 5) new tab: view battle statistics
+	 * 6) show progress in empire screen
+	 * 7) test reconnection of client a little bit more
+	 * 8) have client load style choices from local text file
+	 * 9) clean up server SAX handlers
+	 * 10) use xml for ships
+	 * 11) add creuss (planet) to game if ghosts of creuss are a race
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)
@@ -42,6 +41,7 @@ public class Main extends Application {
 		TechSAXHandler.generateTechs();
 		PersonnelSAXHandler.generatePersonnel();
 		ResolutionSAXHandler.generateResolutions();
+		EmpireSAXHandler.generateStages();
 		
 		launch();
 	}

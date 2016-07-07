@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<empire>
+    <stage>
+        <name>Coalition</name>
+        <command>2</command>
+        <fleet>3</fleet>
+        <objective>capture one enemy planet</objective>
+        <objective>destroy one enemy capital ship</objective>
+        <reward/>
+    </stage>
+    <stage>
+        <name>Federation</name>
+        <command>3</command>
+        <fleet>4</fleet>
+        <objective>control three border systems</objective>
+        <objective>hire two tier iii personnel</objective>
+        <objective>research two unique technologies</objective>
+        <reward/>
+    </stage>
+    <stage>
+        <name>Republic</name>
+        <command>4</command>
+        <fleet>5</fleet>
+        <objective>win six battles</objective>
+        <objective>destroy thirty resources</objective>
+        <reward/>
+    </stage>
+    <stage>
+        <name>Empire</name>
+        <command>5</command>
+        <fleet>6</fleet>
+        <objective>control the Mecatol Rex system</objective>
+        <reward/>
+    </stage>
+    <stage>
+        <name>Imperium Rex</name>
+        <command/>
+        <fleet/>
+        <objective/>
+        <reward/>
+    </stage>
+</empire>
