@@ -312,12 +312,15 @@ public class Database {
 		// ^ maps a tech name to its description
 	private static final LinkedList<String> TECH_QUEUE = new LinkedList<String>();
 		// ^ holds local changes to the technology tree before they're sent to the server - USES SAME LOCK AS TECH_MAP
-	private static final HashMap<String,HashSet<String>> TECH_MAP = new HashMap<String,HashSet<String>>();
+	private static final HashMap<String,TreeSet<String>> TECH_MAP = new HashMap<String,TreeSet<String>>();
 		// ^ maps a player name to the set of all techs he's researched
 	
 	@SuppressWarnings("unchecked")
 	private static final ArrayList<String>[] TECH_NAMES = new ArrayList[4];
 		// ^ holds a list of all technology names
+	private static final HashMap<String,Integer> TECH_PRIORITY = new HashMap<String,Integer>();
+		// ^ maps a tech name to the order in which it should appear
+	private static int _redIndex = 0, _blueIndex = 0, _greenIndex = 0, _yellowIndex = 0;
 	private static final HashMap<String,String> PREREQUISITES = new HashMap<String,String>();
 		// ^ maps a tech name to its first prerequisite, if any
 	private static final HashMap<String,String> PREREQ_AND = new HashMap<String,String>();
@@ -402,31 +405,43 @@ public class Database {
 	// iterate over all of the technology owned by one player
 	public static Iterable<String> technologyOf(String player) {
 		synchronized(TECH_MAP) {
-			return new HashSet<String>(TECH_MAP.get(player));
+			return new TreeSet<String>(TECH_MAP.get(player));
 		}
 	}
 	
 	// add a tech to the database
 	public static void addTechToDatabase(String name, String color, String effect,
 			String prereq1, String prereqand, String prereqor) {
-		int colorIndex = -1;
+		int colorIndex = -1, priority = 0;
 		color = color.toLowerCase();
 		if(color.equals("red")) {
 			colorIndex = RED;
+			priority += _redIndex++;
 		} else if(color.equals("blue")) {
 			colorIndex = BLUE;
+			priority += 1000 + _blueIndex++;
 		} else if(color.equals("green")) {
 			colorIndex = GREEN;
+			priority += 2000 + _greenIndex++;
 		} else if(color.equals("yellow")) {
 			colorIndex = YELLOW;
+			priority += 3000 + _yellowIndex++;
 		}
 		
 		TECH_NAMES[colorIndex].add(name);
+		TECH_PRIORITY.put(name, priority);
 		DESCRIPTIONS.put(name, effect);
 		PREREQUISITES.put(name, prereq1);
 		PREREQ_AND.put(name, prereqand);
 		PREREQ_OR.put(name, prereqor);
 
+	}
+	
+	// compare two technology strings to see which comes first
+	public static int compareTech(String tech1, String tech2) {
+		synchronized(TECH_PRIORITY) {
+			return TECH_PRIORITY.get(tech1) - TECH_PRIORITY.get(tech2);
+		}
 	}
 	
 	// return the description of a given tech name
@@ -475,8 +490,11 @@ public class Database {
 	
 	private static final HashSet<String> PERSONNEL_QUEUE = new HashSet<String>();
 		// ^ holds changes to local personnel before it's sent to the server - SHARES LOCK WITH PERSONNEL_MAP
-	private static final HashMap<String,HashSet<String>> PERSONNEL_MAP = new HashMap<String,HashSet<String>>();
+	private static final HashMap<String,TreeSet<String>> PERSONNEL_MAP = new HashMap<String,TreeSet<String>>();
 		// ^ maps a player name to the set of owned personnel
+	private static final HashMap<String,Integer> PERSONNEL_PRIORITY = new HashMap<String,Integer>();
+		// ^ maps a personnel to its order
+	private static final int[] _tierIndices = {0, 0, 0, 0, 0};
 	@SuppressWarnings("unchecked")
 	private static final TreeSet<String>[] PERSONNEL_SET = new TreeSet[3];
 	
@@ -572,7 +590,7 @@ public class Database {
 	// iterate over the personnel of the given player
 	public static Iterable<String> personnelOfPlayer(String player) {
 		synchronized(PERSONNEL_MAP) {
-			return new HashSet<String>(PERSONNEL_MAP.get(player));
+			return new TreeSet<String>(PERSONNEL_MAP.get(player));
 		}
 	}
 	
@@ -597,18 +615,30 @@ public class Database {
 	// populate database from xml
 	public static void addPersonnelToDatabase(String name, String color, String effect, String tier) {
 		DESCRIPTIONS.put(name, effect);
-		TIERS.put(name, Integer.parseInt(tier));
+		int tierNum = Integer.parseInt(tier);
+		TIERS.put(name, tierNum);
 		
-		int index = -1;
+		int index = -1, priority = 0;
 		if(color.equals("red")) {
 			index = RED;
+			priority += _tierIndices[tierNum]++;
 		} else if(color.equals("blue")) {
 			index = BLUE;
+			priority += 1000 + _tierIndices[tierNum]++;
 		} else if(color.equals("green")) {
 			index = GREEN;
+			priority += 2000 + _tierIndices[tierNum]++;
 		}
 		
 		PERSONNEL_SET[index].add(name);
+		PERSONNEL_PRIORITY.put(name, priority);
+	}
+	
+	// compares two personnel
+	public static int comparePersonnel(String person1, String person2) {
+		synchronized(PERSONNEL_PRIORITY) {
+			return PERSONNEL_PRIORITY.get(person1) - PERSONNEL_PRIORITY.get(person2);
+		}
 	}
 	
 	// given the name of a person, return its tier
@@ -731,8 +761,8 @@ public class Database {
 	
 	public static void addPlayer(Player player) {
 		
-		TECH_MAP.put(player.name, new HashSet<String>());
-		PERSONNEL_MAP.put(player.name, new HashSet<String>());
+		TECH_MAP.put(player.name, new TreeSet<String>(ComparatorFactory.generateTechnologyComparator()));
+		PERSONNEL_MAP.put(player.name, new TreeSet<String>(ComparatorFactory.generatePersonnelComparator2()));
 		STAGE_MAP.put(player.name, "");
 		COLORS.put(player.name, Color.rgb(player.red, player.green, player.blue));
 		RACES.put(player.name, player.race);
