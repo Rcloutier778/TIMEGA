@@ -102,7 +102,7 @@ public class StatusTab extends AbstractTab{
 		_race.setText(Database.raceOf(_player));
 		
 		_stage.setVisible(true);
-		_stage.setText(EmpireTab.EMPIRE_STAGE[Database.empireStageOf(_player)]);
+		_stage.setText(Database.nameOfStage(Database.empireStageOf(_player)));
 		
 		String techText = "Technology:\n";
 		for(String tech : Database.technologyOf(_player)) {

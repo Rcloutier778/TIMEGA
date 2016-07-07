@@ -651,6 +651,47 @@ public class Database {
 		// ^ set to true of the local player is advancing
 	private static HashMap<String,Integer> STAGE_MAP = new HashMap<String,Integer>();
 		// ^ maps a player name to his empire stage
+	
+	private static ArrayList<String> STAGE_NAMES = new ArrayList<String>();
+		// ^ maps a stage index to its name
+	private static ArrayList<Integer> STAGE_COMMAND = new ArrayList<Integer>();
+		// ^ maps a stage index to its command pool
+	private static ArrayList<Integer> STAGE_FLEET = new ArrayList<Integer>();
+		// ^ maps a stage index to its fleet supply
+	private static ArrayList<String> STAGE_OBJECTIVES = new ArrayList<String>();
+		// ^ maps a stage index to its list of objectives
+	private static ArrayList<String> STAGE_REWARDS = new ArrayList<String>();
+		// ^ maps a stage index to its rewards
+	
+	// add a new empire stage to the database
+	public static void addEmpireStage(String name, int commandPool, int fleetSupply, String objectives, String reward) {
+		STAGE_NAMES.add(name);
+		STAGE_COMMAND.add(commandPool);
+		STAGE_FLEET.add(fleetSupply);
+		STAGE_OBJECTIVES.add(objectives);
+		STAGE_REWARDS.add(reward);
+	}
+	
+	// accessors for empire stage info
+	public static String nameOfStage(int index) {
+		return STAGE_NAMES.get(index);
+	}
+	
+	public static int commandPoolOfStage(int index) {
+		return STAGE_COMMAND.get(index);
+	}
+	
+	public static int fleetSupplyOfStage(int index) {
+		return STAGE_FLEET.get(index);
+	}
+	
+	public static String objectivesOfStage(int index) {
+		return STAGE_OBJECTIVES.get(index);
+	}
+	
+	public static String rewardsOfStage(int index) {
+		return STAGE_REWARDS.get(index);
+	}
 		
 	// advancing mutator
 	public static void setAdvancing(boolean b) {
