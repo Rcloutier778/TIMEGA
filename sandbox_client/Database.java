@@ -661,7 +661,7 @@ public class Database {
 	private static ArrayList<String> STAGE_OBJECTIVES = new ArrayList<String>();
 		// ^ maps a stage index to its list of objectives
 	private static ArrayList<String> STAGE_REWARDS = new ArrayList<String>();
-		// ^ maps a stage index to its rewards
+		// ^ maps a stage index to the reward for reaching the next stage
 	
 	// add a new empire stage to the database
 	public static void addEmpireStage(String name, int commandPool, int fleetSupply, String objectives, String reward) {
@@ -670,6 +670,11 @@ public class Database {
 		STAGE_FLEET.add(fleetSupply);
 		STAGE_OBJECTIVES.add(objectives);
 		STAGE_REWARDS.add(reward);
+	}
+	
+	// returns the maximum number of empire stages
+	public static int numStages() {
+		return STAGE_NAMES.size();
 	}
 	
 	// accessors for empire stage info
@@ -689,7 +694,7 @@ public class Database {
 		return STAGE_OBJECTIVES.get(index);
 	}
 	
-	public static String rewardsOfStage(int index) {
+	public static String rewardsOfNextStage(int index) {
 		return STAGE_REWARDS.get(index);
 	}
 		
@@ -707,6 +712,9 @@ public class Database {
 	public static void advancePlayer(String player) {
 		synchronized(STAGE_MAP) {
 			int prevStage = STAGE_MAP.get(player);
+			if(prevStage == STAGE_MAP.size() - 1) {
+				return;
+			}
 			STAGE_MAP.put(player, prevStage + 1);
 		}
 	}
@@ -760,6 +768,72 @@ public class Database {
 	}
 	
 	
+	//      _     _           
+	//  ___| |__ (_)_ __  ___ 
+	// / __| '_ \| | '_ \/ __|
+	// \__ \ | | | | |_) \__ \
+	// |___/_| |_|_| .__/|___/
+	//             |_|   
+	
+	public static final int FIGHTER = 0;
+	public static final int DESTROYER = 1;
+	public static final int CRUISER = 2;
+	public static final int DREADNOUGHT = 3;
+	public static final int WAR_SUN = 4;
+	// keep codes and array synchronized!
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun"};
+	
+	public static final int NUM_SHIPS = SHIP_NAMES.length;
+	
+	private static final int[] HIT_RATES = new int[NUM_SHIPS];
+	private static final int[] DICE = new int[NUM_SHIPS];
+
+	// returns a ship's name given its integer code
+	public static String nameOfShip(int code) {
+		return SHIP_NAMES[code];
+	}
+	
+	// given a ship's name, find it's code
+	public static int codeOfShip(String name) {
+		for(int i=0; i<NUM_SHIPS; i++) {
+			if(SHIP_NAMES[i].equals(name)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	// add a ship to the database
+	public static void addShip(String name, int hit, int dice) {
+		int index = Database.codeOfShip(name);
+		HIT_RATES[index] = hit;
+		DICE[index] = dice;
+	}
+	
+	// access ship info
+	public static int[] getBaseHitRates() {
+		int[] output = new int[NUM_SHIPS];
+		for(int i=0; i<NUM_SHIPS; i++) {
+			output[i] = HIT_RATES[i];
+		}
+		return output;
+	}
+	
+	public static int[] getBaseDiceRolled() {
+		int[] output = new int[NUM_SHIPS];
+		for(int i=0; i<NUM_SHIPS; i++) {
+			output[i] = DICE[i];
+		}
+		return output;
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -804,6 +878,15 @@ public class Database {
 	public static final int BOTTOM_RIGHT = 2;
 	
 	public static void initialize() {
+		
+		// populate database from XML
+		Tile.generateTiles();
+		TechSAXHandler.generateTechs();
+		PersonnelSAXHandler.generatePersonnel();
+		ResolutionSAXHandler.generateResolutions();
+		EmpireSAXHandler.generateStages();
+		ShipSAXHandler.generateShips();
+		
 		// color neutral planets
 		COLORS.put("none", Color.GRAY);
 		

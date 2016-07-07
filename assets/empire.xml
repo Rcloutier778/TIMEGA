@@ -15,7 +15,7 @@
         <objective>control three border systems</objective>
         <objective>hire two tier iii personnel</objective>
         <objective>research two unique technologies</objective>
-        <reward/>
+        <reward>flagship</reward>
     </stage>
     <stage>
         <name>Republic</name>
@@ -30,7 +30,7 @@
         <command>5</command>
         <fleet>6</fleet>
         <objective>control the Mecatol Rex system</objective>
-        <reward/>
+        <reward>victory</reward>
     </stage>
     <stage>
         <name>Imperium Rex</name>
