@@ -205,7 +205,7 @@ public class Main {
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
 						for(int i=0; i<splitline[1].length(); i++){
-							broadcastAdvance(splitline[0], 0, "[" + splitline[0] + "] ");
+							// TODO: update broadcastAdvance(splitline[0], 0, "[" + splitline[0] + "] ");
 						}
 					}
 
@@ -284,11 +284,11 @@ public class Main {
 	}
 	
 	// same but for empire stage
-	public void broadcastAdvance(String player, int color, String clientName) {
+	public void broadcastAdvance(String player, String clientName) {
 		ServerDatabase.EMPIRE_LOCK.lock();
-		String sequence = ServerDatabase.EMPIRE_STAGE.get(player);
-		ServerDatabase.EMPIRE_STAGE.put(player, sequence + Integer.toString(color));
-		this.broadcast(Protocol.ADVANCE, player + "\n" + Integer.toString(color) + "\n");
+		int stage = ServerDatabase.EMPIRE_STAGE.get(player);
+		ServerDatabase.EMPIRE_STAGE.put(player, stage + 1);
+		this.broadcast(Protocol.ADVANCE, player + "\n");
 		writeColortext(clientName + "advanced his empire.", CLIENTOUT);
 		ServerDatabase.EMPIRE_LOCK.unlock();
 	}

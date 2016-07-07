@@ -510,16 +510,6 @@ public class Database {
 				}
 			}
 		}
-		synchronized(STAGE_MAP) {
-			String sequence = STAGE_MAP.get(player);
-			for(int i=0; i<sequence.length(); i++) {
-				if(i == 2 || i > 3) {
-					// do nothing
-				} else if(Integer.toString(color).charAt(0) == sequence.charAt(i)) {
-					output++;
-				}
-			}
-		}
 		return output;
 	}
 	
@@ -659,8 +649,8 @@ public class Database {
 	
 	private static boolean ADVANCING = false;
 		// ^ set to true of the local player is advancing
-	private static HashMap<String,String> STAGE_MAP = new HashMap<String,String>();
-		// ^ maps a player name to his advancement string 
+	private static HashMap<String,Integer> STAGE_MAP = new HashMap<String,Integer>();
+		// ^ maps a player name to his empire stage
 		
 	// advancing mutator
 	public static void setAdvancing(boolean b) {
@@ -673,26 +663,20 @@ public class Database {
 	}
 	
 	// respond to server input to advance an player in the database
-	public static void advancePlayer(String player, String color) {
+	public static void advancePlayer(String player) {
 		synchronized(STAGE_MAP) {
-			String prevSequence = STAGE_MAP.get(player);
-			STAGE_MAP.put(player, prevSequence + color);
+			int prevStage = STAGE_MAP.get(player);
+			STAGE_MAP.put(player, prevStage + 1);
 		}
 	}
 	
 	// return empire stage of a given player
 	public static int empireStageOf(String player) {
 		synchronized(STAGE_MAP) {
-			return STAGE_MAP.get(player).length();
-		}
-	}
-	
-	// return the sequence of policy choices by the given player
-	public static String empireSequence(String player) {
-		synchronized(STAGE_MAP) {
 			return STAGE_MAP.get(player);
 		}
 	}
+	
 	
 	//                       _       _   _                 
 	//   _ __ ___  ___  ___ | |_   _| |_(_) ___  _ __  ___ 
@@ -763,7 +747,7 @@ public class Database {
 		
 		TECH_MAP.put(player.name, new TreeSet<String>(ComparatorFactory.generateTechnologyComparator()));
 		PERSONNEL_MAP.put(player.name, new TreeSet<String>(ComparatorFactory.generatePersonnelComparator2()));
-		STAGE_MAP.put(player.name, "");
+		STAGE_MAP.put(player.name, 0);
 		COLORS.put(player.name, Color.rgb(player.red, player.green, player.blue));
 		RACES.put(player.name, player.race);
 		INDICES.put(player.name, PLAYERS.size());

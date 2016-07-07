@@ -206,10 +206,10 @@ public class ClientThread implements Runnable {
 			// report empire stages
 			ServerDatabase.EMPIRE_LOCK.lock();
 			for(Player player : ServerDatabase.PLAYERS) {
-				String sequence = ServerDatabase.EMPIRE_STAGE.get(player.name);
-				for(int j=0; j<sequence.length(); j++) {
+				int stage = ServerDatabase.EMPIRE_STAGE.get(player.name);
+				for(int j=0; j<stage; j++) {
 					_out.write(Protocol.ADVANCE);
-					_out.write(player.name + "\n" + sequence.charAt(j) + "\n");
+					_out.write(player.name + "\n");
 				}
 			}
 			ServerDatabase.EMPIRE_LOCK.unlock();
@@ -319,12 +319,11 @@ public class ClientThread implements Runnable {
 		
 		else if(i == Protocol.ADVANCE) {
 			String player = _in.readLine();
-			int color = Integer.parseInt(_in.readLine());
 			
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
-					_main.broadcastAdvance(player, color, _name);
+					_main.broadcastAdvance(player, _name);
 				}
 			}).start();
 		}
