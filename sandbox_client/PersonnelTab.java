@@ -74,7 +74,7 @@ public class PersonnelTab extends AbstractTab {
 		_buttons = new HashMap<String, PersonnelButton>();
 		PersonnelButton b;
 				
-		int i=2, maxTier = 0;
+		int i=2;
 		for(int color=0; color<3; color++) {
 			i = 2;
 			int tier = 1;
@@ -89,11 +89,8 @@ public class PersonnelTab extends AbstractTab {
 				_buttons.put(person, b);
 				i++;
 			}
-			maxTier = maxTier > tier ? maxTier : tier;
 		}
-		
-		i = maxTier;
-				
+						
 		VBox v = new VBox(10);
 		
 		_hbox = new HBox(10);
@@ -114,7 +111,7 @@ public class PersonnelTab extends AbstractTab {
 		v.getChildren().addAll(_hbox, _hire, _personnelDescription);
 		
 				
-		_pane.add(v, 0, i, 3, 1);
+		_pane.add(v, 0, 12, 3, 1);
 	}
 	
 	@Override

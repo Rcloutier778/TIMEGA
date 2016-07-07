@@ -30,7 +30,7 @@
     </tech>
     <tech color="red" prereq="Ion Cannons" prereqAND="Fighter Bays">
         <name>Deep Space Cannon</name>
-        <effect>When activating an enemy system adjacent to at least one of your fleets, you may siege instead of moving in ships. If you have a siege token in that system, destroy one capital ship of the defender’s choice, then inflict one hit for each adjacent system containing at least one of your dreadnoughts. Otherwise, place one of your siege tokens in the system.</effect>
+        <effect>As an action, you may activate a system adjacent to one of your fleets to begin a siege. If your siege token is in that system, destroy one capital ship of the defender's choice, then inflict one hit for each adjacent system containing at least one of your dreadnoughts. Otherwise, place your siege token in that system. </effect>
     </tech>
     
     <tech color="blue">
@@ -45,7 +45,7 @@
         <name>XRD Transporters</name>
         <effect>Your carriers and dreadnoughts receive +1 movement.</effect>
     </tech>
-    <tech color="blue" prereq="XRD Transpoters" prereqAND="Hylar V Assault Laser">
+    <tech color="blue" prereq="XRD Transporters" prereqAND="Hylar V Assault Laser">
         <name>Fighter Bays</name>
         <effect>Your dreadnoughts now have a fighter capacity of three.</effect>
     </tech>

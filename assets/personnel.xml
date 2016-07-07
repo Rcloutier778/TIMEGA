@@ -22,7 +22,7 @@
     </person>
     <person color="red" tier="3">
         <name>Advisor</name>
-        <effect>At the beginning of each action phase, receive one bonus command counter in your command pool. The first time you activate a system each round, you may place a second command counter from your command pool. Each of your ships in that system receives +1 during the first round of space combat.</effect>
+        <effect>The first time you activate a system each round, you may place a second command counter from your reinforcements. Each of your ships in that system receives +1 during the first round of space combat.</effect>
     </person>
     <person color="red" tier="4">
         <name>Conqueror</name>

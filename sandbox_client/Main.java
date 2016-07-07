@@ -17,23 +17,22 @@ public class Main extends Application {
 	
 	/**
 	 * TODO list (it's not that long, I swear...)
-	 * 1) fix the mess that is the council room
-	 * 2) show racial abilities/flagship in status/players screen
-	 * 3) color/order technology and personnel (update language too) in status/players screen
+	 * 1) add past resolutions to council room
+	 * 2) show racial abilities/flagship in status/players screen (and add XML)
+	 * 3) color technology and personnel (update language too) in status/players screen
 	 * 4) remove policy choices, update other deviations from new rules
 	 * 5) show progress in empire screen
 	 * 6) new tab: report battle data
 	 * 7) new tab: view battle statistics
 	 * 8) test reconnection of client a little bit more
-	 * 9) allow a client to connect, then choose name from drop down list
-	 * 10) have client load style choices from local text file
-	 * 11) sort technology/personnel on players page
-	 * 12) clean up server SAX handlers
-	 * 13) use xml for empire stages and ships
-	 * 14) add creuss (planet) to game if ghosts of creuss are a race
+	 * 9) have client load style choices from local text file
+	 * 10) clean up server SAX handlers
+	 * 11) use xml for empire stages and ships
+	 * 12) add creuss (planet) to game if ghosts of creuss are a race
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)
+	 * 2) personnel not updating properly
 	 */
 
 	public static void main(String[] args) {

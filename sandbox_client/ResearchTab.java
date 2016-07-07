@@ -369,14 +369,17 @@ public class ResearchTab extends AbstractTab {
 				Text prereq1 = new Text(prereqs[0]);
 				prereq1.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs[0])]));
 				Text prereq2 = new Text();
-				prereq2.setFill(Color.web(BRIGHT[Database.colorOfTech(prereqs[1])]));
+				Color fill = null;
 				if(prereqs[1] == null) {
+					fill = Color.web(BRIGHT[Database.colorOfTech(prereqs[2])]);
 					prereq2.setText(prereqs[2]);
 					_root.getChildren().addAll(new Text("("), prereq1, new Text(" or "), prereq2, new Text(")"));
 				} else if(prereqs[2] == null) {
+					fill = Color.web(BRIGHT[Database.colorOfTech(prereqs[1])]);
 					prereq2.setText(prereqs[1]);
 					_root.getChildren().addAll(new Text("("), prereq1, new Text(" and "), prereq2, new Text(")"));
 				}
+				prereq2.setFill(fill);
 			}
 			
 		}
