@@ -768,6 +768,72 @@ public class Database {
 	}
 	
 	
+	//      _     _           
+	//  ___| |__ (_)_ __  ___ 
+	// / __| '_ \| | '_ \/ __|
+	// \__ \ | | | | |_) \__ \
+	// |___/_| |_|_| .__/|___/
+	//             |_|   
+	
+	public static final int FIGHTER = 0;
+	public static final int DESTROYER = 1;
+	public static final int CRUISER = 2;
+	public static final int DREADNOUGHT = 3;
+	public static final int WAR_SUN = 4;
+	// keep codes and array synchronized!
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun"};
+	
+	public static final int NUM_SHIPS = SHIP_NAMES.length;
+	
+	private static final int[] HIT_RATES = new int[NUM_SHIPS];
+	private static final int[] DICE = new int[NUM_SHIPS];
+
+	// returns a ship's name given its integer code
+	public static String nameOfShip(int code) {
+		return SHIP_NAMES[code];
+	}
+	
+	// given a ship's name, find it's code
+	public static int codeOfShip(String name) {
+		for(int i=0; i<NUM_SHIPS; i++) {
+			if(SHIP_NAMES[i].equals(name)) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	// add a ship to the database
+	public static void addShip(String name, int hit, int dice) {
+		int index = Database.codeOfShip(name);
+		HIT_RATES[index] = hit;
+		DICE[index] = dice;
+	}
+	
+	// access ship info
+	public static int[] getBaseHitRates() {
+		int[] output = new int[NUM_SHIPS];
+		for(int i=0; i<NUM_SHIPS; i++) {
+			output[i] = HIT_RATES[i];
+		}
+		return output;
+	}
+	
+	public static int[] getBaseDiceRolled() {
+		int[] output = new int[NUM_SHIPS];
+		for(int i=0; i<NUM_SHIPS; i++) {
+			output[i] = DICE[i];
+		}
+		return output;
+	}
+
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
@@ -812,6 +878,15 @@ public class Database {
 	public static final int BOTTOM_RIGHT = 2;
 	
 	public static void initialize() {
+		
+		// populate database from XML
+		Tile.generateTiles();
+		TechSAXHandler.generateTechs();
+		PersonnelSAXHandler.generatePersonnel();
+		ResolutionSAXHandler.generateResolutions();
+		EmpireSAXHandler.generateStages();
+		ShipSAXHandler.generateShips();
+		
 		// color neutral planets
 		COLORS.put("none", Color.GRAY);
 		

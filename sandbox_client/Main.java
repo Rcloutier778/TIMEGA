@@ -26,8 +26,7 @@ public class Main extends Application {
 	 * 7) test reconnection of client a little bit more
 	 * 8) have client load style choices from local text file
 	 * 9) clean up server SAX handlers
-	 * 10) use xml for ships
-	 * 11) add creuss (planet) to game if ghosts of creuss are a race
+	 * 10) add creuss (planet) to game if ghosts of creuss are a race
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)
@@ -37,11 +36,6 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		
 		Database.initialize();
-		Tile.generateTiles();
-		TechSAXHandler.generateTechs();
-		PersonnelSAXHandler.generatePersonnel();
-		ResolutionSAXHandler.generateResolutions();
-		EmpireSAXHandler.generateStages();
 		
 		launch();
 	}

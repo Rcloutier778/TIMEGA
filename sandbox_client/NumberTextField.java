@@ -26,4 +26,11 @@ public class NumberTextField extends TextField {
 		return text.matches("[0-9]*");
 	}
 	
+	public int getNumber() {
+		if(this.getText() == null || this.getText().equals("")) {
+			return -1;
+		}
+		return Integer.parseInt(this.getText());
+	}
+	
 }
