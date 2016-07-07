@@ -76,23 +76,25 @@ public class ServerDatabase {
 
 	}
 	
-	public static void placeTech(Collection<String> tech) {
-		for(String t : tech) {
-			TECH_SET.add(t);
-		}
-	}
+	public static final int CODE_TECH = 0;
+	public static final int CODE_PERSONNEL = 1;
+	public static final int CODE_RESOLUTIONS = 2;
 	
-	public static void placePersonnel(Collection<String> personnel) {
-		for(String p : personnel) {
-			PERSONNEL_SET.add(p);
+	public static void placeNames(Collection<String> names, int code) {
+		HashSet<String> set;
+		if(code == CODE_TECH) {
+			set = TECH_SET;
+		} else if(code == CODE_PERSONNEL) {
+			set = PERSONNEL_SET;
+		} else if(code == CODE_RESOLUTIONS) {
+			set = RESOLUTION_SET;
+		} else {
+			return;
 		}
-	}
-	
-	public static void placeResolutions(Collection<String> resolutions) {
-		for(String r : resolutions) {
-			RESOLUTION_SET.add(r);
+		
+		for(String s : names) {
+			set.add(s);
 		}
-	}
-	
+	}	
 	
 }

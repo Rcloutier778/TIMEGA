@@ -505,9 +505,9 @@ public class Main {
 		// set up the database
 		ServerDatabase.initialize(names);
 		Tile.generateTiles();
-		TechSAXHandler.generateTech();
-		PersonnelSAXHandler.generatePersonnel();
-		ResolutionSAXHandler.generateResolutions();
+		NameSAXHandler.generateNames("technology.xml", ServerDatabase.CODE_TECH);
+		NameSAXHandler.generateNames("personnel.xml", ServerDatabase.CODE_PERSONNEL);
+		NameSAXHandler.generateNames("resolutions.xml", ServerDatabase.CODE_RESOLUTIONS);
 		
 		try {
 			reader.close();
