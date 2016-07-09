@@ -29,7 +29,7 @@ public class CouncilTab extends AbstractTab {
 	public CouncilTab() {
 		super(Client.COUNCIL);
 
-		_pastTitle = new Text("Past Resolutions");
+		_pastTitle = new Text("");
 		_pastResolutions = new Text("");
 		Pane pane = new Pane();
 		_root.setContent(pane);
@@ -81,6 +81,16 @@ public class CouncilTab extends AbstractTab {
 		_extra2.setMaxWidth(820);
 		_extra2.setLayoutY(320);
 		_extra2.setStyle("-fx-text-fill:#aaa");
+
+		_pastTitle.setLayoutX(40);
+		_pastTitle.setLayoutY(400);
+		_pastTitle.setStyle("-fx-font-weight:bold");
+
+		_pastResolutions.setLayoutX(40);
+		_pastResolutions.setLayoutY(420);
+		_pastResolutions.maxWidth(820);
+		_pastResolutions.setWrappingWidth(820);
+
 		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResolutions);
 		
 	}
@@ -91,6 +101,7 @@ public class CouncilTab extends AbstractTab {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				_pastTitle.setText("Past Resolutions");
 				currentResolution[0] = resolution1;
 				currentResolution[1] = resolution2;
 				_name1.setText(resolution1);
