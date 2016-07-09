@@ -480,6 +480,7 @@ public class Main {
 				for(int i=5; i<details.length; i++) {
 					p.race += " " + details[i];
 				}
+				
 				names.addLast(p);
 			}
 		} catch(IOException e) {

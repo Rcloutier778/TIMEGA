@@ -93,7 +93,7 @@ public class Database {
 		synchronized(PLANETS) {
 			
 			for(int i=0; i<4; i++) {
-				LOCAL_TECH[i] = 0;
+				LOCAL_TECH_DISCOUNT[i] = 0;
 			}
 			LOCALPLANETS.clear();
 			NAME = name;
@@ -105,7 +105,7 @@ public class Database {
 					
 					for(int i=0; i<4; i++) {
 						if((n = TECH[i].get(e.getKey())) != null) {
-							LOCAL_TECH[i] += n;
+							LOCAL_TECH_DISCOUNT[i] += n;
 						}
 					}
 				}
@@ -156,7 +156,7 @@ public class Database {
 		// ^ maps a planet name to whether it has a space dock
 	private static final TreeSet<String> LOCALPLANETS = new TreeSet<String>();
 		// ^ holds all planets owned by local player, sorted alphabetically - USES SAME LOCK AS PLANETS
-	private static final int[] LOCAL_TECH = {0,0,0,0};
+	private static final int[] LOCAL_TECH_DISCOUNT = {0,0,0,0};
 		// ^ holds the total technology discounts of the local player
 	private static final HashMap<String,Integer> RESOURCES = new HashMap<String,Integer>();
 		// ^ maps a planet name to its resource value
@@ -247,7 +247,7 @@ public class Database {
 				
 				for(int i=0; i<4; i++) {
 					if((n = TECH[i].get(planetName)) != null) {
-						LOCAL_TECH[i] -= n;
+						LOCAL_TECH_DISCOUNT[i] -= n;
 					}
 				}
 				
@@ -256,7 +256,7 @@ public class Database {
 				
 				for(int i=0; i<4; i++) {
 					if((n = TECH[i].get(planetName)) != null) {
-						LOCAL_TECH[i] += n;
+						LOCAL_TECH_DISCOUNT[i] += n;
 					}
 				}
 			}
@@ -292,9 +292,9 @@ public class Database {
 	}
 	
 	// returns the current technology discount
-	public static int localTech(int index) {
+	public static int localTechDiscount(int index) {
 		synchronized(PLANETS) {
-			return LOCAL_TECH[index];
+			return LOCAL_TECH_DISCOUNT[index];
 		}
 	}
 	
@@ -843,7 +843,7 @@ public class Database {
 		synchronized(PLANETS) {PLANETS.clear();}
 		synchronized(SPACEDOCKS) {SPACEDOCKS.clear();}
 		synchronized(PLANETS) {LOCALPLANETS.clear();} // intentional- LOCALPLANETS shares a lock with PLANETS
-		for(int i=0; i<4; i++) {LOCAL_TECH[i] = 0;}
+		for(int i=0; i<4; i++) {LOCAL_TECH_DISCOUNT[i] = 0;}
 		synchronized(TECH_QUEUE) {TECH_QUEUE.clear();}
 		synchronized(TECH_MAP) {TECH_MAP.clear();}
 		synchronized(PERSONNEL_QUEUE) {PERSONNEL_QUEUE.clear();}
