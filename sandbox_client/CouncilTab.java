@@ -30,7 +30,7 @@ public class CouncilTab extends AbstractTab {
 		super(Client.COUNCIL);
 
 		_pastTitle = new Text("Past Resolutions");
-
+		_pastResolutions = new Text("");
 		Pane pane = new Pane();
 		_root.setContent(pane);
 		
@@ -81,7 +81,6 @@ public class CouncilTab extends AbstractTab {
 		_extra2.setMaxWidth(820);
 		_extra2.setLayoutY(320);
 		_extra2.setStyle("-fx-text-fill:#aaa");
-		_pastResolutions.setText("");
 		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResolutions);
 		
 	}

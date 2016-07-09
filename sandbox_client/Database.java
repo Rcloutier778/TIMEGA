@@ -879,7 +879,15 @@ public class Database {
 	public static final int BOTTOM_RIGHT = 2;
 	
 	public static void initialize() {
-		
+
+		for(int i=0; i<4; i++) {
+			TECH[i] = new HashMap<String,Integer>();
+			TECH_NAMES[i] = new ArrayList<String>();
+		}
+		for(int i=0; i<3; i++) {
+			PERSONNEL_SET[i] = new TreeSet<String>(ComparatorFactory.generatePersonnelComparator());
+		}
+
 		// populate database from XML
 		Tile.generateTiles();
 		TechSAXHandler.generateTechs();
@@ -917,13 +925,7 @@ public class Database {
 		HS_HINTS.put("Retillion", TOP_LEFT);
 		HS_HINTS.put("Shalloq", BOTTOM_RIGHT);
 		
-		for(int i=0; i<4; i++) {
-			TECH[i] = new HashMap<String,Integer>();
-			TECH_NAMES[i] = new ArrayList<String>();
-		}
-		for(int i=0; i<3; i++) {
-			PERSONNEL_SET[i] = new TreeSet<String>(ComparatorFactory.generatePersonnelComparator());
-		}
+
 	}
 	
 	public static int getHints(String planetName) {
