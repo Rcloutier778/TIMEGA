@@ -208,24 +208,24 @@ public class CombatSimTab extends AbstractTab {
     public void preCombat () {
         damageVal();
         int preFire[] = {0,0}; // player, enemy
-        for(int i=0; i < 2; i++){
+        for(int i=0; i < 2; i++){   //iterates through player and enemy
             // i is the current player
             // e is the enemy of the current player
             int e = 1 - i;
             
             //ADT
-            if (_unitCounts[i][Database.FIGHTER] > 3) {
+            if (_unitCounts[i][Database.FIGHTER] > 3) { //if ADT/AFB can be done
                 int ADT = 0;
-                if (Database.hasTechLocal(_names[i], "ADT")) {
+                if (Database.hasTechLocal(_names[i], "ADT")) {  //ADT
                     while(ADT < _unitCounts[i][Database.DESTROYER] || ADT < _unitCounts[e][Database.FIGHTER]) {
-                        for (int k = 0; i < _unitCounts[e][Database.FIGHTER] / 4; k++) {
+                        for (int k = 0; k < _unitCounts[e][Database.FIGHTER] / 4; k++) {
                             if (diceRoller() >= (_unitHitRate[i][Database.FIGHTER] - 1)) {
                                 ADT += 1;
                             }
                         }
                     }
-                } else {
-                    for (int k = 0; i < _unitCounts[e][Database.FIGHTER] / 4; k++) {
+                } else { //AFB
+                    for (int k = 0; k < _unitCounts[e][Database.FIGHTER] / 4; k++) {
                         if (diceRoller() >= _unitHitRate[i][Database.FIGHTER]) {
                             ADT +=+ 1;
                         }
