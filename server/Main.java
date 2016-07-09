@@ -9,7 +9,9 @@ package server;
 import sandbox_client.Protocol;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedList;
 //import server.CommandMap;
 
@@ -202,8 +204,8 @@ public class Main {
 				//Empire Stage
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						for(int i=0; i<splitline[1].length(); i++){
-							// TODO: update broadcastAdvance(splitline[0], 0, "[" + splitline[0] + "] ");
+						for(int i=0; i <= Integer.parseInt(splitline[1]); i++){
+							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}
 
@@ -390,6 +392,8 @@ public class Main {
 					}
 					ServerDatabase.EMPIRE_LOCK.unlock();
 					writer.write("EndFile");
+					String timeLog = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+					writer.write("\n" + timeLog);
 
 				} catch (Exception e) {
 					e.printStackTrace();
