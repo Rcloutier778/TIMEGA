@@ -1,19 +1,76 @@
 <?xml version='1.0' encoding='us-ascii'?>
 <races>
-    <race id="The Barony of Letnev"/>
-    <race id="The Brotherhood of Yin"/>
-    <race id="The Clan of Saar"/>
-    <race id="The Embers of Muaat"/>
-    <race id="The Emirates of Hacan"/>
-    <race id="The Federation of Sol"/>
-    <race id="The Ghosts of Creuss"/>
-    <race id="The L1Z1X Mindnet"/>
-    <race id="The Mentak Coalition"/>
-    <race id="The Naalu Collective"/>
-    <race id="The Nekro Virus"/>
-    <race id="The Sardakk N'Orr"/>
-    <race id="The Universities of Jol-Nar"/>
-    <race id="The Winnu"/>
-    <race id="The Xxcha Kingdom"/>
-    <race id="The Yssaril Tribes"/>
+    <race>
+        <name>The Arborec</name>
+        <ability>You may not build space docks or invade planets.</ability>
+        <ability>At the end of each development phase, each ground force may capture one neutral planet in its current system or in an adjacent system. Then, receive one ground force above each planet with a green technology specialty, if able.</ability>
+        <ability>At the end of each battle phase, all enemy planets in systems containing at least one of your ships are reverted to neutral.</ability>
+        <ability>Your ground forces cost one resource to build and have a production capacity of zero in all systems currently activated by you and one in all other systems. Upon advancing to republic, their production capacity is increased to one and two respectively.</ability>
+        <home>Nestphar</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>Stasis Capsules</tech>
+    </race>
+    <race>
+        <name>The Barony of Letnev</name>
+        <ability>The base cost and plastic supply of your dreadnoughts are both modified to five.</ability>
+        <ability>When you have fewer than five dreadnoughts on the board, your first dreadnought in each system may sustain damage twice. Otherwise, your first dreadnought in each system rolls two dice every combat round.</ability>
+        <home>Wren Terra</home>
+        <home>Arc Prime</home>
+        <tech>Hylar V Assault Laser</tech>
+        <tech>Antimass Deflectors</tech>
+    </race>
+    <race>
+        <name>The Clan of Saar</name>
+        <ability>Receive two fighters every time you capture a planet.</ability>
+        <ability>You do not need to control your home system to advance your empire.</ability>
+        <ability>Your space docks have a movement of two. Your space docks are not ships, do not count towards fleet supply, and do not participate in space battles. Your space docks are destroyed if left alone with enemy ships.</ability>
+        <ability>You may only have one space dock in each system. Your space docks begin with three capacity and three production capacity. This is increased by one every time you advance your empire.</ability>
+        <ability>During the development phase, each of your space docks may choose one of the planets in its system. You benefit from all technology specialties on the chosen planets.</ability>
+        <home>Lisis II</home>
+        <home>Ragh</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>XRD Transporters</tech>
+    </race>
+    <race>
+        <name>The Embers of Muaat</name>
+        <ability>Your ships may move through (but not end their turn in) systems containing super- novae. This does not cost a movement point if your the ships end their turn in a system containing enemy ships.</ability>
+        <ability>As an action, you may spend a command counter from your command pool to place two fighters or one destroyer in any system containing one of your war suns. Whenever one of your destroyers is destroyed, place an ember in its place.</ability>
+        <ability>Whenever your ships move through a system containing an ember, add another.</ability>
+        <ability>Whenever any other player’s ships move, ignite one ember in each system along their paths. When an ember is ignited, return it to its supply along with one destroyer from each fleet in its system (except yours).</ability>
+        <ability>After reaching republic, as an action, you may replace any neutral system on the map (except home systems and Mecatol Rex) with a supernova. Place an ember in all adjacent systems. Any ships remaining in the supernova by the end of the battle phase are destroyed.</ability>
+        <home>Muaat</home>
+        <tech>Enviro Compensator</tech>
+        <tech>Sarween Tools</tech>
+    </race>
+    <race>
+        <name>The Emirates of Hacan</name>
+        <ability>At the beginning of each action phase, receive one new trade contract. You may trade these cards with other players as if they were promissory notes. When doing so, you may add additional restrictions to the card (or lift restrictions you previously added).</ability>
+        <ability>Any player may exchange a completed trade contract for a fortune card at the end of each round. Fortune cards may only be traded for other fortune cards.</ability>
+        <home>Arretze</home>
+        <home>Kamdorn</home>
+        <home>Hercant</home>
+        <tech>Enviro Compensator</tech>
+        <tech>Sarween Tools</tech>
+    </race>
+    <race>
+        <name>The Federation of Sol</name>
+        <ability>Your carriers have a capacity of eight.</ability>
+        <ability>Receive one bonus command counter in your command pool at the beginning of each action phase.</ability>
+        <ability>At the beginning of each action phase, name one type unit. All of your units of that type receive +1 on all combat rolls.</ability>
+        <ability>After researching hyper metabolism, your ground forces may each roll a single combat die at 8+ at the end of the first combat round.</ability>
+        <home>Jord</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>Cybernetics</tech>
+    </race>
+    <race>
+        <name>The Ghosts of Creuss</name>
+        <ability>You may always use wormholes, regardless of any other effects or restrictions. You may travel between alpha and beta wormholes as if they were adjacent. Moving between alpha and beta wormholes does not cost any movement points.</abilitiy>
+        <ability>After reaching federation, place your alpha wormhole token in any neutral system. After reaching empire, receive a beta wormhole token in your reinforcements.</ability>
+        <ability>Each development phase after reaching republic, you may move your alpha or beta wormhole token to any neutral system.</ability>
+        <ability>Whenever one of your cruisers is destroyed, receive two blue technology credits.</ability>
+        <ability>Your destroyers and cruisers receive +1 in wormhole systems.</ability>
+        <home>Creuss</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>XRD Transporters</tech>
+    </race>
 </races>

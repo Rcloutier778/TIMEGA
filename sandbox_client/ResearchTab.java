@@ -163,10 +163,10 @@ public class ResearchTab extends AbstractTab {
 	}
 	
 	public void updatePlanet() {
-		_redDiscount.setText("discount: -" + Database.localTech(Database.RED));
-		_blueDiscount.setText("discount: -" + Database.localTech(Database.BLUE));
-		_greenDiscount.setText("discount: -" + Database.localTech(Database.GREEN));
-		_yellowDiscount.setText("discount: -" + Database.localTech(Database.YELLOW));
+		_redDiscount.setText("discount: -" + Database.localTechDiscount(Database.RED));
+		_blueDiscount.setText("discount: -" + Database.localTechDiscount(Database.BLUE));
+		_greenDiscount.setText("discount: -" + Database.localTechDiscount(Database.GREEN));
+		_yellowDiscount.setText("discount: -" + Database.localTechDiscount(Database.YELLOW));
 	}
 	
 	public void research(String player, String tech) {
