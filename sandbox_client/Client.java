@@ -236,5 +236,10 @@ public class Client {
 	public void resolution(String resolution1, String resolution2) {
 		_council.resolved(resolution1, resolution2);
 	}
+
+	// RESOLUTION RESULT
+	public void resolutionResult(String result[]){
+		_council.result(result);
+	}
 	
 }

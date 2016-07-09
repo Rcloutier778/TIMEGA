@@ -7,6 +7,9 @@ package sandbox_client;
  * @author dmayans
  */
 
+import javafx.scene.paint.Color;
+import server.Player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,8 +17,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeSet;
 
-import server.Player;
-import javafx.scene.paint.Color;
 
 
 public class Database {
@@ -207,7 +208,7 @@ public class Database {
 	public static void addTechSpec(String planetName, int techType) {
 		synchronized(TECH) {
 			Integer prev = TECH[techType].get(planetName);
-			int newValue = prev == null ? 1 : prev + 1;
+			int newValue = (prev == null) ? 1 : prev + 1;
 			TECH[techType].put(planetName, newValue);
 		}
 	}
@@ -878,7 +879,15 @@ public class Database {
 	public static final int BOTTOM_RIGHT = 2;
 	
 	public static void initialize() {
-		
+
+		for(int i=0; i<4; i++) {
+			TECH[i] = new HashMap<String,Integer>();
+			TECH_NAMES[i] = new ArrayList<String>();
+		}
+		for(int i=0; i<3; i++) {
+			PERSONNEL_SET[i] = new TreeSet<String>(ComparatorFactory.generatePersonnelComparator());
+		}
+
 		// populate database from XML
 		Tile.generateTiles();
 		TechSAXHandler.generateTechs();
@@ -916,14 +925,7 @@ public class Database {
 		HS_HINTS.put("Retillion", TOP_LEFT);
 		HS_HINTS.put("Shalloq", BOTTOM_RIGHT);
 		
-		for(int i=0; i<4; i++) {
-			TECH[i] = new HashMap<String,Integer>();
-			TECH_NAMES[i] = new ArrayList<String>();
-		}
-		
-		for(int i=0; i<3; i++) {
-			PERSONNEL_SET[i] = new TreeSet<String>(ComparatorFactory.generatePersonnelComparator());
-		}
+
 	}
 	
 	public static int getHints(String planetName) {

@@ -23,9 +23,14 @@ public class CouncilTab extends AbstractTab {
 	private Label _con2;
 	private Label _extra2;
 
+	private Text _pastTitle;
+	private Text _pastResolutions;
+
 	public CouncilTab() {
 		super(Client.COUNCIL);
-		
+
+		_pastTitle = new Text("");
+		_pastResolutions = new Text("");
 		Pane pane = new Pane();
 		_root.setContent(pane);
 		
@@ -76,15 +81,29 @@ public class CouncilTab extends AbstractTab {
 		_extra2.setMaxWidth(820);
 		_extra2.setLayoutY(320);
 		_extra2.setStyle("-fx-text-fill:#aaa");
-		
-		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2);
+
+		_pastTitle.setLayoutX(40);
+		_pastTitle.setLayoutY(400);
+		_pastTitle.setStyle("-fx-font-weight:bold");
+
+		_pastResolutions.setLayoutX(40);
+		_pastResolutions.setLayoutY(420);
+		_pastResolutions.maxWidth(820);
+		_pastResolutions.setWrappingWidth(820);
+
+		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResolutions);
 		
 	}
-	
+
+	private String[] currentResolution = new String[2];
+
 	public void resolved(String resolution1, String resolution2) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
+				_pastTitle.setText("Past Resolutions");
+				currentResolution[0] = resolution1;
+				currentResolution[1] = resolution2;
 				_name1.setText(resolution1);
 				String pro1 = "For: " + Database.getPro(resolution1);
 				_pro1.setText(pro1);
@@ -101,5 +120,22 @@ public class CouncilTab extends AbstractTab {
 			}
 		});
 	}
-	
+
+	public void result(String result[]) {
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				String results = "";
+				for(int i=0; i<2; i++) {
+					if (result[i].equals("for")) {
+						results = results.concat(currentResolution[i] + ": " + Database.getPro(currentResolution[i]) + "\n");
+					} else{
+						results = results.concat(currentResolution[i] + ": " + Database.getCon(currentResolution[i]) + "\n");
+					}
+				}
+				_pastResolutions.setText(_pastResolutions.getText() + results);
+
+			}
+		});
+	}
 }

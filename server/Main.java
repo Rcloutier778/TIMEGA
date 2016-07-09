@@ -204,8 +204,8 @@ public class Main {
 				//Empire Stage
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						for(int i=0; i<splitline[1].length(); i++){
-							// TODO: update broadcastAdvance(splitline[0], 0, "[" + splitline[0] + "] ");
+						for(int i=0; i <= Integer.parseInt(splitline[1]); i++){
+							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}
 
@@ -331,8 +331,7 @@ public class Main {
 				BufferedWriter writer = null;
 				try {
 					//create a temporary file
-					String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-					File logFile = new File(timeLog + ".txt");
+					File logFile = new File("savefile" + ".txt");
 
 					// This will output the full path where the file will be written to...
 					System.out.println(logFile.getCanonicalPath());
@@ -393,6 +392,8 @@ public class Main {
 					}
 					ServerDatabase.EMPIRE_LOCK.unlock();
 					writer.write("EndFile");
+					String timeLog = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+					writer.write("\n" + timeLog);
 
 				} catch (Exception e) {
 					e.printStackTrace();

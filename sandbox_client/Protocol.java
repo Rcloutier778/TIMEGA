@@ -33,5 +33,6 @@ public class Protocol {
 	public static final int ADVANCE = 40; // usage: ADVANCE <name>
 	public static final int ROUND_OK = 41; // usage: ROUND_OK (indicates that all responses have been received)
 	public static final int SEND_RESOLUTION = 42; // usage: SEND_RESOLUTION <resolution 1 name> <resolution 2 name>
+	public static final int RESOLUTION_RESULT = 43; //usage: RESOLUTION_RESULT <resolution name> <for/against>
 
 }

@@ -241,6 +241,12 @@ public class Server implements Runnable {
 			String resolution2 = _in.readLine();
 			
 			_client.resolution(resolution1, resolution2);
+		} else if(message == Protocol.RESOLUTION_RESULT){
+			String result[] = new String[2];
+			result[0] = _in.readLine();
+			result[1] = _in.readLine();
+
+			_client.resolutionResult(result);
 		}
 	}
 	
