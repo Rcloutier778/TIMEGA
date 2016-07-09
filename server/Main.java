@@ -9,9 +9,7 @@ package server;
 import sandbox_client.Protocol;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 //import server.CommandMap;
 
@@ -331,8 +329,7 @@ public class Main {
 				BufferedWriter writer = null;
 				try {
 					//create a temporary file
-					String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-					File logFile = new File(timeLog + ".txt");
+					File logFile = new File("savefile" + ".txt");
 
 					// This will output the full path where the file will be written to...
 					System.out.println(logFile.getCanonicalPath());
