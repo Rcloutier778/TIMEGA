@@ -5,6 +5,7 @@ package sandbox_client;
  * 
  * @author dmayans
  */
+//todo make repeal work
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -129,6 +130,11 @@ public class CouncilTab extends AbstractTab {
 				for(int i=0; i<2; i++) {
 					if (result[i].equals("for")) {
 						results = results.concat(currentResolution[i] + ": " + Database.getPro(currentResolution[i]) + "\n");
+						if(currentResolution[i].equals("New Constitution")){
+							results = "";
+							_pastResolutions.setText("");
+							break;
+						}
 					} else{
 						results = results.concat(currentResolution[i] + ": " + Database.getCon(currentResolution[i]) + "\n");
 					}
