@@ -141,25 +141,22 @@ public class CombatSimTab extends AbstractTab {
 
 
     /**
-     * Reads the values entered into the textfield and assignes them to the unit numbers
-     * @return true if no errors, false if errors
+     * Reads the values entered into the textfield and assignes them to the unit numbers.
+     * If the field is not filled, assigns 0.
      */
-    public boolean setUnits() {
-        for(int k=0; k<Database.NUM_SHIPS; k++){
-            _unitCounts[PLAYER][k] = _unitFields[PLAYER][k].getNumber();
-            _unitCounts[ENEMY][k] = _unitFields[ENEMY][k].getNumber();
-            if(_unitCounts[PLAYER][k] < 0 || _unitCounts[ENEMY][k] < 0) {
-            	return false;
+    public void setUnits() {
+        for(int i=0; i<_names.length; i++) {
+            for (int k = 0; k < Database.NUM_SHIPS; k++) {
+                _unitCounts[i][k] = (_unitFields[i][k].getNumber() < 0) ? 0 : _unitFields[i][k].getNumber();
+                _unitFields[i][k].setText((_unitCounts[i][k] == 0) ? "0" : Integer.toString(_unitCounts[i][k]));
             }
         }
-        return true;
     }
 
     /**
      * Calculates damage values for units based on tech that the player and enemy have researched
      */
     public void damageVal () {
-        _names[PLAYER] = _playerName.getText();
         for(int i = 0; i < 2; i++) {
             if (Database.hasTechLocal(_names[i], "Hylar V Assult Laser")) {
                 _unitHitRate[i][Database.DESTROYER] -= 1;
@@ -394,54 +391,49 @@ public class CombatSimTab extends AbstractTab {
         Float[] avgUrem = {(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0};
         try {
             _names[PLAYER] = _playerName.getText();
+            System.out.println(_names[PLAYER]);
             _names[ENEMY] = _eOptions.getValue(); // gets the value selected by the combobox
         } catch (NullPointerException e) {
             return "Enemy name field is null";
         }
-        for(int i = 0; i<1000; i++){
-            if(!setUnits()){
-                return "Error, setUnits returned false";
+        for(int i = 0; i<1000; i++) {
+            setUnits();
+            //Pre-Combat
+            preCombat();
+            //Set sustains
+            DREAD_SUS[PLAYER] = _unitCounts[PLAYER][Database.DREADNOUGHT];
+            DREAD_SUS[ENEMY] = _unitCounts[ENEMY][Database.DREADNOUGHT];
+            WAR_SUS[PLAYER] = _unitCounts[PLAYER][Database.WAR_SUN];
+            WAR_SUS[ENEMY] = _unitCounts[ENEMY][Database.WAR_SUN];
+
+            int res = combat();
+            if (res == 1) {
+                avgUrem[10]++;
+            } else if (res == 2) {
+                avgUrem[11]++;
+            } else if (res == 3) {
+                avgUrem[12]++;
+            } else {
+                return "Error";
             }
-            else {
-                //Pre-Combat
-                preCombat();
-                //Set sustains
-                DREAD_SUS[PLAYER] = _unitCounts[PLAYER][Database.DREADNOUGHT];
-                DREAD_SUS[ENEMY] = _unitCounts[ENEMY][Database.DREADNOUGHT];
-                WAR_SUS[PLAYER] = _unitCounts[PLAYER][Database.WAR_SUN];
-                WAR_SUS[ENEMY] = _unitCounts[ENEMY][Database.WAR_SUN];
-                
-                int res = combat();
-                if(res == 1){
-                    avgUrem[10]++;
-                }
-                else if(res == 2){
-                    avgUrem[11]++;
-                }
-                else if(res == 3){
-                    avgUrem[12]++;
-                }
-                else{
-                    return "Error";
-                }
 
-                //Add number of ships remaining to average
-                for(int l = 0; l < Database.NUM_SHIPS; l++){
-                    avgUrem[l] += _unitCounts[PLAYER][l];
-                    avgUrem[l+5] += _unitCounts[ENEMY][l];
-                }
+            //Add number of ships remaining to average
+            for (int l = 0; l < Database.NUM_SHIPS; l++) {
+                avgUrem[l] += _unitCounts[PLAYER][l];
+                avgUrem[l + 5] += _unitCounts[ENEMY][l];
+            }
 
-                int remdread[] = {_unitCounts[PLAYER][Database.DREADNOUGHT], _unitCounts[ENEMY][Database.DREADNOUGHT]};
-                int remdest[] = {_unitCounts[PLAYER][Database.DESTROYER], _unitCounts[ENEMY][Database.DESTROYER]};
-                setUnits();
-                if(Database.hasTechLocal(_names[PLAYER], "Transfabrication") && (_unitCounts[PLAYER][Database.DREADNOUGHT] > remdread[0]) && (remdest[0] > 0)){
-                    avgUrem[3]++;
-                }
-                if(Database.hasTechLocal(_names[ENEMY], "Transfabrication") && (_unitCounts[ENEMY][Database.DREADNOUGHT] > remdread[1]) && (remdest[1] > 0)){
-                    avgUrem[6]++;
-                }
+            int remdread[] = {_unitCounts[PLAYER][Database.DREADNOUGHT], _unitCounts[ENEMY][Database.DREADNOUGHT]};
+            int remdest[] = {_unitCounts[PLAYER][Database.DESTROYER], _unitCounts[ENEMY][Database.DESTROYER]};
+            setUnits();
+            if (Database.hasTechLocal(_names[PLAYER], "Transfabrication") && (_unitCounts[PLAYER][Database.DREADNOUGHT] > remdread[0]) && (remdest[0] > 0)) {
+                avgUrem[3]++;
+            }
+            if (Database.hasTechLocal(_names[ENEMY], "Transfabrication") && (_unitCounts[ENEMY][Database.DREADNOUGHT] > remdread[1]) && (remdest[1] > 0)) {
+                avgUrem[6]++;
             }
         }
+
         //Compute average
         for(int i = 0; i < 10; i++){
             avgUrem[i] /= 1000;
