@@ -30,10 +30,6 @@ import java.math.BigDecimal;
  */
 
 /**
- * Current problems with simulator tab:
-
- - there is no distinction between attacker and defender (important in some cases)
-
  Recommendations:
  - leave the results text in permanently (on the right half of the screen), and just change the output numbers when the simulation is run
  - run the simulator immediately after someone finishes editing the box instead of having to hit the button (the simulation is fast enough anyway)

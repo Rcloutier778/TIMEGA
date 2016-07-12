@@ -204,7 +204,7 @@ public class Main {
 				//Empire Stage
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						for(int i=0; i <= Integer.parseInt(splitline[1]); i++){
+						for(int i = ServerDatabase.EMPIRE_STAGE.get(splitline[0]); i <= Integer.parseInt(splitline[1]); i++){
 							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}
