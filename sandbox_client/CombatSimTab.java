@@ -5,6 +5,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -25,8 +26,18 @@ import java.math.BigDecimal;
  * 1) Flagships
  * 2) Updated race abilities (inc. Hacan)
  * 3) Xeno Psychology
- * 4) Personnel and SAS
+ * 4) SAS
  * 5) Custom targeting order
+ * 8) Personnel bonuses
+ * 9) Mercs
+ * 10) Deep Space Cannon
+ *
+ * Notes:
+ * 1) Probably won't do Barony, will have to add a checkbox if I do.
+ * 2) Fed of Sol: Add col of checkbox, give -1 to the one selected
+ * 3) How to do Emeriates?
+ * 4) Ghosts: -1 in wormhole. Do another checkbox in Defender
+ * 5)
  */
 
 /**
@@ -63,8 +74,14 @@ public class CombatSimTab extends AbstractTab {
 
     private ComboBox<String>[] _eOptions = new ComboBox[]{new ComboBox<String>(), new ComboBox<String>()};
 
+    //If defender is in a nebula
+    private CheckBox _defNeb = new CheckBox();
+
     //name of player(0) and enemy(1)
-    public String[] _names = new String[2];
+    private String[] _names = new String[2];
+
+    //Striker Fleets Movement
+    private NumberTextField _strikerField = new NumberTextField();
 
     //make values cleared when you click on another tab
     public CombatSimTab() {
@@ -79,7 +96,7 @@ public class CombatSimTab extends AbstractTab {
         Text resultTitle = new Text();
         resultTitle.setText("Result of the battle:");
 
-        Label[] _unitLabels = new Label[5];
+        Label[] _unitLabels = new Label[7];
 
         for(int k=0; k<Database.NUM_SHIPS; k++){
             //Make new Number Text Fields and labels
@@ -103,12 +120,32 @@ public class CombatSimTab extends AbstractTab {
             _pane.add(_unitFields[ENEMY][k], 3, k + 2);
         }
 
+        //Striker Fleets Label
+        _unitLabels[5] = new Label();
+        _unitLabels[5].setText("Striker Fleets Movement");
+        _pane.add(_unitLabels[5],2,7);
+
+        //Striker Fleets Field
+        _strikerField.setPromptText("Striker Fleets");
+        _strikerField.setMaxWidth(120);
+        _pane.add(_strikerField,2,8);
+
+        //Nebula Label
+        _unitLabels[6] = new Label();
+        _unitLabels[6].setText("In Nebula");
+        _pane.add(_unitLabels[6],3,7);
+
+        //Nebula checkbox
+        _pane.add(_defNeb, 3,8);
+
 
         GridPane[] _namePane = {new GridPane(), new GridPane()};
 
+        //Attacker combobox
         _namePane[PLAYER].add(new Text("Attacker"),1,1);
         _namePane[PLAYER].add(_eOptions[PLAYER],1,2);
 
+        //Defender combobox
         _namePane[ENEMY].add(new Text("Defender"),1,1);
         _namePane[ENEMY].add(_eOptions[ENEMY],1,2);
 
@@ -122,7 +159,6 @@ public class CombatSimTab extends AbstractTab {
                     }
                 }));
         GridPane.setHalignment(_start, HPos.CENTER);
-
 
         _pane.setAlignment(Pos.CENTER);
 
@@ -196,6 +232,9 @@ public class CombatSimTab extends AbstractTab {
             
             if(Database.hasTechLocal(_names[i], "Advanced Fighters")) {
                 _unitHitRate[i][Database.FIGHTER]--;
+                if(Database.raceOf(_names[i]).equals("The Naalu Collective")){
+                    _unitHitRate[i][Database.FIGHTER]--;
+                }
             }
             
             if(Database.raceOf(_names[i]).equals("The Sardakk N'Orr")){
@@ -206,6 +245,20 @@ public class CombatSimTab extends AbstractTab {
             
             if(Database.raceOf(_names[i]).equals("The L1Z1X Mindnet")){
                 _unitHitRate[i][Database.DREADNOUGHT]--;
+            }
+            if(Database.raceOf(_names[i]).equals("The Naalu Collective")){
+                _unitHitRate[i][Database.FIGHTER]--;
+            }
+
+        }
+        if(Database.hasTechLocal(_names[PLAYER], "Striker Fleets")){
+            _unitHitRate[PLAYER][Database.DESTROYER] -= ((Integer.parseInt(_strikerField.getText()) < 0) ? 0 : Integer.parseInt(_strikerField.getText()));
+            _unitHitRate[PLAYER][Database.CRUISER] -= ((Integer.parseInt(_strikerField.getText()) < 0) ? 0 : Integer.parseInt(_strikerField.getText()));
+            _strikerField.setText((Integer.parseInt(_strikerField.getText()) < 0 ? "0" : _strikerField.getText()));
+        }
+        if(_defNeb.isSelected()){
+            for(int i=0; i<Database.NUM_SHIPS; i++){
+                _unitHitRate[ENEMY][i]--;
             }
         }
     }
@@ -424,6 +477,8 @@ public class CombatSimTab extends AbstractTab {
             WAR_SUS[PLAYER] = _unitCounts[PLAYER][Database.WAR_SUN];
             WAR_SUS[ENEMY] = _unitCounts[ENEMY][Database.WAR_SUN];
 
+
+
             int res = combat();
             if (res == 1) {
                 avgUrem[10]++;
@@ -460,7 +515,7 @@ public class CombatSimTab extends AbstractTab {
         avgUrem[11] /= 10;
         avgUrem[12] /= 10;
         String[] prefix = {"Attacker Victory = ", "Defender Victory = ", "Stalemate = "};
-        String results = "\n \nOut of 1000 trials, the results were: \n";
+        String results = "\nOut of 1000 trials, the results were: \n";
         for(int i=0; i<3; i++){
             results = results.concat(prefix[i]) + (new BigDecimal(Float.toString(avgUrem[i+10])).setScale(1, BigDecimal.ROUND_HALF_EVEN).toString()) + "%\n";
         }
