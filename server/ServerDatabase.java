@@ -6,11 +6,11 @@ package server;
  * @author dmayans
  */
 
+import sandbox_client.Client;
+
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import sandbox_client.Client;
 
 public class ServerDatabase {
 		
@@ -34,6 +34,9 @@ public class ServerDatabase {
 	
 	public static final HashMap<String,Integer> EMPIRE_STAGE = new HashMap<String,Integer>();
 	public static final Lock EMPIRE_LOCK = new ReentrantLock();
+
+	public static final HashMap<String,String> PAST_RESOLUTION = new HashMap<String,String>();
+	public static final Lock RESOLUTION_LOCK = new ReentrantLock();
 	
 	
 	public static final HashSet<String> TECH_SET = new HashSet<String>();

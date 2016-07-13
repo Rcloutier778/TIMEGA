@@ -238,8 +238,8 @@ public class Client {
 	}
 
 	// RESOLUTION RESULT
-	public void resolutionResult(String result[]){
-		_council.result(result);
+	public void resolutionResult(){
+		_council.result();
 	}
 	
 }

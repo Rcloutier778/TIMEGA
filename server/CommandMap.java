@@ -301,7 +301,7 @@ public class CommandMap {
 	private class ResolutionCommand implements Command {
 
 		public void run(String[] args) {
-			if (args.length != 3) {
+			if (args.length < 3) {
 				Main.writeColortext("usage: resolution <agenda_1> <agenda_2>", Main.ERROR);
 				return;
 			}
@@ -313,8 +313,8 @@ public class CommandMap {
 				Main.writeColortext("resolution \"" + res1 + "\" not found", Main.ERROR);
 			} else if (!ServerDatabase.RESOLUTION_SET.contains(res2)) {
 				Main.writeColortext("resolution \"" + res2 + "\" not found", Main.ERROR);
-			} else {
-				_main.broadcast(Protocol.SEND_RESOLUTION, res1 + "\n" + res2 + "\n");
+			} else{
+				_main.broadcastResolution(res1, res2);
 			}
 		}
 
@@ -323,15 +323,29 @@ public class CommandMap {
 	private class ResolutionWinCommand implements Command {
 
 		public void run(String[] args) {
-			if (args.length != 3) {
-				Main.writeColortext("usage: resresult <result_1> <result_2>", Main.ERROR);
+			if (args.length < 3 || args.length >5) {
+				Main.writeColortext("usage: resresult <result_1> <result_2> <repeal_1> <repeal_2>", Main.ERROR);
 				return;
 			}
-
+			String[] result = new String[4];
+			result[0] = args[1];
+			result[1] = args[2];
+			if(args.length == 4){
+				result[2] = args[3].replace("_"," ");
+				if(!ServerDatabase.RESOLUTION_SET.contains(result[2])){
+					Main.writeColortext("resolution \"" + result[2] + "\" not found", Main.ERROR);
+				}
+			}
+			if(args.length == 5){
+				result[3] = args[4].replace("_"," ");
+				if(!ServerDatabase.RESOLUTION_SET.contains(result[3])){
+					Main.writeColortext("resolution \"" + result[3] + "\" not found", Main.ERROR);
+				}
+			}
 			if (!(args[1].equals("for") || args[1].equals("against")) ||!(args[2].equals("for") || args[2].equals("against")) ) {
 				Main.writeColortext("usage: resresult <for/against> <for/against>", Main.ERROR);
-			} else {
-				_main.broadcast(Protocol.RESOLUTION_RESULT, args[1] + "\n" +args[2] + "\n");
+			}else{
+				_main.broadcastResolutionResult(result);
 			}
 		}
 

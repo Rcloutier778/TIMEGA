@@ -128,7 +128,7 @@ public class Server implements Runnable {
 		
 		this.cleanup();
 	}
-	
+
 	// read and respond to a message
 	private synchronized void handle(int message) throws IOException {
 		
@@ -239,14 +239,23 @@ public class Server implements Runnable {
 		} else if(message == Protocol.SEND_RESOLUTION) {
 			String resolution1 = _in.readLine();
 			String resolution2 = _in.readLine();
-			
+
 			_client.resolution(resolution1, resolution2);
 		} else if(message == Protocol.RESOLUTION_RESULT){
-			String result[] = new String[2];
+			String result[] = new String[4];
 			result[0] = _in.readLine();
 			result[1] = _in.readLine();
+			result[2] = _in.readLine();
+			result[3] = _in.readLine();
 
-			_client.resolutionResult(result);
+			//todo make sure repeal doesn't slip past.
+			for(int i=0; i<2; i++){
+				if(!result[i*2].equals("New Constitution") || !result[i*2].equals("Repeal") || !result[i*2].equals("Revote")) {
+					Database.putRes(result[i*2], result[(i*2)+1]);
+				}
+			}
+
+			_client.resolutionResult();
 		}
 	}
 	
