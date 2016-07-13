@@ -4,10 +4,7 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -27,10 +24,9 @@ import java.math.BigDecimal;
  * 2) Updated race abilities (inc. Hacan)
  * 3) Xeno Psychology
  * 4) SAS
- * 5) Custom targeting order
  * 8) Personnel bonuses
  * 9) Mercs
- * 10) Deep Space Cannon
+ * 10) Deep Space Cannon?
  *
  * Notes:
  * 1) Probably won't do Barony, will have to add a checkbox if I do.
@@ -83,6 +79,12 @@ public class CombatSimTab extends AbstractTab {
     //Striker Fleets Movement
     private NumberTextField _strikerField = new NumberTextField();
 
+    //Targeting order Field
+    private TextField[] _targetOrderField = {new TextField(),new TextField()};
+
+    //Targeting order
+    private int[][] _targetOrder = new int[2][7];
+
     //make values cleared when you click on another tab
     public CombatSimTab() {
         super(Client.SIMULATOR);
@@ -96,7 +98,7 @@ public class CombatSimTab extends AbstractTab {
         Text resultTitle = new Text();
         resultTitle.setText("Result of the battle:");
 
-        Label[] _unitLabels = new Label[7];
+        Label[] _unitLabels = new Label[6];
 
         for(int k=0; k<Database.NUM_SHIPS; k++){
             //Make new Number Text Fields and labels
@@ -120,23 +122,36 @@ public class CombatSimTab extends AbstractTab {
             _pane.add(_unitFields[ENEMY][k], 3, k + 2);
         }
 
+        Label[] _techLabels = new Label[2];
         //Striker Fleets Label
-        _unitLabels[5] = new Label();
-        _unitLabels[5].setText("Striker Fleets Movement");
-        _pane.add(_unitLabels[5],2,7);
+        _techLabels[0] = new Label();
+        _techLabels[0].setText("Striker Fleets Movement");
+        _pane.add(_techLabels[0],2,8);
 
         //Striker Fleets Field
         _strikerField.setPromptText("Striker Fleets");
         _strikerField.setMaxWidth(120);
-        _pane.add(_strikerField,2,8);
+        _pane.add(_strikerField,2,9);
 
         //Nebula Label
-        _unitLabels[6] = new Label();
-        _unitLabels[6].setText("In Nebula");
-        _pane.add(_unitLabels[6],3,7);
+        _techLabels[1] = new Label();
+        _techLabels[1].setText("In Nebula");
+        _pane.add(_techLabels[1],3,8);
 
         //Nebula checkbox
-        _pane.add(_defNeb, 3,8);
+        _pane.add(_defNeb, 3,9);
+
+        //Targeting order Label
+        _unitLabels[5] = new Label();
+        _unitLabels[5].setText("Targeting Order:");
+        _pane.add(_unitLabels[5],1,7);
+
+        //Targeting order Fields
+        for(int i=0; i<2; i++){
+            _targetOrderField[i].setMaxWidth(90);
+            _targetOrderField[i].setPromptText("Target Order");
+            _pane.add(_targetOrderField[i],i+2,7);
+        }
 
 
         GridPane[] _namePane = {new GridPane(), new GridPane()};
@@ -166,9 +181,9 @@ public class CombatSimTab extends AbstractTab {
         ResultsPane.add(resultTitle,1,1);
         ResultsPane.add(results,1,2);
         ResultsPane.setMinWidth(300);
-        ResultsPane.setVgap(40);
+        ResultsPane.setVgap(10);
 
-        _pane.setVgap(40);
+        _pane.setVgap(20);
         _pane.setHgap(60);
 
         //Player and enemey names
@@ -210,6 +225,39 @@ public class CombatSimTab extends AbstractTab {
                 _unitCounts[i][k] = (_unitFields[i][k].getNumber() < 0) ? 0 : _unitFields[i][k].getNumber();
                 _unitFields[i][k].setText((_unitCounts[i][k] == 0) ? "0" : Integer.toString(_unitCounts[i][k]));
             }
+            if(!_targetOrderField[i].getText().isEmpty()){
+                String splitline[] =  _targetOrderField[i].getText().split("");
+                //CANNOT SUBSTITUTE NUMBERS WITH K.
+                for(int k=0; k<splitline.length; k++){
+                    switch (splitline[k]) {
+                        case "f":
+                            _targetOrder[i][k] = Database.FIGHTER;
+                            break;
+                        case "d":
+                            _targetOrder[i][k] = Database.DESTROYER;
+                            break;
+                        case "c":
+                            _targetOrder[i][k] = Database.CRUISER;
+                            break;
+                        case "n":
+                            _targetOrder[i][k] = Database.DREADNOUGHT;
+                            break;
+                        case "w":
+                            _targetOrder[i][k] = Database.WAR_SUN;
+                            break;
+                        case "D":
+                            _targetOrder[i][k] = Database.DREAD_SUS;
+                            break;
+                        case "W":
+                            _targetOrder[i][k] = Database.WAR_SUN_SUS;
+                            break;
+                    }
+                }
+            }else{
+                //Default targeting order
+                _targetOrder[i] = new int[]{5, 6, 0, 1, 2, 3, 4};
+            }
+
         }
     }
 
@@ -251,11 +299,7 @@ public class CombatSimTab extends AbstractTab {
             }
 
         }
-        if(Database.hasTechLocal(_names[PLAYER], "Striker Fleets")){
-            _unitHitRate[PLAYER][Database.DESTROYER] -= ((Integer.parseInt(_strikerField.getText()) < 0) ? 0 : Integer.parseInt(_strikerField.getText()));
-            _unitHitRate[PLAYER][Database.CRUISER] -= ((Integer.parseInt(_strikerField.getText()) < 0) ? 0 : Integer.parseInt(_strikerField.getText()));
-            _strikerField.setText((Integer.parseInt(_strikerField.getText()) < 0 ? "0" : _strikerField.getText()));
-        }
+
         if(_defNeb.isSelected()){
             for(int i=0; i<Database.NUM_SHIPS; i++){
                 _unitHitRate[ENEMY][i]--;
@@ -320,14 +364,17 @@ public class CombatSimTab extends AbstractTab {
         //Applying Assault Cannons
         for(int i = 0; i<2; i++) {
             int e = 1 - i;
-            for (int k = 0; k < Database.NUM_SHIPS; k++) {
+            for (int k = 0; k < _targetOrder[i].length; k++) {  //iterates over the targeting order
                 while (preFire[i] > 0) {
-                    if (_unitCounts[e][k] > 0) {
-                        _unitCounts[e][k]--;
+                    //Skip over sustains. Cruiser punches through
+                    if(_targetOrder[e][k] == 5 || _targetOrder[e][k] == 6){
+                        break;
+                    } else if (_unitCounts[e][_targetOrder[e][k]] > 0) {   //if enemy unit count of current target in targeting order > 0
+                        _unitCounts[e][_targetOrder[e][k]]--;
                         preFire[i]--;
                         if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
                             _unitCounts[e][Database.DESTROYER]++;
-                            k -= 2;
+                            k = 0;
                         }
                     } else {break;}
                 }
@@ -374,14 +421,17 @@ public class CombatSimTab extends AbstractTab {
         //Inflict cruiser damage
         for(int i = 0; i < 2; i++){
             int e = 1 - i;
-            for (int k = 0; k < Database.NUM_SHIPS; k++) {
+            for (int k = 0; k < _targetOrder[i].length; k++) {
                 while (cruiserHits[i] > 0) {
-                    if (_unitCounts[e][k] > 0) {
-                        _unitCounts[e][k]--;
+                    //Skip over sustains. Cruiser punches through
+                    if(_targetOrder[e][k] == 5 || _targetOrder[e][k] == 6){
+                        break;
+                    } else if (_unitCounts[e][_targetOrder[e][k]] > 0) {   //if enemy unit count of current target in targeting order > 0
+                        _unitCounts[e][_targetOrder[e][k]]--;
                         cruiserHits[i]--;
                         if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
                             _unitCounts[e][Database.DESTROYER]++;
-                            k -= 2;
+                            k = 0;
                         }
                     } else {break;}
                 }
@@ -389,28 +439,35 @@ public class CombatSimTab extends AbstractTab {
         }
 
         //Inflict normal hits
-        for(int i=0; i<2; i++){
+        for(int i=0; i<2; i++) {
             int e = 1 - i;
-            while ((DREAD_SUS[e] > 0 || WAR_SUS[e] > 0) && hits[i] > 0) {
-                if (DREAD_SUS[e] > 0) {
-                    DREAD_SUS[e]--;
-                    hits[i]--;
-                } else if (WAR_SUS[e] > 0) {
-                    WAR_SUS[e]--;
-                    hits[i]--;
-                }
-                else{break;}
-            }
-            for (int k = 0; k < Database.NUM_SHIPS; k++) {
-                while (hits[i] > 0) {
-                    if (_unitCounts[e][k] > 0) {
-                        _unitCounts[e][k]--;
-                        hits[i]--;
-                        if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
-                            _unitCounts[e][Database.DESTROYER]++;
-                            k -= 2;
+            for (int k = 0; k < _targetOrder[i].length; k++) {
+                //Sustains
+                if (_targetOrder[e][k] == 5 || _targetOrder[e][k] == 6) {
+                    while ((DREAD_SUS[e] > 0 || WAR_SUS[e] > 0) && hits[i] > 0) {
+                        if (DREAD_SUS[e] > 0) {
+                            DREAD_SUS[e]--;
+                            hits[i]--;
+                        } else if (WAR_SUS[e] > 0) {
+                            WAR_SUS[e]--;
+                            hits[i]--;
+                        } else {
+                            break;
                         }
-                    } else {break;}
+                    }
+                } else {
+                    while (hits[i] > 0) {
+                        if (_unitCounts[e][_targetOrder[e][k]] > 0) {   //if enemy unit count of current target in targeting order > 0
+                            _unitCounts[e][_targetOrder[e][k]]--;
+                            hits[i]--;
+                            if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
+                                _unitCounts[e][Database.DESTROYER]++;
+                                k = 0;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -469,6 +526,10 @@ public class CombatSimTab extends AbstractTab {
 
         for(int i = 0; i<1000; i++) {
             setUnits();
+
+            _unitHitRate[PLAYER] = Database.getBaseHitRates() ;
+            _unitHitRate[ENEMY] = Database.getBaseHitRates();
+
             //Pre-Combat
             preCombat();
             //Set sustains
@@ -477,7 +538,12 @@ public class CombatSimTab extends AbstractTab {
             WAR_SUS[PLAYER] = _unitCounts[PLAYER][Database.WAR_SUN];
             WAR_SUS[ENEMY] = _unitCounts[ENEMY][Database.WAR_SUN];
 
-
+            //Striker Fleets
+            if(Database.hasTechLocal(_names[PLAYER], "Striker Fleets")){
+                _unitHitRate[PLAYER][Database.DESTROYER] -= ((_strikerField.getNumber() < 0) ? 0 : _strikerField.getNumber());
+                _unitHitRate[PLAYER][Database.CRUISER] -= ((_strikerField.getNumber() < 0) ? 0 : _strikerField.getNumber());
+                _strikerField.setText((_strikerField.getNumber() < 0) ? "0" : Integer.toString(_strikerField.getNumber()));
+            }
 
             int res = combat();
             if (res == 1) {
