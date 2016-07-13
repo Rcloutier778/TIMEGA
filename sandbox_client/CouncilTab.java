@@ -128,9 +128,9 @@ public class CouncilTab extends AbstractTab {
 				for(int i=0; i<2; i++) {
 					for(String resolution: Database.resolutionKeys()){
 						if(Database.getRes(resolution).equals("for")){
-							display = display.concat(resolution + ": For: " + Database.getPro(resolution) + "\n");
+							display = display.concat(resolution + ": " + Database.getPro(resolution) + "\n");
 						}else{
-							display = display.concat(resolution + ": Against: " + Database.getCon(resolution) + "\n");
+							display = display.concat(resolution + ": " + Database.getCon(resolution) + "\n");
 						}
 					}
 				}

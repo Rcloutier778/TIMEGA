@@ -25,4 +25,9 @@
         <hitrate>3</hitrate>
         <dice>3</dice>
     </ship>
+	<ship>
+        <name>SAS</name>
+        <hitrate>8</hitrate>
+        <dice>1</dice>
+    </ship>
 </ships>

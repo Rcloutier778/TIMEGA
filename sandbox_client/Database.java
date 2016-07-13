@@ -800,8 +800,9 @@ public class Database {
 	public static final int WAR_SUN = 4;
 	public static final int DREAD_SUS = 5;
 	public static final int WAR_SUN_SUS = 6;
+	public static final int SAS = 7;
 	// keep codes and array synchronized!
-	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun"};
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS"};
 	
 	public static final int NUM_SHIPS = SHIP_NAMES.length;
 	

@@ -98,7 +98,7 @@ public class CombatSimTab extends AbstractTab {
         Text resultTitle = new Text();
         resultTitle.setText("Result of the battle:");
 
-        Label[] _unitLabels = new Label[6];
+        Label[] _unitLabels = new Label[7];
 
         for(int k=0; k<Database.NUM_SHIPS; k++){
             //Make new Number Text Fields and labels
@@ -113,6 +113,7 @@ public class CombatSimTab extends AbstractTab {
             //Set the label names
             _unitLabels[k].setText(Database.nameOfShip(k) + "s:");
 
+            //Set max width
             _unitFields[PLAYER][k].setMaxWidth(90);
             _unitFields[ENEMY][k].setMaxWidth(90);
 
@@ -122,35 +123,37 @@ public class CombatSimTab extends AbstractTab {
             _pane.add(_unitFields[ENEMY][k], 3, k + 2);
         }
 
+        //Labels for abnormal stuff affecting combat
         Label[] _techLabels = new Label[2];
+
         //Striker Fleets Label
         _techLabels[0] = new Label();
         _techLabels[0].setText("Striker Fleets Movement");
-        _pane.add(_techLabels[0],2,8);
+        _pane.add(_techLabels[0],2,9);
 
         //Striker Fleets Field
         _strikerField.setPromptText("Striker Fleets");
         _strikerField.setMaxWidth(120);
-        _pane.add(_strikerField,2,9);
+        _pane.add(_strikerField,2,10);
 
         //Nebula Label
         _techLabels[1] = new Label();
         _techLabels[1].setText("In Nebula");
-        _pane.add(_techLabels[1],3,8);
+        _pane.add(_techLabels[1],3,9);
 
         //Nebula checkbox
-        _pane.add(_defNeb, 3,9);
+        _pane.add(_defNeb, 3,10);
 
         //Targeting order Label
-        _unitLabels[5] = new Label();
-        _unitLabels[5].setText("Targeting Order:");
-        _pane.add(_unitLabels[5],1,7);
+        _unitLabels[6] = new Label();
+        _unitLabels[6].setText("Targeting Order:");
+        _pane.add(_unitLabels[6],1,8);
 
         //Targeting order Fields
         for(int i=0; i<2; i++){
             _targetOrderField[i].setMaxWidth(90);
             _targetOrderField[i].setPromptText("Target Order");
-            _pane.add(_targetOrderField[i],i+2,7);
+            _pane.add(_targetOrderField[i],i+2,8);
         }
 
 
@@ -297,9 +300,7 @@ public class CombatSimTab extends AbstractTab {
             if(Database.raceOf(_names[i]).equals("The Naalu Collective")){
                 _unitHitRate[i][Database.FIGHTER]--;
             }
-
         }
-
         if(_defNeb.isSelected()){
             for(int i=0; i<Database.NUM_SHIPS; i++){
                 _unitHitRate[ENEMY][i]--;
@@ -313,7 +314,7 @@ public class CombatSimTab extends AbstractTab {
 
     public int[] totalUnits() {
         int[] ret = {0,0};
-        for(int k=0; k<Database.NUM_SHIPS; k++){
+        for(int k=0; k<Database.NUM_SHIPS-1; k++){
             ret[PLAYER] += _unitCounts[PLAYER][k];
             ret[ENEMY] += _unitCounts[ENEMY][k];
         }
@@ -335,22 +336,21 @@ public class CombatSimTab extends AbstractTab {
             if (_unitCounts[i][Database.FIGHTER] > 3) { //if ADT/AFB can be done
                 int ADT = 0;
                 if (Database.hasTechLocal(_names[i], "ADT")) {  //ADT
-                    while(ADT < _unitCounts[i][Database.DESTROYER] || ADT < _unitCounts[e][Database.FIGHTER]) {
-                        for (int k = 0; k < _unitCounts[e][Database.FIGHTER] / 4; k++) {
-                            if (diceRoller() >= (_unitHitRate[i][Database.FIGHTER] - 1)) {
+                    while(!((ADT < (_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS])) && (ADT < _unitCounts[e][Database.FIGHTER]))){
+                        for (int k = 0; k < ((_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS]) * _unitCounts[e][Database.FIGHTER] )/ 4; k++) {
+                            if (diceRoller() >= (_unitHitRate[i][Database.DESTROYER] - 1)) {
                                 ADT++;
                             }
                         }
                     }
                 } else { //AFB
-                    for (int k = 0; k < _unitCounts[e][Database.FIGHTER] / 4; k++) {
-                        if (diceRoller() >= _unitHitRate[i][Database.FIGHTER]) {
-                            ADT +=+ 1;
+                    for (int k = 0; k < ((_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS]) * _unitCounts[e][Database.FIGHTER] )/ 4; k++) {
+                        if (diceRoller() >= _unitHitRate[i][Database.DESTROYER]) {
+                            ADT++;
                         }
                     }
                 }
-                _unitCounts[e][Database.FIGHTER] = _unitCounts[e][Database.FIGHTER] - ADT;
-
+                _unitCounts[e][Database.FIGHTER] -= ADT;
             }
             //Assault Cannons
             if (Database.hasTechLocal(_names[i], "Assault Cannon") && (totalUnits()[i] <= 3)) {
@@ -361,17 +361,24 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
         }
+        //todo if adding more pre combat, make sure to account for SAS Shields Holding
         //Applying Assault Cannons
         for(int i = 0; i<2; i++) {
             int e = 1 - i;
+            int s = _unitCounts[e][Database.SAS];
             for (int k = 0; k < _targetOrder[i].length; k++) {  //iterates over the targeting order
                 while (preFire[i] > 0) {
                     //Skip over sustains. Cruiser punches through
                     if(_targetOrder[e][k] == 5 || _targetOrder[e][k] == 6){
                         break;
                     } else if (_unitCounts[e][_targetOrder[e][k]] > 0) {   //if enemy unit count of current target in targeting order > 0
-                        _unitCounts[e][_targetOrder[e][k]]--;
-                        preFire[i]--;
+                        if(s > 0){ //SAS Shields Holding
+                            s--;
+                        }
+                        else {
+                            _unitCounts[e][_targetOrder[e][k]]--;
+                            preFire[i]--;
+                        }
                         if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
                             _unitCounts[e][Database.DESTROYER]++;
                             k = 0;
@@ -380,8 +387,6 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
         }
-
-
     }
 
     //Sustains
