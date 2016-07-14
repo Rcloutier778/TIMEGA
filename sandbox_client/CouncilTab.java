@@ -5,6 +5,8 @@ package sandbox_client;
  * 
  * @author dmayans
  */
+//todo make repeal work
+//todo make revote work
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -24,13 +26,13 @@ public class CouncilTab extends AbstractTab {
 	private Label _extra2;
 
 	private Text _pastTitle;
-	private Text _pastResolutions;
+	private Text _pastResText;
 
 	public CouncilTab() {
 		super(Client.COUNCIL);
 
 		_pastTitle = new Text("");
-		_pastResolutions = new Text("");
+		_pastResText = new Text("");
 		Pane pane = new Pane();
 		_root.setContent(pane);
 		
@@ -86,24 +88,21 @@ public class CouncilTab extends AbstractTab {
 		_pastTitle.setLayoutY(400);
 		_pastTitle.setStyle("-fx-font-weight:bold");
 
-		_pastResolutions.setLayoutX(40);
-		_pastResolutions.setLayoutY(420);
-		_pastResolutions.maxWidth(820);
-		_pastResolutions.setWrappingWidth(820);
+		_pastResText.setLayoutX(40);
+		_pastResText.setLayoutY(420);
+		_pastResText.maxWidth(820);
+		_pastResText.setWrappingWidth(820);
 
-		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResolutions);
+		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResText);
 		
 	}
 
-	private String[] currentResolution = new String[2];
 
 	public void resolved(String resolution1, String resolution2) {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
 				_pastTitle.setText("Past Resolutions");
-				currentResolution[0] = resolution1;
-				currentResolution[1] = resolution2;
 				_name1.setText(resolution1);
 				String pro1 = "For: " + Database.getPro(resolution1);
 				_pro1.setText(pro1);
@@ -121,20 +120,21 @@ public class CouncilTab extends AbstractTab {
 		});
 	}
 
-	public void result(String result[]) {
+	public void result() {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				String results = "";
+				String display = "";
 				for(int i=0; i<2; i++) {
-					if (result[i].equals("for")) {
-						results = results.concat(currentResolution[i] + ": " + Database.getPro(currentResolution[i]) + "\n");
-					} else{
-						results = results.concat(currentResolution[i] + ": " + Database.getCon(currentResolution[i]) + "\n");
+					for(String resolution: Database.resolutionKeys()){
+						if(Database.getRes(resolution).equals("for")){
+							display = display.concat(resolution + ": For: " + Database.getPro(resolution) + "\n");
+						}else{
+							display = display.concat(resolution + ": Against: " + Database.getCon(resolution) + "\n");
+						}
 					}
 				}
-				_pastResolutions.setText(_pastResolutions.getText() + results);
-
+				_pastResText.setText(display);
 			}
 		});
 	}

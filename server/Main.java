@@ -143,8 +143,8 @@ public class Main {
 	//Reloads server data from log file produced on shutdown.
 	public void broadcastReload(String filename){
 		try(BufferedReader br = new BufferedReader(new FileReader(filename))){
-			//Planets, Space Docks, Tech, Personnel, Empire Stage, End
-			boolean[] passed = {false, false, false, false, false, false};
+			//Planets, Space Docks, Tech, Personnel, Empire Stage, Resolution, End
+			boolean[] passed = {false, false, false, false, false, false, false};
 			ArrayList<String> playernames = new ArrayList<>();
 			for(int i = 0; i<ServerDatabase.PLAYERS.length;i++) {
 				playernames.add(ServerDatabase.PLAYERS[i].name);
@@ -176,8 +176,12 @@ public class Main {
 					passed[4] = true;
 					continue;
 				}
-				if(line.equals("EndFile")){
+				if(line.equals("Resolutions")){
 					passed[5] = true;
+					continue;
+				}
+				if(line.equals("EndFile")){
+					passed[6] = true;
 					break;
 				}
 				//Planets: Owner, Planet name
@@ -204,11 +208,20 @@ public class Main {
 				//Empire Stage
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						for(int i=0; i <= Integer.parseInt(splitline[1]); i++){
+						for(int i = ServerDatabase.EMPIRE_STAGE.get(splitline[0]); i <= Integer.parseInt(splitline[1]); i++){
 							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}
 
+				}
+				//Resolution
+				//
+				if(passed[5] && !passed[6]){
+					_currentResolutions[0] = splitline[0].replace("_"," ");
+					_currentResolutions[1] = splitline[2].replace("_"," ");
+					//result1, result2
+					String[] ret = {splitline[1],splitline[3]};
+					broadcastResolutionResult(ret);
 				}
 
 			}
@@ -291,6 +304,33 @@ public class Main {
 		this.broadcast(Protocol.ADVANCE, player + "\n");
 		writeColortext(clientName + "advanced his empire.", CLIENTOUT);
 		ServerDatabase.EMPIRE_LOCK.unlock();
+	}
+
+	private String[] _currentResolutions = new String[2];
+	public void broadcastResolution(String res1, String res2) {
+		_currentResolutions[0] = res1;
+		_currentResolutions[1] = res2;
+		this.broadcast(Protocol.SEND_RESOLUTION, res1 + "\n" + res2 + "\n");
+	}
+
+	public void broadcastResolutionResult(String result[]) {
+		ServerDatabase.RESOLUTION_LOCK.lock();
+		for(int i=0; i<2; i++){
+			if(_currentResolutions[i].equals("New Constitution") && result[i+2].equals("for")){
+				ServerDatabase.PAST_RESOLUTION.clear();
+				writeColortext( "Enacted New Constitution", CLIENTOUT);
+			}else if(_currentResolutions[i].equals("Repeal") && result[i+2].equals("for")){
+				ServerDatabase.PAST_RESOLUTION.remove(result[i+2]);
+				writeColortext( "Repealed " + result[i+2], CLIENTOUT);
+			}else{
+				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i],result[i]);
+				writeColortext("Voted on resolution.", CLIENTOUT);
+			}
+		}
+		//Current1, Result1, Current2, Result2, Repeal1, Repeal2
+		//todo make repeal and new const statements, implement revote
+		this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[0] + "\n" + result[0] + "\n" + _currentResolutions[1] + "\n" + result[1] + "\n");
+		ServerDatabase.RESOLUTION_LOCK.unlock();
 	}
 	
 	// MAP INFO
@@ -391,6 +431,27 @@ public class Main {
 						writer.write(ServerDatabase.EMPIRE_STAGE.get(s) + "\n");
 					}
 					ServerDatabase.EMPIRE_LOCK.unlock();
+
+					//Resolutions
+					//Resolution1, Result1, Resolution2, Result2
+					writer.write("Resolutions\n");
+					ServerDatabase.RESOLUTION_LOCK.lock();
+					int i=0;
+					for(String s: ServerDatabase.PAST_RESOLUTION.keySet()){
+						writer.write(s.replace(" ","_") + " ");
+						writer.write(ServerDatabase.PAST_RESOLUTION.get(s));
+						if(i==0){
+							writer.write(" ");
+							i++;
+						}else{
+							writer.write("\n");
+							i--;
+						}
+					}
+					ServerDatabase.RESOLUTION_LOCK.unlock();
+
+
+
 					writer.write("EndFile");
 					String timeLog = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
 					writer.write("\n" + timeLog);

@@ -10,12 +10,7 @@ package sandbox_client;
 import javafx.scene.paint.Color;
 import server.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.TreeSet;
+import java.util.*;
 
 
 
@@ -740,6 +735,7 @@ public class Database {
 		// ^ maps a resolution name to its "against" effect
 	private static final HashMap<String,String> EXTRAS = new HashMap<String,String>();
 		// ^ maps a resolution name to its extra effect, if present
+	private static final HashMap<String, String> RESOLUTIONS = new HashMap<String,String>();
 	
 	// populate the resolutions from the xml file
 	public static void addResolutionToDatabase(String name, String pro, String con, String extra) {
@@ -767,6 +763,27 @@ public class Database {
 			return EXTRAS.get(resolution);
 		}
 	}
+
+	//put
+	public static void putRes(String name, String result){
+		synchronized (RESOLUTIONS){
+			RESOLUTIONS.put(name, result);
+		}
+	}
+
+	//keys
+	public static Iterable<String> resolutionKeys(){
+		synchronized (RESOLUTIONS){
+			return new LinkedList<String>(RESOLUTIONS.keySet());
+		}
+	}
+
+	//get
+	public static String getRes(String name){
+		synchronized (RESOLUTIONS){
+			return RESOLUTIONS.get(name);
+		}
+	}
 	
 	
 	//      _     _           
@@ -781,6 +798,8 @@ public class Database {
 	public static final int CRUISER = 2;
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
+	public static final int DREAD_SUS = 5;
+	public static final int WAR_SUN_SUS = 6;
 	// keep codes and array synchronized!
 	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun"};
 	
@@ -836,7 +855,7 @@ public class Database {
 	
 	
 	
-	
+	//todo add stuff for resolution
 	
 	// clear the database upon disconnecting
 	public static void disconnection() {
