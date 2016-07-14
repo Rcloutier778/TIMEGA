@@ -49,6 +49,28 @@ import java.math.BigDecimal;
  - add in SASs (don't do this yet, wait until they appear in the rulebook)
  - make sure the simulator is appropriately handling the current personnel and technology (it should be pretty stable right now, only changing stuff with SASs in a bit)
 
+ Some comments:
+ - way too much noise. there's going to be a lot of nit-picky modifiers, don't try to cram them into the main screen. I would either make a popup or sidebar appear with all of the tiny things (like striker fleets movement, nebula, home system combat bonus, barony effect, a lot of racial abilities, even flagships if relevant).
+
+ - the user doesn't care how many trials were run (unless you also want to report the standard deviation, which is miles more useful, but no one is going to care about that either because it is presumably very small)
+
+ - too much vertical padding between unit boxes, drop it a lot
+
+ - the text on the right goes off the screen
+
+ - "targeting order" is cut off
+
+ - the start button is not intuitively placed- it should be after you input all of the information, not before
+
+ - it's very hard to parse the output text. put some line breaks between different sections
+
+ - I don't care how you handle bad input in the targeting order (either parse it as best you can, ignore it and use the default, or don't run the battle), but you have to give feedback. The user should know exactly what he did that is causing a problem (even if you do decide to parse it as best you can, you should still inform the user)
+
+ - the user needs a reminder about which character corresponds to which ship (I might recommend underlining the relevant character in the ship name)
+
+ - the grid layout doesn't work really well with the boxes and ship names. Try aligning the ship names to the right?
+
+ - the output text should not start above everything to its left if it doesn't end below everything to its left
  */
 
 public class CombatSimTab extends AbstractTab {
@@ -84,6 +106,10 @@ public class CombatSimTab extends AbstractTab {
 
     //Targeting order
     private int[][] _targetOrder = new int[2][7];
+
+    private GridPane _extraPane = new GridPane();
+
+    private GridPane ResultsPane = new GridPane();
 
     //make values cleared when you click on another tab
     public CombatSimTab() {
@@ -124,25 +150,25 @@ public class CombatSimTab extends AbstractTab {
         }
 
         //Labels for abnormal stuff affecting combat
-        Label[] _techLabels = new Label[2];
+        Label[] _extraLabels = new Label[2];
 
         //Striker Fleets Label
-        _techLabels[0] = new Label();
-        _techLabels[0].setText("Striker Fleets Movement");
-        _pane.add(_techLabels[0],2,9);
+        _extraLabels[0] = new Label();
+        _extraLabels[0].setText("Striker Fleets Movement");
+        _extraPane.add(_extraLabels[0],2,1);
 
         //Striker Fleets Field
         _strikerField.setPromptText("Striker Fleets");
         _strikerField.setMaxWidth(120);
-        _pane.add(_strikerField,2,10);
+        _extraPane.add(_strikerField,2,2);
 
         //Nebula Label
-        _techLabels[1] = new Label();
-        _techLabels[1].setText("In Nebula");
-        _pane.add(_techLabels[1],3,9);
+        _extraLabels[1] = new Label();
+        _extraLabels[1].setText("In Nebula");
+        _extraPane.add(_extraLabels[1],3,1);
 
         //Nebula checkbox
-        _pane.add(_defNeb, 3,10);
+        _extraPane.add(_defNeb, 3,2);
 
         //Targeting order Label
         _unitLabels[6] = new Label();
@@ -176,16 +202,27 @@ public class CombatSimTab extends AbstractTab {
                         results.setText("\n".concat(combatSim()));
                     }
                 }));
+        _pane.add(_start, 2, 9);
+
+
         GridPane.setHalignment(_start, HPos.CENTER);
 
         _pane.setAlignment(Pos.CENTER);
 
-        GridPane ResultsPane = new GridPane();
+        //Results pane
         ResultsPane.add(resultTitle,1,1);
         ResultsPane.add(results,1,2);
         ResultsPane.setMinWidth(300);
         ResultsPane.setVgap(10);
 
+        //Button to show extra pane
+        Button _extraButton = new Button(">>");
+        _extraPane.setVisible(false);
+        _extraButton.setOnAction(e -> movePane());
+        _pane.add(_extraButton,3,9);
+        _scenepane.add(_extraPane,2,1);
+        
+        //Pane gap
         _pane.setVgap(20);
         _pane.setHgap(60);
 
@@ -193,13 +230,17 @@ public class CombatSimTab extends AbstractTab {
         _pane.add(_namePane[PLAYER], 2, 1);
         _pane.add(_namePane[ENEMY], 3, 1);
 
-        _pane.add(_start, 1, 1);
         _scenepane.add(ResultsPane, 2, 1);
         _scenepane.add(_pane, 1, 1);
         _scenepane.setPadding(new Insets(0,180,60,0));
         _scenepane.setHgap(60);
         _scenepane.setAlignment(Pos.CENTER);
 
+    }
+
+    public void movePane(){
+        _extraPane.setVisible(!_extraPane.isVisible());
+        ResultsPane.setVisible(!ResultsPane.isVisible());
     }
 
     /**
@@ -222,38 +263,43 @@ public class CombatSimTab extends AbstractTab {
      * Reads the values entered into the textfield and assignes them to the unit numbers.
      * If the field is not filled, assigns 0.
      */
-    public void setUnits() {
+    public boolean setUnits() {
         for(int i=0; i<_names.length; i++) {
             for (int k = 0; k < Database.NUM_SHIPS; k++) {
                 _unitCounts[i][k] = (_unitFields[i][k].getNumber() < 0) ? 0 : _unitFields[i][k].getNumber();
                 _unitFields[i][k].setText((_unitCounts[i][k] == 0) ? "0" : Integer.toString(_unitCounts[i][k]));
             }
             if(!_targetOrderField[i].getText().isEmpty()){
-                String splitline[] =  _targetOrderField[i].getText().split("");
-                //CANNOT SUBSTITUTE NUMBERS WITH K.
-                for(int k=0; k<splitline.length; k++){
-                    switch (splitline[k]) {
-                        case "f":
-                            _targetOrder[i][k] = Database.FIGHTER;
-                            break;
-                        case "d":
-                            _targetOrder[i][k] = Database.DESTROYER;
-                            break;
-                        case "c":
-                            _targetOrder[i][k] = Database.CRUISER;
-                            break;
-                        case "n":
-                            _targetOrder[i][k] = Database.DREADNOUGHT;
-                            break;
-                        case "w":
-                            _targetOrder[i][k] = Database.WAR_SUN;
-                            break;
-                        case "D":
-                            _targetOrder[i][k] = Database.DREAD_SUS;
-                            break;
-                        case "W":
-                            _targetOrder[i][k] = Database.WAR_SUN_SUS;
-                            break;
+                if(_targetOrderField[i].getText().length() != 7){
+                    return false;
+                }
+                else {
+                    String splitline[] = _targetOrderField[i].getText().split("");
+                    //CANNOT SUBSTITUTE NUMBERS WITH K.
+                    for (int k = 0; k < splitline.length; k++) {
+                        switch (splitline[k]) {
+                            case "f":
+                                _targetOrder[i][k] = Database.FIGHTER;
+                                break;
+                            case "d":
+                                _targetOrder[i][k] = Database.DESTROYER;
+                                break;
+                            case "c":
+                                _targetOrder[i][k] = Database.CRUISER;
+                                break;
+                            case "n":
+                                _targetOrder[i][k] = Database.DREADNOUGHT;
+                                break;
+                            case "w":
+                                _targetOrder[i][k] = Database.WAR_SUN;
+                                break;
+                            case "D":
+                                _targetOrder[i][k] = Database.DREAD_SUS;
+                                break;
+                            case "W":
+                                _targetOrder[i][k] = Database.WAR_SUN_SUS;
+                                break;
+                        }
                     }
                 }
             }else{
@@ -262,6 +308,7 @@ public class CombatSimTab extends AbstractTab {
             }
 
         }
+        return true;
     }
 
     /**
@@ -415,7 +462,7 @@ public class CombatSimTab extends AbstractTab {
                     }
                 }
             }
-            
+
             if(Database.hasTechLocal(_names[i],"Auxiliary Drones") && _unitCounts[i][Database.DREADNOUGHT] > 0){
                 if(diceRoller() >= (_unitHitRate[i][Database.DREADNOUGHT]) + 3) {
                     hits[i]++;
@@ -527,6 +574,9 @@ public class CombatSimTab extends AbstractTab {
         }
         if(_names[ENEMY] == null){
             return "Choose the defender";
+        }
+        if(!setUnits()){
+            return "Invalid targeting order. \nMake sure to include sustains (capital letters).";
         }
 
         for(int i = 0; i<1000; i++) {
