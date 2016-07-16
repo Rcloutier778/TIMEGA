@@ -35,7 +35,13 @@ public class Database {
 	private static final HashMap<String, String> RACES = new HashMap<String,String>();
 		// ^ maps a player name to his race
 	
-	
+	//Return the races in play
+	public static Collection<String> allRaces(){
+		synchronized (RACES){
+			return RACES.values();
+		}
+	}
+
 	// returns the number of players
 	public static int numPlayers() {
 		synchronized(PLAYERS) {
@@ -798,9 +804,7 @@ public class Database {
 	public static final int CRUISER = 2;
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
-	public static final int DREAD_SUS = 5;
-	public static final int WAR_SUN_SUS = 6;
-	public static final int SAS = 7;
+	public static final int SAS = 5;
 	// keep codes and array synchronized!
 	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS"};
 	
