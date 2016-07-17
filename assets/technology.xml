@@ -72,7 +72,7 @@
     </tech>
     <tech color="green" prereq="Stasis Capsules" prereqAND="Enviro Compensator">
         <name>Hydroponics</name>
-        <effect>Your fleet supply is increased by one in all systems that don't contain any of your capital ships.</effect>
+        <effect>In all systems that do not contain any of your capital ships, you may have one more ship present than your fleet supply would normally allow.</effect>
     </tech>
     <tech color="green" prereq="Stasis Capsules" prereqOR="Antimass Deflectors">
         <name>Cybernetics</name>
