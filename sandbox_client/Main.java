@@ -25,9 +25,11 @@ public class Main extends Application {
 	 * 6) show progress in empire screen
 	 * 7) test reconnection of client a little bit more
 	 * 8) have client load style choices from local text file
-	 * 9) add creuss (planet) to game if ghosts of creuss are a race
 	 * 10) have client keep track of resources/influence/credits earned and spent
-	 * 11) have home systems automatically be captured and put sd on highest resource planet
+	 * 11) have home systems automatically be captured and put sd on highest resource planet and add creuss (planet) to game if ghosts of creuss are a race
+	 * 12) finish races (and xml)
+	 * 13) finish ships (and xml)
+	 * 14) arrow key input on tech and personnel page
 	 * 
 	 * Bugs:
 	 * 1) client crashes on server disconnect (low priority)

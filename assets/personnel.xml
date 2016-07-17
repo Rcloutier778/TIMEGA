@@ -72,7 +72,7 @@
     </person>
     <person color="green" tier="2">
         <name>Mechanic</name>
-        <effect>Each of your SASs roll two dice each combat round.</effect>
+        <effect>Each of your SASs rolls two dice each combat round.</effect>
     </person>
     <person color="green" tier="3">
         <name>Chancellor</name>
