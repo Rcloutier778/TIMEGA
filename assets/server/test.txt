@@ -1,6 +1,6 @@
 allplanets
 David 255 0 0 The Sardakk N'Orr
-Matt 0 255 0 The Arborec
-Tyler 0 0 255 The Ghosts of Creuss
+Matt 0 255 0 The Barony of Letnev
+Tyler 0 0 255 The Embers of Muaat
 Vlad 0 0 0 The Nekro Virus
 Richard 255 255 255 The Winnu
