@@ -140,6 +140,9 @@ public class CombatSimTab extends AbstractTab {
     //Counter for the Jol-Nar combat penalty
     private int[] _jolCounter = {0,0,0,0,0,0};
 
+    //boolean for Jol-Nar combat penalty
+    private boolean[] _jolPenalty = {false, false, false, false, false, false};
+
     //make values cleared when you click on another tab
     public CombatSimTab() {
         super(Client.SIMULATOR);
@@ -658,10 +661,11 @@ public class CombatSimTab extends AbstractTab {
                 }
 
                 //Jol-Nar combat counting
-                if(Database.raceOf(_names[e]).equals("The Universities of Jol-Nar")){
+                if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
                     _jolCounter[Database.DESTROYER] += ADT;
-                    if(_jolCounter[Database.DESTROYER] >5){
-                        _unitHitRate[e][Database.DESTROYER]--;
+                    if(_jolCounter[Database.DESTROYER] >5 && !_jolPenalty[Database.DESTROYER]){
+                        _unitHitRate[i][Database.DESTROYER]--;
+                        _jolPenalty[Database.DESTROYER] = true;
                     }
                 }
                 _unitCounts[e][Database.FIGHTER] -= ADT;
@@ -704,21 +708,31 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
 
+            //SAS Shields holding
+            while(preFire[i] >0 && s >0){
+                preFire[i]--;
+                s--;
+            }
+
             for (int k = 0; k < _targetOrder[i].length; k++) {  //iterates over the targeting order
                 while (preFire[i] > 0) {
                     //Skip over sustains. Cruiser punches through
                     if (_targetOrder[e][k] >4) {
                         break;
                     } else if (_unitCounts[e][_targetOrder[e][k]] > 0) {   //if DEFENDER unit count of current target in targeting order > 0
-                        if (s > 0) { //SAS Shields Holding
-                            s--;
-                        } else {
-                            _unitCounts[e][_targetOrder[e][k]]--;
-                            preFire[i]--;
-                            if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
-                                _unitCounts[e][Database.DESTROYER]++;
-                                k = 0;
+                        //Jol-Nar combat counting
+                        if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
+                            _jolCounter[Database.CRUISER] += preFire[i];
+                            if(_jolCounter[Database.CRUISER] >5 && !_jolPenalty[Database.CRUISER]){
+                                _unitHitRate[i][Database.CRUISER]--;
+                                _jolPenalty[Database.CRUISER] = true;
                             }
+                        }
+                        _unitCounts[e][_targetOrder[e][k]]--;
+                        preFire[i]--;
+                        if (k == Database.DREADNOUGHT && Database.hasTechLocal(_names[e], "Transfabrication")) {
+                            _unitCounts[e][Database.DESTROYER]++;
+                            k = 0;
                         }
                     } else{break;}
                 }
@@ -761,12 +775,28 @@ public class CombatSimTab extends AbstractTab {
                 for (int l = 0; l < _unitCounts[i][k]; l++) {
                     for (int die = 0; die < _unitDice[i][k]; die++) {
                         if (diceRoller() >= _unitHitRate[i][k]) {
-                            if (k == Database.CRUISER) {
-                                cruiserHits[i]++;
-                            } else {
-                                hits[i]++;
-                                if(k==Database.GROUND_FORCE && roundNumber == 1){
-                                    _unitHitRate[i][Database.GROUND_FORCE] = 11;
+                            //Naalu Shields
+                            if(Database.raceOf(_names[e]).equals("The Naalu Collective") && _raceEffects[e].get("Naalu") >0){
+                                _raceEffects[e].put("Naalu", _raceEffects[e].get("Naalu")-1);
+                            }
+                            else{
+                                //Jol-Nar
+                                if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
+                                    _jolCounter[k]++;
+                                    if(_jolCounter[k] >5 && !_jolPenalty[k]){
+                                        _unitHitRate[i][k]--;
+                                        _jolPenalty[k] = true;
+                                    }
+                                }
+                                if (k == Database.CRUISER) {
+                                    cruiserHits[i]++;
+                                }
+                                else {
+                                    hits[i]++;
+                                    //Federation of Sol
+                                    if (k == Database.GROUND_FORCE && roundNumber == 1) {
+                                        _unitHitRate[i][Database.GROUND_FORCE] = 11;
+                                    }
                                 }
                             }
                         }
@@ -776,18 +806,6 @@ public class CombatSimTab extends AbstractTab {
             if(Database.hasTechLocal(_names[i],"Auxiliary Drones") && _unitCounts[i][Database.DREADNOUGHT] > 0){
                 if(diceRoller() >= (_unitHitRate[i][Database.DREADNOUGHT]) + 3) {
                     hits[i]++;
-                }
-            }
-
-            //Naalu Shields
-            if(Database.raceOf(_names[e]).equals("The Naalu Collective")){
-                while(cruiserHits[i] >0 && _raceEffects[e].get("Naalu") >0){
-                    cruiserHits[i]--;
-                    _raceEffects[e].put("Naalu", _raceEffects[e].get("Naalu")-1);
-                }
-                while(hits[i] >0 && _raceEffects[e].get("Naalu") >0){
-                    hits[i]--;
-                    _raceEffects[e].put("Naalu", _raceEffects[e].get("Naalu")-1);
                 }
             }
         }
@@ -889,7 +907,7 @@ public class CombatSimTab extends AbstractTab {
      */
     public String combatSim() {
         //Average remaining units, wins, losses
-        Float[] avgUrem = {(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0};
+        Float[] avgUrem = {(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0,(float) 0, (float) 0};
 
         _names[ATTACKER] = _eOptions[ATTACKER].getValue();
         _names[DEFENDER] = _eOptions[DEFENDER].getValue(); // gets the value selected by the combobox
@@ -912,6 +930,7 @@ public class CombatSimTab extends AbstractTab {
             _unitHitRate[DEFENDER] = Database.getBaseHitRates();
 
             _jolCounter = new int[]{0,0,0,0,0,0};
+            _jolPenalty = new boolean[]{false, false, false, false, false, false};
 
             setUnits();
 
