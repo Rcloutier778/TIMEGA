@@ -121,8 +121,8 @@ public class CombatSimTab extends AbstractTab {
     private NumberTextField[][] _raceField = new NumberTextField[2][2];
 
     //Contains the T/F and # value associated with a racial ability
-    //Key = String, Values = int/boolean
-    private HashMap[] _raceEffects = new HashMap[2];
+    //Key = String, Values = int. 0=false, 1=true, other==embers
+    private HashMap<String,Integer>[] _raceEffects = new HashMap[2];
 
     //Button to show extras pane
     private Button _extraButton = new Button(">>");
@@ -200,7 +200,7 @@ public class CombatSimTab extends AbstractTab {
 
         _extraPane.setHgap(20);
         _extraPane.setVgap(20);
-        _extraPane.setHalignment(_defNeb, HPos.CENTER);
+        GridPane.setHalignment(_defNeb, HPos.CENTER);
 
         //Targeting order Label
         _unitLabels[6] = new Label();
@@ -295,7 +295,7 @@ public class CombatSimTab extends AbstractTab {
                 _raceButton[i][0] = new CheckBox();
                 _raceButton[i][0].setAlignment(Pos.CENTER);
                 _extraPane.add(_raceButton[i][0], i + 2, _rowOffset);
-                _extraPane.setHalignment(_raceButton[i][0], HPos.CENTER);
+                GridPane.setHalignment(_raceButton[i][0], HPos.CENTER);
             }
             _rowOffset++;
         }
@@ -383,8 +383,8 @@ public class CombatSimTab extends AbstractTab {
             _raceEffects[DEFENDER].put("Embers",_raceField[DEFENDER][0].getNumber());
         }
         if(Database.allRaces().contains("The Barony of Letnev")){
-            _raceEffects[ATTACKER].put("Letnev",_raceButton[ATTACKER][0].isSelected());
-            _raceEffects[DEFENDER].put("Letnev",_raceButton[DEFENDER][0].isSelected());
+            _raceEffects[ATTACKER].put("Letnev",(_raceButton[ATTACKER][0].isSelected()? 1:0));
+            _raceEffects[DEFENDER].put("Letnev",(_raceButton[DEFENDER][0].isSelected() ? 1:0));
         }
         return true;
     }
@@ -572,7 +572,7 @@ public class CombatSimTab extends AbstractTab {
                                 k = 0;
                             }
                             if(_raceEffects[e].containsKey("Letnev")) {
-                                _raceEffects[e].put("Letnev", ((boolean) _raceEffects[e].get("Letnev") && k != Database.DREADNOUGHT));
+                                _raceEffects[e].put("Letnev", (_raceEffects[e].get("Letnev")==1 && k != Database.DREADNOUGHT)? 1:0);
                             }
                         }
                     } else{break;}
@@ -585,7 +585,7 @@ public class CombatSimTab extends AbstractTab {
             DREAD_SUS[k] = _unitCounts[k][Database.DREADNOUGHT];
             WAR_SUS[k] = _unitCounts[k][Database.WAR_SUN];
             if(_raceEffects[k].containsKey("Letnev")) {
-                if (!(boolean) _raceEffects[k].get("Letnev") && DREAD_SUS[k] > 0 && Database.raceOf(_names[k]).equals("The Barony of Letnev")) {
+                if (_raceEffects[k].get("Letnev")==0 && DREAD_SUS[k] > 0 && Database.raceOf(_names[k]).equals("The Barony of Letnev")) {
                     DREAD_SUS[k]++;
                 }
             }
@@ -627,7 +627,7 @@ public class CombatSimTab extends AbstractTab {
                 }
                 //Barony Effect: #Dread >=5
                 if(_raceEffects[i].containsKey("Letnev")) {
-                    hits[i] += (k == Database.DREADNOUGHT && Database.raceOf(_names[i]).equals("The Barony of Letnev") && (boolean) _raceEffects[i].get("Letnev") && _unitCounts[i][k] > 0 && diceRoller() >= _unitHitRate[i][k]) ? 1 : 0;
+                    hits[i] += (k == Database.DREADNOUGHT && Database.raceOf(_names[i]).equals("The Barony of Letnev") && _raceEffects[i].get("Letnev")==1 && _unitCounts[i][k] > 0 && diceRoller() >= _unitHitRate[i][k]) ? 1 : 0;
                 }
             }
 
@@ -654,7 +654,7 @@ public class CombatSimTab extends AbstractTab {
                             k = 0;
                         }
                         if(_raceEffects[e].containsKey("Letnev")) {
-                            _raceEffects[e].put("Letnev", ((boolean) _raceEffects[e].get("Letnev") && k != Database.DREADNOUGHT));
+                            _raceEffects[e].put("Letnev", (_raceEffects[e].get("Letnev")==1 && k != Database.DREADNOUGHT)? 1:0);
                         }
                     } else {break;}
                 }
@@ -689,7 +689,7 @@ public class CombatSimTab extends AbstractTab {
                                 k = 0;
                             }
                             if(_raceEffects[e].containsKey("Letnev")) {
-                                _raceEffects[e].put("Letnev", ((boolean) _raceEffects[e].get("Letnev") && k != Database.DREADNOUGHT));
+                                _raceEffects[e].put("Letnev", (_raceEffects[e].get("Letnev")==1 && k != Database.DREADNOUGHT)? 1:0);
                             }
                         } else {break;}
                     }
