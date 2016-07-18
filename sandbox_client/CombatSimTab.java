@@ -299,7 +299,7 @@ public class CombatSimTab extends AbstractTab {
      * Sets up the race fields and buttons in extraPane
      */
     public void setRaceEffects(){
-        Label[] _raceLabels = new Label[3];
+        Label[] _raceLabels = new Label[_racialNumber];
         int _rowOffset = 4;
         /**
          //Ember
@@ -375,7 +375,7 @@ public class CombatSimTab extends AbstractTab {
             _extraPane.add(_raceLabels[4], 1, _rowOffset);
             for(int i=0;i<2;i++) {
                 _raceButton[i][1] = new CheckBox();
-                _extraPane.add(_raceButton[i][1], 3, _rowOffset);
+                _extraPane.add(_raceButton[i][1], i+2, _rowOffset);
                 GridPane.setHalignment(_raceButton[i][1], HPos.CENTER);
             }
             _rowOffset++;
@@ -478,6 +478,32 @@ public class CombatSimTab extends AbstractTab {
                 _raceEffects[i].put("Naalu", _raceNumberField[i][1].getNumber());
             }
 
+            //Jol-Nar
+            if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
+                String splitline[] = _raceField[i][1].getText().split("");
+                for (int k = 0; k < splitline.length; k++) {
+                    switch (splitline[k]) {
+                        case "f":
+                            _jolPenalty[Database.FIGHTER] = true;
+                            break;
+                        case "d":
+                            _jolPenalty[Database.DESTROYER] = true;
+                            break;
+                        case "c":
+                            _jolPenalty[Database.CRUISER] = true;
+                            break;
+                        case "n":
+                            _jolPenalty[Database.DREADNOUGHT] = true;
+                            break;
+                        case "w":
+                            _jolPenalty[Database.WAR_SUN] = true;
+                            break;
+                        case "S":
+                            _jolPenalty[Database.SAS] = true;
+                            break;
+                    }
+                }
+            }
 
         }
 
@@ -539,6 +565,7 @@ public class CombatSimTab extends AbstractTab {
                 _unitHitRate[i][Database.FIGHTER] -= (Database.empireStageOf(_names[i])-1 <0 ? 0: Database.empireStageOf(_names[i])-1);
             }
 
+
             if(Database.raceOf(_names[i]).equals("The Sardakk N'Orr") && _raceButton[i][1].isSelected()){
                 for(int k=0; k<Database.NUM_SHIPS-1; k++) {
                     _unitHitRate[i][k]--;
@@ -547,26 +574,9 @@ public class CombatSimTab extends AbstractTab {
 
             if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
                 String splitline[] = _raceField[i][1].getText().split("");
-                for (int k = 0; k < splitline.length; k++) {
-                    switch (splitline[k]) {
-                        case "f":
-                            _unitHitRate[i][Database.FIGHTER]++;
-                            break;
-                        case "d":
-                            _unitHitRate[i][Database.DESTROYER]++;
-                            break;
-                        case "c":
-                            _unitHitRate[i][Database.CRUISER]++;
-                            break;
-                        case "n":
-                            _unitHitRate[i][Database.DREADNOUGHT]++;
-                            break;
-                        case "w":
-                            _unitHitRate[i][Database.WAR_SUN]++;
-                            break;
-                        case "S":
-                            _unitHitRate[i][Database.SAS]++;
-                            break;
+                for (int k = 0; k < _jolPenalty.length; k++) {
+                    if(_jolPenalty[k]){
+                        _unitHitRate[i][k]++;
                     }
                 }
             }
@@ -663,9 +673,9 @@ public class CombatSimTab extends AbstractTab {
                 //Jol-Nar combat counting
                 if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
                     _jolCounter[Database.DESTROYER] += ADT;
-                    if(_jolCounter[Database.DESTROYER] >5 && !_jolPenalty[Database.DESTROYER]){
+                    if(_jolCounter[Database.DESTROYER] >5 && _jolPenalty[Database.DESTROYER]){
                         _unitHitRate[i][Database.DESTROYER]--;
-                        _jolPenalty[Database.DESTROYER] = true;
+                        _jolPenalty[Database.DESTROYER] = false;
                     }
                 }
                 _unitCounts[e][Database.FIGHTER] -= ADT;
@@ -723,9 +733,9 @@ public class CombatSimTab extends AbstractTab {
                         //Jol-Nar combat counting
                         if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
                             _jolCounter[Database.CRUISER] += preFire[i];
-                            if(_jolCounter[Database.CRUISER] >5 && !_jolPenalty[Database.CRUISER]){
+                            if(_jolCounter[Database.CRUISER] >5 && _jolPenalty[Database.CRUISER]){
                                 _unitHitRate[i][Database.CRUISER]--;
-                                _jolPenalty[Database.CRUISER] = true;
+                                _jolPenalty[Database.CRUISER] = false;
                             }
                         }
                         _unitCounts[e][_targetOrder[e][k]]--;
@@ -783,9 +793,9 @@ public class CombatSimTab extends AbstractTab {
                                 //Jol-Nar
                                 if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
                                     _jolCounter[k]++;
-                                    if(_jolCounter[k] >5 && !_jolPenalty[k]){
+                                    if(_jolCounter[k] >5 && _jolPenalty[k]){
                                         _unitHitRate[i][k]--;
-                                        _jolPenalty[k] = true;
+                                        _jolPenalty[k] = false;
                                     }
                                 }
                                 if (k == Database.CRUISER) {
@@ -953,11 +963,22 @@ public class CombatSimTab extends AbstractTab {
                 return "Error";
             }
 
+
+
             //Add number of ships remaining to average
-            for (int l = 0; l < Database.NUM_SHIPS; l++) {
+            for (int l = 0; l < Database.NUM_SHIPS-1; l++) {
                 avgUrem[l] += _unitCounts[ATTACKER][l];
                 avgUrem[l + 5] += _unitCounts[DEFENDER][l];
             }
+
+            //Add number of stolen goods to average if mentak
+            for(int k=0; k<2; k++){
+                if(Database.raceOf(_names[k]).equals("The Mentak Coalition")){
+                    avgUrem[13] += _raceEffects[k].get("Mentak Goods");
+                }
+            }
+
+
 
             int remdread[] = {_unitCounts[ATTACKER][Database.DREADNOUGHT], _unitCounts[DEFENDER][Database.DREADNOUGHT]};
             int remdest[] = {_unitCounts[ATTACKER][Database.DESTROYER], _unitCounts[DEFENDER][Database.DESTROYER]};
@@ -970,9 +991,6 @@ public class CombatSimTab extends AbstractTab {
             }
         }
 
-
-        //todo get average stolen goods for mentak and average combat penalties removed for jol-nar
-
         //Compute average
         for(int i = 0; i < 10; i++){
             avgUrem[i] /= 1000;
@@ -980,6 +998,8 @@ public class CombatSimTab extends AbstractTab {
         avgUrem[10] /= 10;
         avgUrem[11] /= 10;
         avgUrem[12] /= 10;
+        avgUrem[13] /= 1000;
+
         String[] prefix = {"Attacker Victory = ", "Defender Victory = ", "Stalemate = "};
         String results = "\nOut of 1000 trials, the results were: \n";
         for(int i=0; i<3; i++){
@@ -990,14 +1010,14 @@ public class CombatSimTab extends AbstractTab {
             results = results.concat(Database.nameOfShip(i) + ": ").concat((new BigDecimal(Float.toString(avgUrem[i])).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
         }
         if(Database.raceOf(_names[ATTACKER]).equals("The Mentak Coalition")){
-            results = results.concat("Stolen Goods obtained: " + _raceEffects[ATTACKER].get("Mentak Goods"));
+            results = results.concat("Stolen Goods obtained: " + avgUrem[13]);
         }
         results = results.concat("\n" + _names[DEFENDER] + " had the following average remaining units: \n");
         for(int i = 0; i<5; i++){
             results = results.concat(Database.nameOfShip(i) + ": ").concat((new BigDecimal(Float.toString(avgUrem[i+5])).setScale(2, BigDecimal.ROUND_HALF_EVEN).toString())).concat("\n");
         }
         if(Database.raceOf(_names[DEFENDER]).equals("The Mentak Coalition")){
-            results = results.concat("Stolen Goods obtained: " + _raceEffects[DEFENDER].get("Mentak Goods"));
+            results = results.concat("Stolen Goods obtained: " + avgUrem[13]);
         }
         return results;
     }
