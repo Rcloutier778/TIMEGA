@@ -183,21 +183,21 @@ public class CombatSimTab extends AbstractTab {
             _pane.add(_unitFields[DEFENDER][k], 3, k + 2);
         }
 
-        _extraPane.add(new Label("Attacker Extras"),2,1);
-        _extraPane.add(new Label("Defender Extras"),3,1);
+        _extraPane.add(new Label("Attacker Extras"),1,1);
+        _extraPane.add(new Label("Defender Extras"),2,1);
 
         //Striker Fleets
-        _extraPane.add(new Label("Striker Fleets"),1,2);
+        _extraPane.add(new Label("Striker Fleets"),0,2);
         _extraPane.getChildren().get(2).setOnMouseEntered(e-> Tooltip.install(_extraPane.getChildren().get(2), new Tooltip("Number of extra movement \nfor Striker Fleets")));
         _strikerField.setPromptText("Striker Fleets");
         _strikerField.setMaxWidth(90);
-        _extraPane.add(_strikerField,2,2);
+        _extraPane.add(_strikerField,1,2);
 
         //Nebula
-        _extraPane.add(new Label("In Nebula"), 1, 3);
+        _extraPane.add(new Label("In Nebula"), 0, 3);
         _extraPane.getChildren().get(4).setOnMouseEntered(e -> Tooltip.install(_extraPane.getChildren().get(4), new Tooltip("If defender is in a nebula")));
         _defNeb.setAlignment(Pos.CENTER);
-        _extraPane.add(_defNeb, 3, 3);
+        _extraPane.add(_defNeb, 2, 3);
 
         _extraPane.setHgap(20);
         _extraPane.setVgap(20);
@@ -207,13 +207,13 @@ public class CombatSimTab extends AbstractTab {
         _unitLabels[6] = new Label();
         _unitLabels[6].setText("Targeting Order:");
         _unitLabels[6].setTooltip(new Tooltip("Use capital letters for sustains.\nDefault order is WNfdcnw"));
-        _pane.add(_unitLabels[6], 1, 9);
+        _pane.add(_unitLabels[6], 0, 9);
 
         //Targeting order Fields
         for(int i=0; i<2; i++){
             _targetOrderField[i].setMaxWidth(90);
             _targetOrderField[i].setPromptText("Target Order");
-            _pane.add(_targetOrderField[i],i+2,9);
+            _pane.add(_targetOrderField[i],i+1,9);
         }
 
 
@@ -252,7 +252,7 @@ public class CombatSimTab extends AbstractTab {
         _extraPane.setVisible(false);
         _extraButton.setOnAction(e -> movePane());
         _pane.add(_extraButton, 3, 10);
-        _scenepane.add(_extraPane, 2, 1);
+        _scenepane.add(_extraPane, 1, 1);
         
         //Pane gap
         _pane.setVgap(20);
@@ -262,8 +262,8 @@ public class CombatSimTab extends AbstractTab {
         _pane.add(_namePane[ATTACKER], 2, 1);
         _pane.add(_namePane[DEFENDER], 3, 1);
 
-        _scenepane.add(ResultsPane, 2, 1);
-        _scenepane.add(_pane, 1, 1);
+        _scenepane.add(ResultsPane, 1, 1);
+        _scenepane.add(_pane, 0, 1);
         _scenepane.setPadding(new Insets(0,180,60,0));
         _scenepane.setHgap(60);
         _scenepane.setAlignment(Pos.CENTER);
@@ -319,9 +319,9 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The Ghosts of Creuss")){
             _raceLabels[0] = new Label("Wormhole");
             _raceLabels[0].setTooltip(new Tooltip("Are the Creuss fighting\nin a wormhole system?"));
-            _extraPane.add(_raceLabels[0], 1, _rowOffset);
+            _extraPane.add(_raceLabels[0], 0, _rowOffset);
             _raceButton[DEFENDER][0] = new CheckBox();
-            _extraPane.add(_raceButton[DEFENDER][0], 3, _rowOffset);
+            _extraPane.add(_raceButton[DEFENDER][0], 2, _rowOffset);
             GridPane.setHalignment(_raceButton[DEFENDER][0], HPos.CENTER);
             _rowOffset++;
         }
@@ -330,11 +330,11 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The L1Z1X Mindnet")){
             _raceLabels[1] = new Label("L1Z1X");
             _raceLabels[1].setTooltip(new Tooltip("Number of adjacent systems\nwith a friendly dreadnought"));
-            _extraPane.add(_raceLabels[1], 1, _rowOffset);
+            _extraPane.add(_raceLabels[1], 0, _rowOffset);
             for(int i=0;i<2;i++){
                 _raceNumberField[i][0] = new NumberTextField();
                 _raceNumberField[i][0].setMaxWidth(80);
-                _extraPane.add(_raceNumberField[i][0],i+2,_rowOffset);
+                _extraPane.add(_raceNumberField[i][0],i+1,_rowOffset);
                 _raceNumberField[i][0].setPromptText("Adj. Sys w/ n");
             }
             _rowOffset++;
@@ -344,11 +344,11 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The Mentak Coalition")){
             _raceLabels[2] = new Label("Mentak");
             _raceLabels[2].setTooltip(new Tooltip("Pre-Combat ability.\nList in the same way\nas targeting order."));
-            _extraPane.add(_raceLabels[2], 1, _rowOffset);
+            _extraPane.add(_raceLabels[2], 0, _rowOffset);
             for(int i=0;i<2;i++){
                 _raceField[i][0] = new TextField();
                 _raceField[i][0].setMaxWidth(80);
-                _extraPane.add(_raceField[i][0],i+2,_rowOffset);
+                _extraPane.add(_raceField[i][0],i+1,_rowOffset);
                 _raceField[i][0].setPromptText("R. ability");
             }
             _rowOffset++;
@@ -358,11 +358,11 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The Naalu Collective")){
             _raceLabels[3] = new Label("Naalu");
             _raceLabels[3].setTooltip(new Tooltip("Number of shields"));
-            _extraPane.add(_raceLabels[3], 1, _rowOffset);
+            _extraPane.add(_raceLabels[3], 0, _rowOffset);
             for(int i=0;i<2;i++){
                 _raceNumberField[i][1] = new NumberTextField();
                 _raceNumberField[i][1].setMaxWidth(80);
-                _extraPane.add(_raceNumberField[i][0],i+2,_rowOffset);
+                _extraPane.add(_raceNumberField[i][0],i+1,_rowOffset);
                 _raceNumberField[i][1].setPromptText("Shields");
             }
             _rowOffset++;
@@ -372,10 +372,10 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The Sardakk N'Orr")){
             _raceLabels[4] = new Label("Sardakk");
             _raceLabels[4].setTooltip(new Tooltip("Exhaust a spacedock"));
-            _extraPane.add(_raceLabels[4], 1, _rowOffset);
+            _extraPane.add(_raceLabels[4], 0, _rowOffset);
             for(int i=0;i<2;i++) {
                 _raceButton[i][1] = new CheckBox();
-                _extraPane.add(_raceButton[i][1], i+2, _rowOffset);
+                _extraPane.add(_raceButton[i][1], i+1, _rowOffset);
                 GridPane.setHalignment(_raceButton[i][1], HPos.CENTER);
             }
             _rowOffset++;
@@ -385,12 +385,45 @@ public class CombatSimTab extends AbstractTab {
         if(Database.allRaces().contains("The Universities of Jol-Nar")){
             _raceLabels[5] = new Label("Jol-Nar");
             _raceLabels[5].setTooltip(new Tooltip("Ships that the Jol-Nar\nhave a combat penalty on.\nList in the same way\nas targeting order.\nS for SAS"));
-            _extraPane.add(_raceLabels[5], 1, _rowOffset);
+            _extraPane.add(_raceLabels[5], 0, _rowOffset);
             for(int i=0;i<2;i++){
                 _raceField[i][1] = new TextField();
                 _raceField[i][1].setMaxWidth(80);
-                _extraPane.add(_raceField[i][1],i+2,_rowOffset);
+                _extraPane.add(_raceField[i][1],i+1,_rowOffset);
                 _raceField[i][1].setPromptText("R. ability");
+            }
+            _rowOffset++;
+        }
+
+        //Hacan
+        if(Database.allRaces().contains("The Emirates of Hacan")){
+            _raceLabels[6] = new Label("Hacan");
+            _raceLabels[6].setTooltip(new Tooltip("Fighters +1"));
+            _extraPane.add(_raceLabels[6],0,_rowOffset);
+            for(int i=0;i<2;i++) {
+                _raceButton[i][2] = new CheckBox();
+                _extraPane.add(_raceButton[i][2], i+1, _rowOffset);
+                GridPane.setHalignment(_raceButton[i][2], HPos.CENTER);
+            }
+            _rowOffset++;
+
+            _raceLabels[7] = new Label("Hacan (cont.)");
+            _raceLabels[7].setTooltip(new Tooltip("AFB +1"));
+            _extraPane.add(_raceLabels[7],0,_rowOffset);
+            for(int i=0;i<2;i++) {
+                _raceButton[i][3] = new CheckBox();
+                _extraPane.add(_raceButton[i][3], i+1, _rowOffset);
+                GridPane.setHalignment(_raceButton[i][3], HPos.CENTER);
+            }
+            _rowOffset++;
+
+            _raceLabels[8] = new Label("Hacan (cont.)");
+            _raceLabels[8].setTooltip(new Tooltip("War Suns +2"));
+            _extraPane.add(_raceLabels[8],0,_rowOffset);
+            for(int i=0;i<2;i++) {
+                _raceButton[i][4] = new CheckBox();
+                _extraPane.add(_raceButton[i][4], i+1, _rowOffset);
+                GridPane.setHalignment(_raceButton[i][4], HPos.CENTER);
             }
             _rowOffset++;
         }
@@ -573,11 +606,19 @@ public class CombatSimTab extends AbstractTab {
             }
 
             if(Database.raceOf(_names[i]).equals("The Universities of Jol-Nar")){
-                String splitline[] = _raceField[i][1].getText().split("");
                 for (int k = 0; k < _jolPenalty.length; k++) {
                     if(_jolPenalty[k]){
                         _unitHitRate[i][k]++;
                     }
+                }
+            }
+
+            if(Database.raceOf(_names[i]).equals("The Emirates of Hacan")){
+                if(_raceButton[i][2].isSelected()){
+                    _unitHitRate[i][Database.FIGHTER]++;
+                }
+                if(_raceButton[i][4].isSelected()){
+                    _unitHitRate[i][Database.WAR_SUN] += 2;
                 }
             }
 
@@ -643,21 +684,30 @@ public class CombatSimTab extends AbstractTab {
             // i is the current ATTACKER
             // e is the DEFENDER of the current ATTACKER
             int e = 1 - i;
-            
             //ADT
             if (_unitCounts[i][Database.FIGHTER] > 3) { //if ADT/AFB can be done
                 int ADT = 0;
                 if (Database.hasTechLocal(_names[i], "ADT")) {  //ADT
                     while(!((ADT < (_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS])) && (ADT < _unitCounts[e][Database.FIGHTER]))){
                         for (int k = 0; k < ((_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS]) * _unitCounts[e][Database.FIGHTER] )/ 4; k++) {
-                            if (diceRoller() >= (_unitHitRate[i][Database.DESTROYER] - 1)) {
+                            if(Database.raceOf(_names[i]).equals("The Emirates of Hacan")
+                                    && _raceButton[i][3].isSelected()
+                                    && diceRoller() >= (_unitHitRate[i][Database.DESTROYER] - 2)){
+                                ADT++;
+                            }
+                            else if (diceRoller() >= (_unitHitRate[i][Database.DESTROYER] - 1)) {
                                 ADT++;
                             }
                         }
                     }
                 } else { //AFB
                     for (int k = 0; k < ((_unitCounts[i][Database.DESTROYER] + _unitCounts[i][Database.SAS]) * _unitCounts[e][Database.FIGHTER] )/ 4; k++) {
-                        if (diceRoller() >= _unitHitRate[i][Database.DESTROYER]) {
+                        if(Database.raceOf(_names[i]).equals("The Emirates of Hacan")
+                                && _raceButton[i][3].isSelected()
+                                && diceRoller() >= (_unitHitRate[i][Database.DESTROYER] - 1)){
+                            ADT++;
+                        }
+                        else if (diceRoller() >= _unitHitRate[i][Database.DESTROYER]) {
                             ADT++;
                         }
                     }
