@@ -5,6 +5,7 @@ package sandbox_client;
  */
 
 import server.Player;
+import server.ServerDatabase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -250,8 +251,26 @@ public class Server implements Runnable {
 
 			//todo make sure repeal doesn't slip past.
 			for(int i=0; i<2; i++){
-				if(!result[i*2].equals("New Constitution") || !result[i*2].equals("Repeal") || !result[i*2].equals("Revote")) {
+				if(result[i*2].equals("Repeal") && result[(i*2)+1].equals("for")){
+					ServerDatabase.RESOLUTION_LOCK.lock();
+					for(String s : Database.resolutionKeys()){
+						if(!ServerDatabase.PAST_RESOLUTION.keySet().contains(s)){
+							Database.removePast(s);
+						}
+					}
+					ServerDatabase.RESOLUTION_LOCK.unlock();
+				}
+				else if(result[i*2].equals("Revote")){
+					//do nothing
+				}
+				else{
 					Database.putRes(result[i*2], result[(i*2)+1]);
+				}
+			}
+
+			for(int i=0; i<2; i++) {
+				if (result[i*2].equals("New Constitution") && result[(i*2)+1].equals("for")) {
+					Database.clearPast();
 				}
 			}
 

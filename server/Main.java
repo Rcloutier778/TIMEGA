@@ -320,10 +320,12 @@ public class Main {
 				ServerDatabase.PAST_RESOLUTION.clear();
 				writeColortext( "Enacted New Constitution", CLIENTOUT);
 			}else if(_currentResolutions[i].equals("Repeal") && result[i+2].equals("for")){
-				ServerDatabase.PAST_RESOLUTION.remove(result[i+2]);
+				ServerDatabase.PAST_RESOLUTION.remove(result[i + 2]);
 				writeColortext( "Repealed " + result[i+2], CLIENTOUT);
-			}else{
-				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i],result[i]);
+			}else if (_currentResolutions[i].equals("Revote")) {
+				//do nothing
+			} else {
+				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i], result[i]);
 				writeColortext("Voted on resolution.", CLIENTOUT);
 			}
 		}

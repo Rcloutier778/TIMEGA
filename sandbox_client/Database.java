@@ -741,8 +741,8 @@ public class Database {
 		// ^ maps a resolution name to its "against" effect
 	private static final HashMap<String,String> EXTRAS = new HashMap<String,String>();
 		// ^ maps a resolution name to its extra effect, if present
-	private static final HashMap<String, String> RESOLUTIONS = new HashMap<String,String>();
-	
+	private static final HashMap<String, String> PAST_RESOLUTIONS = new HashMap<String,String>();
+
 	// populate the resolutions from the xml file
 	public static void addResolutionToDatabase(String name, String pro, String con, String extra) {
 		PROS.put(name, pro);
@@ -772,22 +772,36 @@ public class Database {
 
 	//put
 	public static void putRes(String name, String result){
-		synchronized (RESOLUTIONS){
-			RESOLUTIONS.put(name, result);
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.put(name, result);
 		}
 	}
 
 	//keys
 	public static Iterable<String> resolutionKeys(){
-		synchronized (RESOLUTIONS){
-			return new LinkedList<String>(RESOLUTIONS.keySet());
+		synchronized (PAST_RESOLUTIONS){
+			return new LinkedList<String>(PAST_RESOLUTIONS.keySet());
 		}
 	}
 
 	//get
 	public static String getRes(String name){
-		synchronized (RESOLUTIONS){
-			return RESOLUTIONS.get(name);
+		synchronized (PAST_RESOLUTIONS){
+			return PAST_RESOLUTIONS.get(name);
+		}
+	}
+
+	//clear Past
+	public static void clearPast(){
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.clear();
+		}
+	}
+
+	//remove Past resolution
+	public static void removePast(String name){
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.remove(name);
 		}
 	}
 	

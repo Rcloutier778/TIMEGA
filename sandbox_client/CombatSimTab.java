@@ -759,7 +759,8 @@ public class CombatSimTab extends AbstractTab {
         }
 
         //Striker Fleets
-        if(Database.hasTechLocal(_names[ATTACKER], "Striker Fleets")){
+        if(Database.hasTechLocal(_names[ATTACKER], "Striker Fleets") && _unitCounts[ATTACKER][Database.FIGHTER] < 6
+                && (_unitCounts[ATTACKER][Database.DREADNOUGHT] + _unitCounts[ATTACKER][Database.WAR_SUN]) <2){
             _unitHitRate[ATTACKER][Database.DESTROYER] -= ((_strikerField.getNumber() < 0) ? 0 : _strikerField.getNumber());
             _unitHitRate[ATTACKER][Database.CRUISER] -= ((_strikerField.getNumber() < 0) ? 0 : _strikerField.getNumber());
             _strikerField.setText((_strikerField.getNumber() < 0) ? "0" : Integer.toString(_strikerField.getNumber()));
@@ -938,6 +939,10 @@ public class CombatSimTab extends AbstractTab {
         for(int i = 0; i<1000; i++) {
             _unitHitRate[ATTACKER] = Database.getBaseHitRates();
             _unitHitRate[DEFENDER] = Database.getBaseHitRates();
+
+            _unitDice[ATTACKER] = Database.getBaseDiceRolled();
+            _unitDice[DEFENDER] = Database.getBaseDiceRolled();
+
 
             _jolCounter = new int[]{0,0,0,0,0,0};
             _jolPenalty = new boolean[]{false, false, false, false, false, false};
