@@ -166,7 +166,22 @@ public class Database {
 	@SuppressWarnings("unchecked")
 	private static final HashMap<String,Integer>[] TECH = (HashMap<String,Integer>[]) new HashMap[4];
 		// ^ maps a tech index and a planet name to the degree of tech specialty it has (i.e., RED, "Industrex" => 2)
-	
+
+	//get the number of a type of tech spec a player has
+	public static int getTechSpecs(String player, int type){
+		int ret=0;
+		synchronized (PLANETS){
+			synchronized (TECH) {
+				for (String s : PLANETS.keySet()) {
+					if (PLANETS.get(s).equals(player) && TECH[type].containsKey(s)) {
+						ret += TECH[type].get(s);
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
 	// add a new planet to the database
 	public static void addPlanetName(String name) {
 		synchronized(PLANETS) {

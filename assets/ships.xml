@@ -32,7 +32,7 @@
     </ship>
 	<ship>
         <name>Ground Force</name>
-        <hitrate>11</hitrate>
+        <hitrate>20</hitrate>
         <dice>1</dice>
     </ship>
 </ships>
