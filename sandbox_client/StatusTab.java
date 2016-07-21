@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 public class StatusTab extends AbstractTab{
@@ -22,7 +23,7 @@ public class StatusTab extends AbstractTab{
 	private Text _race;
 	private Text _stage;
 	
-	private Label _tech;
+	private Label[] _tech = new Label[5];
 	private Label _personnel;
 	
 	private String _player;
@@ -67,14 +68,16 @@ public class StatusTab extends AbstractTab{
 		_stage.setLayoutY(120);
 		_stage.setStyle("-fx-font-weight:bold;-fx-font-size: 18px");
 		pane.getChildren().add(_stage);
-		
-		_tech = new Label();
-		_tech.setVisible(false);
-		_tech.setLayoutX(40);
-		_tech.setLayoutY(160);
-		_tech.setWrapText(true);
-		pane.getChildren().add(_tech);
-		
+
+		for(int i=0; i<5; i++){
+			_tech[i] = new Label();
+			_tech[i].setVisible(false);
+			_tech[i].setLayoutX(40);
+			_tech[i].setWrapText(true);
+			pane.getChildren().add(_tech[i]);
+		}
+		_tech[0].setLayoutY(160);
+
 		_personnel = new Label();
 		_personnel.setVisible(false);
 		_personnel.setLayoutX(490);
@@ -103,15 +106,45 @@ public class StatusTab extends AbstractTab{
 		
 		_stage.setVisible(true);
 		_stage.setText(Database.nameOfStage(Database.empireStageOf(_player)));
-		
-		String techText = "Technology:\n";
-		for(String tech : Database.technologyOf(_player)) {
-			techText += "-" + tech + "\n";
+
+		int yOffset[] = {160,176,176,176,176};
+		String techText[] = new String[5];
+		for(int i=1; i<5;i++){
+			techText[i] = "";
 		}
-		
-		_tech.setVisible(true);
-		_tech.setText(techText);
-		
+		techText[0] = "Technology:";
+		for(String tech : Database.technologyOf(_player)) {
+			//Will always go red, blue, green, yellow tech
+			int color = Database.colorOfTech(tech);
+
+			if(color == 0){ //red
+				techText[1] += "-" + tech + "\n";
+				yOffset[2] += 16;
+				yOffset[3] += 16;
+				yOffset[4] += 16;
+			}else if(color==1){ //blue
+				techText[2] += "-" + tech + "\n";
+				yOffset[3] += 16;
+				yOffset[4] += 16;
+			}else if(color==2){ //green
+				techText[3] += "-" + tech + "\n";
+				yOffset[4] += 16;
+			}else if(color==3){ //yellow
+				techText[4] += "-" + tech + "\n";
+			}
+		}
+
+		for(int i=0; i<5; i++) {
+			_tech[i].setVisible(true);
+			_tech[i].setText(techText[i]);
+			_tech[i].setLayoutY(yOffset[i]);
+		}
+
+		_tech[1].setTextFill(Color.RED);
+		_tech[2].setTextFill(Color.BLUE);
+		_tech[3].setTextFill(Color.GREEN);
+		_tech[4].setTextFill(Color.YELLOW);
+
 		String personnelText = "Personnel:\n";
 		for(String personnel : Database.personnelOfPlayer(_player)) {
 			personnelText += "-" + personnel + "\n";

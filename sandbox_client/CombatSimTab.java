@@ -92,9 +92,6 @@ public class CombatSimTab extends AbstractTab {
     //Extras pane
     private GridPane _extraPane = new GridPane();
 
-    //Results pane
-    private GridPane ResultsPane = new GridPane();
-
     //Start button
     private Button _start = new Button("Start");
 
@@ -214,10 +211,11 @@ public class CombatSimTab extends AbstractTab {
         _pane.setAlignment(Pos.CENTER);
 
         //Results pane
-        ResultsPane.add(resultTitle, 1, 1);
-        ResultsPane.add(results,1,2);
-        ResultsPane.setMinWidth(300);
-        ResultsPane.setVgap(10);
+        GridPane resultsPane = new GridPane();
+        resultsPane.add(resultTitle, 1, 1);
+        resultsPane.add(results, 1, 2);
+        resultsPane.setMinWidth(300);
+        resultsPane.setVgap(10);
 
         //Button to show extra pane
         _extraPane.setVisible(false);
@@ -244,7 +242,7 @@ public class CombatSimTab extends AbstractTab {
         _pane.add(_namePane[ATTACKER], 2, 1);
         _pane.add(_namePane[DEFENDER], 3, 1);
 
-        _scenepane.add(ResultsPane, 1, 1);
+        _scenepane.add(resultsPane, 1, 1);
         _scenepane.add(_extraPane, 0, 1);
         _scenepane.add(_pane, 0, 1);
         _scenepane.setPadding(new Insets(0,180,60,0));
@@ -561,7 +559,6 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
 
-            //todo fix embers so that it calculates correct red tech discount. local calcs for logged in player
             if(_names[i].equals("The Embers of Muaat")){
                 _unitHitRate[i][Database.WAR_SUN] -= Database.getTechSpecs(_names[i],Database.RED);
             }
