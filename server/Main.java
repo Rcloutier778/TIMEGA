@@ -190,7 +190,11 @@ public class Main {
 				}
 				//Spacedocks: Planet_name, boolean
 				if(passed[1] && !passed[2]){
-					broadcastSD(splitline[0], Boolean.parseBoolean(splitline[1]), ServerDatabase.PLANETS.get(splitline[0]) + " ");
+					if(splitline.length == 2) {
+						broadcastSD(splitline[0], Boolean.parseBoolean(splitline[1]), ServerDatabase.PLANETS.get(splitline[0]) + " ");
+					}else if(splitline.length == 3){
+						broadcastSD(splitline[0] + " " + splitline[1], Boolean.parseBoolean(splitline[2]), ServerDatabase.PLANETS.get(splitline[0] + " " + splitline[1]));
+					}
 				}
 				//Tech
 				//Name
@@ -206,9 +210,10 @@ public class Main {
 					_map.parse("hire " + pname + " " + line);
 				}
 				//Empire Stage
+				//Starts at Coalition
 				if(passed[4] && !passed[5]){
 					if(splitline.length > 1) {
-						for(int i = ServerDatabase.EMPIRE_STAGE.get(splitline[0]); i <= Integer.parseInt(splitline[1]); i++){
+						for(int i = 0; i < Integer.parseInt(splitline[1]); i++){
 							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}

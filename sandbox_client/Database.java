@@ -607,6 +607,21 @@ public class Database {
 			return new LinkedList<String>(PERSONNEL_SET[color]);
 		}
 	}
+
+	//returns the color of a personnel
+	public static int colorOfPersonnel(String personnel){
+		synchronized (PERSONNEL_SET){
+			if(PERSONNEL_SET[RED].contains(personnel)){
+				return RED;
+			}else if(PERSONNEL_SET[BLUE].contains(personnel)){
+				return BLUE;
+			}else if(PERSONNEL_SET[GREEN].contains(personnel)){
+				return GREEN;
+			}else{
+				return YELLOW;
+			}
+		}
+	}
 	
 	// return whether the given player has the given personnel in the local database
 	public static boolean localHasPerson(String player, String person) {

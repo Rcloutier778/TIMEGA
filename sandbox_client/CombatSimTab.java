@@ -559,15 +559,15 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
 
-            if(_names[i].equals("The Embers of Muaat")){
+            if(Database.raceOf(_names[i]).equals("The Embers of Muaat")){
                 _unitHitRate[i][Database.WAR_SUN] -= Database.getTechSpecs(_names[i],Database.RED);
             }
 
-            if(_names[i].equals("The Federation of Sol") && Database.hasTechLocal(_names[i],"Hyper Metabolism")){
+            if(Database.raceOf(_names[i]).equals("The Federation of Sol") && Database.hasTechLocal(_names[i],"Hyper Metabolism")){
                 _unitHitRate[i][Database.GROUND_FORCE] = 8;
             }
 
-            if(_names[i].equals("The L1Z1X Mindnet")){
+            if(Database.raceOf(_names[i]).equals("The L1Z1X Mindnet")){
                 _raceNumberField[i][0].setText(_raceNumberField[i][0].getNumber()<0 ? "0":_raceNumberField[i][0].getText());
                 for(int k=0; k<_raceNumberField[i][0].getNumber(); k++){
                     _unitHitRate[i][Database.DREADNOUGHT]--;
@@ -613,9 +613,6 @@ public class CombatSimTab extends AbstractTab {
                 _unitHitRate[DEFENDER][i]--;
             }
         }
-
-        System.out.println(_unitHitRate[1][Database.WAR_SUN]);
-
     }
 
 
@@ -790,7 +787,7 @@ public class CombatSimTab extends AbstractTab {
         for(int k=0;k<2;k++){
             DREAD_SUS[k] = _unitCounts[k][Database.DREADNOUGHT];
             WAR_SUS[k] = _unitCounts[k][Database.WAR_SUN];
-            if(_names[k].equals("The Barony of Letnev")) {
+            if(Database.raceOf(_names[k]).equals("The Barony of Letnev")) {
                 DREAD_SUS[k] *= 2;
             }
         }
