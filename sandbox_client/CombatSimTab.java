@@ -454,6 +454,8 @@ public class CombatSimTab extends AbstractTab {
                             case "W":
                                 _targetOrder[i][k] = 6;
                                 break;
+                            default:
+                                return false;
                         }
                     }
                 }
@@ -484,6 +486,8 @@ public class CombatSimTab extends AbstractTab {
                             case "c":
                                 mentakAbility = mentakAbility.concat(Integer.toString(Database.CRUISER));
                                 break;
+                            default:
+                                return false;
                         }
                     }
                 }
@@ -519,6 +523,8 @@ public class CombatSimTab extends AbstractTab {
                         case "S":
                             _jolPenalty[Database.SAS] = true;
                             break;
+                        default:
+                            return false;
                     }
                 }
             }
