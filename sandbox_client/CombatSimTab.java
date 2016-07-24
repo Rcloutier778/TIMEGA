@@ -88,7 +88,8 @@ public class CombatSimTab extends AbstractTab {
     private static final int ATTACKER = 0;
     private static final int DEFENDER = 1;
 
-    private ComboBox<String>[] _eOptions = new ComboBox[]{new ComboBox<String>(), new ComboBox<String>()};
+    @SuppressWarnings("unchecked")
+	private ComboBox<String>[] _eOptions = new ComboBox[]{new ComboBox<String>(), new ComboBox<String>()};
 
     //If defender is in a nebula
     private CheckBox _defNeb = new CheckBox();
@@ -200,7 +201,7 @@ public class CombatSimTab extends AbstractTab {
 
         _extraPane.setHgap(20);
         _extraPane.setVgap(20);
-        _extraPane.setHalignment(_defNeb, HPos.CENTER);
+        GridPane.setHalignment(_defNeb, HPos.CENTER);
 
         //Targeting order Label
         _unitLabels[6] = new Label();
@@ -295,7 +296,7 @@ public class CombatSimTab extends AbstractTab {
                 _raceButton[i][0] = new CheckBox();
                 _raceButton[i][0].setAlignment(Pos.CENTER);
                 _extraPane.add(_raceButton[i][0], i + 2, _rowOffset);
-                _extraPane.setHalignment(_raceButton[i][0], HPos.CENTER);
+                GridPane.setHalignment(_raceButton[i][0], HPos.CENTER);
             }
             _rowOffset++;
         }
