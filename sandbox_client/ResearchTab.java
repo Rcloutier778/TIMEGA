@@ -5,9 +5,7 @@ package sandbox_client;
  * 
  */
 
-import java.util.HashMap;
-
-import server.Player;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -22,6 +20,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import server.Player;
+
+import java.util.HashMap;
 
 public class ResearchTab extends AbstractTab {
 	
@@ -163,10 +164,15 @@ public class ResearchTab extends AbstractTab {
 	}
 	
 	public void updatePlanet() {
-		_redDiscount.setText("discount: -" + Database.localTechDiscount(Database.RED));
-		_blueDiscount.setText("discount: -" + Database.localTechDiscount(Database.BLUE));
-		_greenDiscount.setText("discount: -" + Database.localTechDiscount(Database.GREEN));
-		_yellowDiscount.setText("discount: -" + Database.localTechDiscount(Database.YELLOW));
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				_redDiscount.setText("discount: -" + Database.localTechDiscount(Database.RED));
+				_blueDiscount.setText("discount: -" + Database.localTechDiscount(Database.BLUE));
+				_greenDiscount.setText("discount: -" + Database.localTechDiscount(Database.GREEN));
+				_yellowDiscount.setText("discount: -" + Database.localTechDiscount(Database.YELLOW));
+			}
+		});
 	}
 	
 	public void research(String player, String tech) {

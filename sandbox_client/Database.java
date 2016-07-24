@@ -166,7 +166,22 @@ public class Database {
 	@SuppressWarnings("unchecked")
 	private static final HashMap<String,Integer>[] TECH = (HashMap<String,Integer>[]) new HashMap[4];
 		// ^ maps a tech index and a planet name to the degree of tech specialty it has (i.e., RED, "Industrex" => 2)
-	
+
+	//get the number of a type of tech spec a player has
+	public static int getTechSpecs(String player, int type){
+		int ret=0;
+		synchronized (PLANETS){
+			synchronized (TECH) {
+				for (String s : PLANETS.keySet()) {
+					if (PLANETS.get(s).equals(player) && TECH[type].containsKey(s)) {
+						ret += TECH[type].get(s);
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
 	// add a new planet to the database
 	public static void addPlanetName(String name) {
 		synchronized(PLANETS) {
@@ -592,6 +607,21 @@ public class Database {
 			return new LinkedList<String>(PERSONNEL_SET[color]);
 		}
 	}
+
+	//returns the color of a personnel
+	public static int colorOfPersonnel(String personnel){
+		synchronized (PERSONNEL_SET){
+			if(PERSONNEL_SET[RED].contains(personnel)){
+				return RED;
+			}else if(PERSONNEL_SET[BLUE].contains(personnel)){
+				return BLUE;
+			}else if(PERSONNEL_SET[GREEN].contains(personnel)){
+				return GREEN;
+			}else{
+				return YELLOW;
+			}
+		}
+	}
 	
 	// return whether the given player has the given personnel in the local database
 	public static boolean localHasPerson(String player, String person) {
@@ -741,8 +771,8 @@ public class Database {
 		// ^ maps a resolution name to its "against" effect
 	private static final HashMap<String,String> EXTRAS = new HashMap<String,String>();
 		// ^ maps a resolution name to its extra effect, if present
-	private static final HashMap<String, String> RESOLUTIONS = new HashMap<String,String>();
-	
+	private static final HashMap<String, String> PAST_RESOLUTIONS = new HashMap<String,String>();
+
 	// populate the resolutions from the xml file
 	public static void addResolutionToDatabase(String name, String pro, String con, String extra) {
 		PROS.put(name, pro);
@@ -772,22 +802,36 @@ public class Database {
 
 	//put
 	public static void putRes(String name, String result){
-		synchronized (RESOLUTIONS){
-			RESOLUTIONS.put(name, result);
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.put(name, result);
 		}
 	}
 
 	//keys
 	public static Iterable<String> resolutionKeys(){
-		synchronized (RESOLUTIONS){
-			return new LinkedList<String>(RESOLUTIONS.keySet());
+		synchronized (PAST_RESOLUTIONS){
+			return new LinkedList<String>(PAST_RESOLUTIONS.keySet());
 		}
 	}
 
 	//get
 	public static String getRes(String name){
-		synchronized (RESOLUTIONS){
-			return RESOLUTIONS.get(name);
+		synchronized (PAST_RESOLUTIONS){
+			return PAST_RESOLUTIONS.get(name);
+		}
+	}
+
+	//clear Past
+	public static void clearPast(){
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.clear();
+		}
+	}
+
+	//remove Past resolution
+	public static void removePast(String name){
+		synchronized (PAST_RESOLUTIONS){
+			PAST_RESOLUTIONS.remove(name);
 		}
 	}
 	
@@ -805,8 +849,9 @@ public class Database {
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
 	public static final int SAS = 5;
+	public static final int GROUND_FORCE = 6;
 	// keep codes and array synchronized!
-	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS"};
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS", "Ground Force"};
 	
 	public static final int NUM_SHIPS = SHIP_NAMES.length;
 	

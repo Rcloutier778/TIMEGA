@@ -226,8 +226,13 @@ public class Client {
 	// EMPIRE
 	public void advancePlayer(String player) {
 		if(player.equals(Database.getName())) {
-			_empire.advance();
-			_personnel.updateSD();
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					_empire.advance();
+					_personnel.updateSD();
+				}
+			});
 		}
 		_status.update();
 	}

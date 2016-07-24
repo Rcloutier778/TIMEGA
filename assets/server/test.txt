@@ -1,6 +1,6 @@
 allplanets
 David 255 0 0 The Sardakk N'Orr
 Matt 0 255 0 The Barony of Letnev
-Tyler 0 0 255 The Embers of Muaat
-Vlad 0 0 0 The Nekro Virus
+Tyler 0 0 255 The L1Z1X Mindnet
+Vlad 0 0 0 The Embers of Muaat
 Richard 255 255 255 The Winnu

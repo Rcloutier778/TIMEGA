@@ -20,7 +20,7 @@ import java.net.Socket;
 
 public class ControlsTab extends AbstractTab {
 	
-	private static final String DEFAULT_HOST = "104.236.42.194";
+	private static final String DEFAULT_HOST = "localhost";//"104.236.42.194";
 	private static final String DEFAULT_PORT = "4040";
 	
 	private Client _client;

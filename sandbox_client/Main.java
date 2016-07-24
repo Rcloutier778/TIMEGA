@@ -19,7 +19,6 @@ public class Main extends Application {
 	 * TODO list (it's not that long, I swear...)
 	 * 1) add past resolutions to council room    RICHARD
 	 * 2) show racial abilities/flagship in status/players screen (and add XML)
-	 * 3) color technology and personnel in status/players screen
 	 * 4) new tab: report battle data
 	 * 5) new tab: view battle statistics
 	 * 6) show progress in empire screen

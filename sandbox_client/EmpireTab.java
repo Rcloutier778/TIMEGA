@@ -6,6 +6,7 @@ package sandbox_client;
  * @author dmayans
  */
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -79,13 +80,27 @@ public class EmpireTab extends AbstractTab {
 	}
 	
 	public void lock() {
-		_lock = true;
-		_advance.setDisable(true);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				_lock = true;
+				_advance.setDisable(true);
+			}
+		});
+		//_lock = true;
+		//_advance.setDisable(true);
 	}
 	
 	public void unlock() {
-		_lock = false;
-		_advance.setDisable(false);
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				_lock = false;
+				_advance.setDisable(false);
+			}
+		});
+		//_lock = false;
+		//_advance.setDisable(false);
 	}
 	
 	public void advance() {
@@ -132,6 +147,7 @@ public class EmpireTab extends AbstractTab {
 
 		@Override
 		public void handle(ActionEvent e) {
+			System.out.println("test");
 			if(!_lock) {
 				_advance.setDisable(false);
 			}
