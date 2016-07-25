@@ -191,10 +191,10 @@ public class CombatSimTab extends AbstractTab {
         Text resultTitle = new Text();
         resultTitle.setText("Result of the battle:");
 
-        Label[] _unitLabels = new Label[7];
-        String[] _targetOrderNames = {" (f):", " (d):", " (c):", " (n):", " (w):", ":", ":"};
+        Label[] _unitLabels = new Label[6];
+        String[] _targetOrderNames = {" (f):", " (d):", " (c):", " (n):", " (w):", ":"};
 
-        for(int k=0; k<Database.NUM_SHIPS-1; k++){
+        for(int k=0; k<Database.NUM_SHIPS; k++){
             //Make new Number Text Fields and labels
             _unitFields[ATTACKER][k] = new NumberTextField();
             _unitFields[DEFENDER][k] = new NumberTextField();
@@ -263,7 +263,6 @@ public class CombatSimTab extends AbstractTab {
                 _names[DEFENDER] = _eOptions[DEFENDER].getValue(); // gets the value selected by the combobox
                 setRaceEffects();
                 _pane.setVisible(false);
-                _extraButton.setVisible(false);
                 _extraPane.setVisible(true);
             }
         });
@@ -447,9 +446,9 @@ public class CombatSimTab extends AbstractTab {
             _extraPane.add(_raceLabels[9], 1, _rowOffset);
             for (int i = 0; i < 2; i++) {
                 if(Database.raceOf(_names[i]).equals("The Federation of Sol")) {
-                    _unitFields[i][6] = new NumberTextField();
-                    _unitFields[i][6].setMaxWidth(90);
-                    _extraPane.add(_unitFields[i][6], i + 2, _rowOffset);
+                    _raceNumberField[i][2] = new NumberTextField();
+                    _raceNumberField[i][2].setMaxWidth(90);
+                    _extraPane.add(_raceNumberField[i][2], i + 2, _rowOffset);
                 }
             }
             _rowOffset++;
@@ -488,7 +487,7 @@ public class CombatSimTab extends AbstractTab {
      */
     public boolean setUnits() {
         for(int i=0; i<_names.length; i++) {
-            for (int k = 0; k < Database.NUM_SHIPS-1; k++) {
+            for (int k = 0; k < Database.NUM_SHIPS; k++) {
                 _unitCounts[i][k] = (_unitFields[i][k].getNumber() < 0) ? 0 : _unitFields[i][k].getNumber();
                 _unitFields[i][k].setText((_unitCounts[i][k] == 0) ? "0" : Integer.toString(_unitCounts[i][k]));
             }
@@ -599,8 +598,7 @@ public class CombatSimTab extends AbstractTab {
 
             //Federation
             if(Database.raceOf(_names[i]).equals("The Federation of Sol")){
-                _unitCounts[i][6] = (_unitFields[i][6].getNumber() < 0) ? 0 : _unitFields[i][6].getNumber();
-                _unitFields[i][6].setText((_unitCounts[i][6] == 0) ? "0" : Integer.toString(_unitCounts[i][6]));
+                _raceEffects[i].put("Sol", _raceNumberField[i][2].getNumber() < 0 ? 0 : _raceNumberField[i][2].getNumber());
             }
         }
 
@@ -628,7 +626,7 @@ public class CombatSimTab extends AbstractTab {
                 _unitHitRate[i][Database.FIGHTER]--;
             }
 
-            if(Database.localHasPerson(_names[i],"Mechanic")){
+            if(Database.localHasPerson(_names[i], "Mechanic")){
                 _unitDice[i][Database.SAS]++;
             }
 
@@ -642,8 +640,8 @@ public class CombatSimTab extends AbstractTab {
                 _unitHitRate[i][Database.WAR_SUN] -= Database.getTechSpecs(_names[i],Database.RED);
             }
 
-            if(Database.raceOf(_names[i]).equals("The Federation of Sol") && Database.hasTechLocal(_names[i],"Hyper Metabolism")){
-                _unitHitRate[i][Database.GROUND_FORCE] = 8;
+            if(Database.raceOf(_names[i]).equals("The Federation of Sol") && !Database.hasTechLocal(_names[i],"Hyper Metabolism")){
+                _raceEffects[i].put("Sol",0);
             }
 
             if(Database.raceOf(_names[i]).equals("The L1Z1X Mindnet")){
@@ -917,13 +915,17 @@ public class CombatSimTab extends AbstractTab {
                                 }
                                 else {
                                     hits[i]++;
-                                    //Federation of Sol
-                                    if (k == Database.GROUND_FORCE && roundNumber == 1) {
-                                        _unitHitRate[i][Database.GROUND_FORCE] = 20;
-                                    }
                                 }
                             }
                         }
+                    }
+                }
+            }
+            //Federation of Sol
+            if (roundNumber==1 && Database.raceOf(_names[i]).equals("The Federation of Sol")) {
+                for(int k=0; k<_raceEffects[i].get("Sol");k++){
+                    if(diceRoller() >= 8){
+                        hits[i]++;
                     }
                 }
             }
