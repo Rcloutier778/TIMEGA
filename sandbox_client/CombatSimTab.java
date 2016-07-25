@@ -29,13 +29,62 @@ import java.util.HashMap;
  * 6) Mercs
  * 7) Make Naalu shields its own method?
  * 8) Turn the start button into a next button, have extra pane appear over the units pane, then make a start button on extra pane
-/**
+ /**
  * Personnel
  * 2) Advisor   --Checkbox
  * 5) Explorer  --Implement carriers first
  */
 
 /**
+
+ * Simulator:
+ 2) Carriers should appear in the simulator since they can absorb hits. The ships should be ordered "fighters, cruisers, SASs, carriers, dreadnoughts, flagships, war suns".
+ 4) You should definitely underline the letters of the ship name instead of putting it in parentheses
+
+ Council Room
+ 1) This tab may need to be rewritten. When rewriting a tab, lay out the UI on paper first, then code in the UI, and then start adding in functionality. This will save you hours and me a headache.
+ 2) We don't care about all past resolutions, only the ones still in play (note that some stay in play for a single round and then disappear)
+ 4) Players should be able to cast votes from this tab as well (this is a big update, hence why it may need to be rewritten).
+
+ Server
+ 3) the server should be track total votes, reset them whenever new resolutions are sent, and be able to report the votes for each resolution on command and the turn order on command. the turn order should be sent to each player.
+ 4) the server should also keep track of the total votes cast by each player (for statistics purposes)
+ 5) the server should save the resolutions in play, the resolutions under deliberation, the votes cast for the current resolutions by player, and the total votes cast be each player
+ 6) the server should be able to load the information in the above step
+
+
+
+ Finally, the simulator should be able to handle this (exhaustive) list of all combat effects:
+
+ Technology
+ Xeno Psychology*
+
+ Personnel
+ Advisor*
+ Explorer
+
+ Agendas
+ War Funding (against)
+
+ Races
+ Barony (2*)
+ Embers (3)
+ Emirates (fortune cards 7*, 11*, and 14*, can be owned by any player)
+ Federation (4*, 5)
+ Ghosts (5*)
+ L1Z1X (3*)
+ Mentak (3, also black market 1* and 6*)
+ Naalu (3, 4*, you can assume that shields will always be taken if nothing can sustain damage)
+ Sardakk (1*)
+ Jol-Nar (1*)
+ Winnu (2)
+ Xxcha (incomplete)
+ Yin (incomplete)
+ Yssaril (1)
+ Other
+ Mercenaries (not in rulebook yet)
+ Flagships (not in database yet)
+ Everything marked with an asterisk will require more information than the database has. Everything else should be handled silently.
  Recommendations:
  - leave the results text in permanently (on the right half of the screen), and just change the output numbers when the simulation is run
  - run the simulator immediately after someone finishes editing the box instead of having to hit the button (the simulation is fast enough anyway)
@@ -68,12 +117,12 @@ public class CombatSimTab extends AbstractTab {
 
     // dice rolled by each unit
     private int[][] _unitDice = {Database.getBaseDiceRolled(), Database.getBaseDiceRolled()};
-    
+
     private static final int ATTACKER = 0;
     private static final int DEFENDER = 1;
 
     @SuppressWarnings("unchecked")
-	private ComboBox<String>[] _eOptions = new ComboBox[]{new ComboBox<String>(), new ComboBox<String>()};
+    private ComboBox<String>[] _eOptions = new ComboBox[]{new ComboBox<String>(), new ComboBox<String>()};
 
     //If defender is in a nebula
     private CheckBox _defNeb = new CheckBox();
@@ -97,7 +146,7 @@ public class CombatSimTab extends AbstractTab {
     private Button _start = new Button("Start");
 
     //Number of racial abilities in the game (total, regardless of who is playing)
-    private static final int _racialNumber = 10;
+    private static final int _racialNumber = 12;
 
     //Checkbox for all racial abilities in play
     private CheckBox[][] _raceButton = new CheckBox[2][_racialNumber];
@@ -128,6 +177,8 @@ public class CombatSimTab extends AbstractTab {
     //boolean for Jol-Nar combat penalty
     private boolean[] _jolPenalty = {false, false, false, false, false, false};
 
+    private GridPane _pane = new GridPane();
+
     //make values cleared when you click on another tab
     public CombatSimTab() {
         super(Client.SIMULATOR);
@@ -135,24 +186,19 @@ public class CombatSimTab extends AbstractTab {
         GridPane _scenepane = new GridPane();
         _root.setContent(_scenepane);
 
-        GridPane _pane = new GridPane();
         Text results = new Text();
         results.setText("Enter data to view results");
         Text resultTitle = new Text();
         resultTitle.setText("Result of the battle:");
 
-        Label[] _unitLabels = new Label[8];
+        Label[] _unitLabels = new Label[7];
         String[] _targetOrderNames = {" (f):", " (d):", " (c):", " (n):", " (w):", ":", ":"};
 
-        for(int k=0; k<Database.NUM_SHIPS; k++){
+        for(int k=0; k<Database.NUM_SHIPS-1; k++){
             //Make new Number Text Fields and labels
             _unitFields[ATTACKER][k] = new NumberTextField();
             _unitFields[DEFENDER][k] = new NumberTextField();
             _unitLabels[k] = new Label();
-
-            //Set the prompt text
-            _unitFields[ATTACKER][k].setPromptText(Database.nameOfShip(k) + "s");
-            _unitFields[DEFENDER][k].setPromptText(Database.nameOfShip(k) + "s");
 
             //Set the label names
             _unitLabels[k].setText(Database.nameOfShip(k) + "s" + _targetOrderNames[k]);
@@ -168,18 +214,10 @@ public class CombatSimTab extends AbstractTab {
             _pane.add(_unitFields[DEFENDER][k], 3, k + 2);
         }
 
-        //Targeting order Label
-        _unitLabels[6] = new Label();
-        _unitLabels[6].setText("Targeting Order:");
-        _unitLabels[6].setTooltip(new Tooltip("Use capital letters for sustains.\nDefault order is WNfdcnw"));
-        _pane.add(_unitLabels[6], 1, 9);
 
-        //Targeting order Fields
-        for(int i=0; i<2; i++){
-            _targetOrderField[i].setMaxWidth(90);
-            _targetOrderField[i].setPromptText("Target Order");
-            _pane.add(_targetOrderField[i],i+2,9);
-        }
+
+
+
 
 
         GridPane[] _namePane = {new GridPane(), new GridPane()};
@@ -199,7 +237,6 @@ public class CombatSimTab extends AbstractTab {
                     public void run() {
                         _pane.setVisible(true);
                         _extraPane.setVisible(false);
-                        _extraButton.setVisible(true);
                         results.setText("\n".concat(combatSim()));
                     }
                 }));
@@ -274,9 +311,8 @@ public class CombatSimTab extends AbstractTab {
         _extraPane.setVgap(20);
 
         //Striker Fleets
-        _extraPane.add(new Label("Striker Fleets"),1,2);
-        _extraPane.getChildren().get(2).setOnMouseEntered(e-> Tooltip.install(_extraPane.getChildren().get(2), new Tooltip("Number of extra movement \nfor Striker Fleets")));
-        _strikerField.setPromptText("Striker Fleets");
+        _extraPane.add(new Label("Striker Fleets"), 1, 2);
+        _extraPane.getChildren().get(2).setOnMouseEntered(e -> Tooltip.install(_extraPane.getChildren().get(2), new Tooltip("Number of extra movement \nfor Striker Fleets")));
         _strikerField.setMaxWidth(90);
         _extraPane.add(_strikerField,2,2);
 
@@ -314,7 +350,6 @@ public class CombatSimTab extends AbstractTab {
                     _raceNumberField[i][0] = new NumberTextField();
                     _raceNumberField[i][0].setMaxWidth(80);
                     _extraPane.add(_raceNumberField[i][0], i + 2, _rowOffset);
-                    _raceNumberField[i][0].setPromptText("Adj. Sys w/ n");
                 }
             }
             _rowOffset++;
@@ -330,7 +365,6 @@ public class CombatSimTab extends AbstractTab {
                     _raceField[i][0] = new TextField();
                     _raceField[i][0].setMaxWidth(80);
                     _extraPane.add(_raceField[i][0], i + 2, _rowOffset);
-                    _raceField[i][0].setPromptText("R. ability");
                 }
             }
             _rowOffset++;
@@ -345,8 +379,7 @@ public class CombatSimTab extends AbstractTab {
                 if(Database.raceOf(_names[i]).equals("The Naalu Collective")) {
                     _raceNumberField[i][1] = new NumberTextField();
                     _raceNumberField[i][1].setMaxWidth(80);
-                    _extraPane.add(_raceNumberField[i][0], i + 2, _rowOffset);
-                    _raceNumberField[i][1].setPromptText("Shields");
+                    _extraPane.add(_raceNumberField[i][1], i + 2, _rowOffset);
                 }
             }
             _rowOffset++;
@@ -377,7 +410,6 @@ public class CombatSimTab extends AbstractTab {
                     _raceField[i][1] = new TextField();
                     _raceField[i][1].setMaxWidth(80);
                     _extraPane.add(_raceField[i][1], i + 2, _rowOffset);
-                    _raceField[i][1].setPromptText("R. ability");
                 }
             }
             _rowOffset++;
@@ -408,8 +440,46 @@ public class CombatSimTab extends AbstractTab {
             }
         }
 
+        //Federation
+        if (Database.raceOf(_names[ATTACKER]).equals("The Federation of Sol") || Database.raceOf(_names[DEFENDER]).equals("The Federation of Sol")){
+            _raceLabels[9] = new Label("Sol");
+            _raceLabels[9].setTooltip(new Tooltip("Number of Ground Forces"));
+            _extraPane.add(_raceLabels[9], 1, _rowOffset);
+            for (int i = 0; i < 2; i++) {
+                if(Database.raceOf(_names[i]).equals("The Federation of Sol")) {
+                    _unitFields[i][6] = new NumberTextField();
+                    _unitFields[i][6].setMaxWidth(90);
+                    _extraPane.add(_unitFields[i][6], i + 2, _rowOffset);
+                }
+            }
+            _rowOffset++;
+        }
 
-        _extraPane.add(_start, 2, _rowOffset);
+
+        //Targeting order Label
+        _raceLabels[11] = new Label();
+        _raceLabels[11].setText("Targeting Order:");
+        _raceLabels[11].setTooltip(new Tooltip("Use capital letters for sustains.\nDefault order is WNfdcnw"));
+        _extraPane.add(_raceLabels[11], 1, _rowOffset);
+
+        //Targeting order Fields
+        for(int i=0; i<2; i++){
+            _targetOrderField[i].setMaxWidth(90);
+            _targetOrderField[i].setPromptText("Target Order");
+            _extraPane.add(_targetOrderField[i],i+2,_rowOffset);
+        }
+
+        Button _backButton = new Button("Back");
+        _backButton.setOnAction(e->
+        {
+            _extraPane.setVisible(false);
+            _pane.setVisible(true);
+        });
+
+        _rowOffset++;
+
+        _extraPane.add(_backButton,2,_rowOffset);
+        _extraPane.add(_start, 3, _rowOffset);
     }
 
     /**
@@ -418,7 +488,7 @@ public class CombatSimTab extends AbstractTab {
      */
     public boolean setUnits() {
         for(int i=0; i<_names.length; i++) {
-            for (int k = 0; k < Database.NUM_SHIPS; k++) {
+            for (int k = 0; k < Database.NUM_SHIPS-1; k++) {
                 _unitCounts[i][k] = (_unitFields[i][k].getNumber() < 0) ? 0 : _unitFields[i][k].getNumber();
                 _unitFields[i][k].setText((_unitCounts[i][k] == 0) ? "0" : Integer.toString(_unitCounts[i][k]));
             }
@@ -527,6 +597,11 @@ public class CombatSimTab extends AbstractTab {
                 }
             }
 
+            //Federation
+            if(Database.raceOf(_names[i]).equals("The Federation of Sol")){
+                _unitCounts[i][6] = (_unitFields[i][6].getNumber() < 0) ? 0 : _unitFields[i][6].getNumber();
+                _unitFields[i][6].setText((_unitCounts[i][6] == 0) ? "0" : Integer.toString(_unitCounts[i][6]));
+            }
         }
 
         return true;
@@ -540,15 +615,15 @@ public class CombatSimTab extends AbstractTab {
             if (Database.hasTechLocal(_names[i], "Hylar V Assault Laser")) {
                 _unitHitRate[i][Database.DESTROYER]--;
             }
-            
+
             if (Database.hasTechLocal(_names[i], "Ion Cannons")) {
                 _unitHitRate[i][Database.DREADNOUGHT] -= 2;
             }
-            
+
             if(Database.hasTechLocal(_names[i], "Cybernetics")) {
                 _unitHitRate[i][Database.FIGHTER]--;
             }
-            
+
             if(Database.hasTechLocal(_names[i], "Advanced Fighters")) {
                 _unitHitRate[i][Database.FIGHTER]--;
             }

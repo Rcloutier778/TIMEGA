@@ -46,6 +46,7 @@ public class CommandMap {
 		_map.put("release", new ReleaseCommand());
 		_map.put("resolutions", new ResolutionCommand());
 		_map.put("resresult", new ResolutionWinCommand());
+		_map.put("help", new HelpCommand());
 
 	}
 
@@ -61,6 +62,50 @@ public class CommandMap {
 
 	public boolean getEnabled(String tab) {
 		return _enabled.get(tab);
+	}
+
+	private class HelpCommand implements Command{
+		public void run(String[] args){
+			if(args.length == 1){
+				for(String s : _map.keySet()){
+					Main.writeColortext(s + "\n", Main.SERVEROUT);
+				}
+				return;
+			}
+			if(args.length == 2){
+				if(_map.containsKey(args[1])){
+					if(args[1].equals("enable")){
+						Main.writeColortext("Enables the desired tab or all tabs", Main.SERVEROUT);
+					}else if(args[1].equals("disable")){
+						Main.writeColortext("Disables the desired tab or all tabs", Main.SERVEROUT);
+					}else if(args[1].equals("clear")){
+						Main.writeColortext("Clears the terminal", Main.SERVEROUT);
+					}else if(args[1].equals("chown")){
+						Main.writeColortext("Captures a planet for a player", Main.SERVEROUT);
+					}else if(args[1].equals("reload")){
+						Main.writeColortext("Reloads game data from a save file", Main.SERVEROUT);
+					}else if(args[1].equals("sync")){
+						Main.writeColortext("Ends the round, syncs the client and server databses", Main.SERVEROUT);
+					}else if(args[1].equals("research")){
+						Main.writeColortext("Researches a tech for a player", Main.SERVEROUT);
+					}else if(args[1].equals("forget")){
+						Main.writeColortext("Removes a tech from a player", Main.SERVEROUT);
+					}else if(args[1].equals("hire")){
+						Main.writeColortext("Hires a personnel for a player", Main.SERVEROUT);
+					}else if(args[1].equals("release")){
+						Main.writeColortext("Fires a personnel for a player", Main.SERVEROUT);
+					}else if(args[1].equals("resolutions")){
+						Main.writeColortext("Sets the resolutions to be voted on", Main.SERVEROUT);
+					}else if(args[1].equals("resresult")) {
+						Main.writeColortext("Sets the result of the current resolution. ", Main.SERVEROUT);
+						//todo finish up council tab before doing repeals
+					}
+				}else {
+					Main.writeColortext("No command \"" + args[1] + "\" found", Main.ERROR);
+				}
+			}
+
+		}
 	}
 
 	// enable a single tab
