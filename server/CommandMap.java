@@ -54,6 +54,7 @@ public class CommandMap {
 				_main.broadcast(Protocol.VOTE);
 			}
 		});
+		_map.put("totalvotes", new TotalVotesCommand());
 
 	}
 
@@ -108,6 +109,8 @@ public class CommandMap {
 						//todo finish up council tab before doing repeals
 					}else if(args[1].equals("vote")){
 						Main.writeColortext("Tallies the votes for the current resolutions", Main.SERVEROUT);
+					}else if(args[1].equals("totalvotes")){
+						Main.writeColortext("Returns the total votes for/against for a given resolution", Main.SERVEROUT);
 					}
 				}else {
 					Main.writeColortext("No command \"" + args[1] + "\" found", Main.ERROR);
@@ -403,4 +406,44 @@ public class CommandMap {
 		}
 
 	}
+
+	private class TotalVotesCommand implements Command{
+		public void run(String[] args){
+			if(args.length != 2){
+				Main.writeColortext("usage: totalvotes <resolution>", Main.ERROR);
+				return;
+			}
+			String res = args[1].replace("_"," ");
+			if(!ServerDatabase.VOTES_BY_RESOLUTION.containsKey(res)){
+				Main.writeColortext("No such resolution: " + res, Main.ERROR);
+			}else{
+				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[0] +
+						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[1],Main.SERVEROUT);
+			}
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

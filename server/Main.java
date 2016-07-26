@@ -404,8 +404,13 @@ public class Main {
 		}else if(_for[0] < _against[0] && _for[1] < _against[1]) {//against against
 			this.broadcastResolutionResult(new String[]{"against", "against"});
 		}
-
 		ServerDatabase.VOTES_LOCK.unlock();
+
+		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.lock();
+		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[0], new Integer[]{_for[0],_against[0]});
+		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[1], new Integer[]{_for[1],_against[1]});
+		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
+
 	}
 	
 	// MAP INFO

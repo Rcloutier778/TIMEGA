@@ -53,6 +53,9 @@ public class ServerDatabase {
 	public static final String[] CURRENT_RESOLUTIONS = {"",""};
 	public static final Lock CURRENT_RESOLUTIONS_LOCK = new ReentrantLock();
 
+	public static final HashMap<String, Integer[]> VOTES_BY_RESOLUTION = new HashMap<String, Integer[]>();
+	public static final Lock VOTES_BY_RESOLUTION_LOCK = new ReentrantLock();
+
 
 	public static final HashMap<String,String> TABS = new HashMap<String,String>();
 

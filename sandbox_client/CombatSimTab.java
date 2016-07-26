@@ -45,7 +45,7 @@ import java.util.HashMap;
  2) We don't care about all past resolutions, only the ones still in play (note that some stay in play for a single round and then disappear)
 
  Server
- 3) and be able to report the votes for each resolution on command and the turn order on command.
+ 3) be able to report the turn order on command.
  4) the turn order should be sent to each player.
 
 
