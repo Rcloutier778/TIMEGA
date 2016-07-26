@@ -26,8 +26,8 @@
         <dice>3</dice>
     </ship>
 	<ship>
-        <name>Ground Force</name>
-        <hitrate>20</hitrate>
+        <name>SAS</name>
+        <hitrate>8</hitrate>
         <dice>1</dice>
     </ship>
 </ships>
