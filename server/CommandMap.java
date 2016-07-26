@@ -110,7 +110,7 @@ public class CommandMap {
 					}else if(args[1].equals("vote")){
 						Main.writeColortext("Tallies the votes for the current resolutions", Main.SERVEROUT);
 					}else if(args[1].equals("totalvotes")){
-						Main.writeColortext("Returns the total votes for/against for a given resolution", Main.SERVEROUT);
+						Main.writeColortext("Returns the total votes for/against for a given resolution and the turn order", Main.SERVEROUT);
 					}
 				}else {
 					Main.writeColortext("No command \"" + args[1] + "\" found", Main.ERROR);
@@ -367,10 +367,10 @@ public class CommandMap {
 			String res2 = args[2].replace("_", " ");
 			String res3 = "";
 			String res4 = "";
-			if(args.length > 2){
+			if(args.length > 3){
 				res3 = args[3].replace("_"," ");
 			}
-			if(args.length > 3){
+			if(args.length > 4){
 				res4 = args[4].replace("_"," ");
 			}
 			if (!ServerDatabase.RESOLUTION_SET.contains(res1)) {
@@ -417,8 +417,10 @@ public class CommandMap {
 			if(!ServerDatabase.VOTES_BY_RESOLUTION.containsKey(res)){
 				Main.writeColortext("No such resolution: " + res, Main.ERROR);
 			}else{
-				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[0] +
-						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[1],Main.SERVEROUT);
+				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.lock();
+				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(args[1])[0] +
+						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(args[1])[1],Main.SERVEROUT);
+				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
 			}
 		}
 	}

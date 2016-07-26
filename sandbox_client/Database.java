@@ -772,12 +772,10 @@ public class Database {
 	private static final HashMap<String,String> EXTRAS = new HashMap<String,String>();
 		// ^ maps a resolution name to its extra effect, if present
 	private static final HashMap<String, String> PAST_RESOLUTIONS = new HashMap<String,String>();
-
+		//Past Resolutions
 	private static final int[][] VOTE_QUEUE = {{0,0},{0,0}};
 	// [resolution][for/against]
-
-	private static final int[][] VOTES = {{0,0},{0,0}};
-
+	private static String TURN_ORDER = "";
 
 	// populate the resolutions from the xml file
 	public static void addResolutionToDatabase(String name, String pro, String con, String extra) {
@@ -856,16 +854,6 @@ public class Database {
 		}
 	}
 
-	public static void clearVotes(){
-		synchronized (VOTES){
-			for(int i=0; i<2; i++){
-				for(int k=0; k<2; k++){
-					VOTES[i][k] = 0;
-				}
-			}
-		}
-	}
-
 	public static void clearVoteQueue(){
 		synchronized (VOTE_QUEUE){
 			for(int i=0; i<2; i++){
@@ -876,16 +864,18 @@ public class Database {
 		}
 	}
 
+	public static void setTurnOrder(String[] order){
+		synchronized (TURN_ORDER){
+			TURN_ORDER = "Turn Order: ";
+			for (String s : order) {
+				TURN_ORDER += s + ", ";
+			}
+		}
+	}
 
-	//Vote
-	public static void vote(Integer resolution, Integer _for, Integer _against){
-		synchronized (VOTES){
-			VOTES[resolution][0] += _for;
-			VOTES[resolution][1] += _against;
-
-			VOTE_QUEUE[resolution][0] = 0;
-			VOTE_QUEUE[resolution][1] = 0;
-
+	public static String getTurnOrder(){
+		synchronized (TURN_ORDER){
+			return TURN_ORDER;
 		}
 	}
 

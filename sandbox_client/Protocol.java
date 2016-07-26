@@ -36,4 +36,5 @@ public class Protocol {
 	public static final int RESOLUTION_RESULT = 43; //usage: RESOLUTION_RESULT <resolution name> <for/against>
 	public static final int VOTE = 44;
 	public static final int VOTE_TALLY = 45;
+	public static final int TURN_ORDER = 46;
 }

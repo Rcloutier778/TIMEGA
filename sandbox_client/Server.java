@@ -256,7 +256,6 @@ public class Server implements Runnable {
 
 			_client.resolutionResult();
 		} else if(message == Protocol.VOTE){
-			System.out.println("In Server Vote" + System.nanoTime());
 
 			for(int i=0; i<2; i++){
 				this.write(Protocol.VOTE_TALLY, Database.getName() + "\n" + i + "\n" + Database.getVoteQueue(i, "For") + "\n" + Database.getVoteQueue(i,"Against"));
@@ -265,6 +264,13 @@ public class Server implements Runnable {
 			this.write(Protocol.VOTE);
 
 			Database.clearVoteQueue();
+		} else if(message == Protocol.TURN_ORDER){
+			String[] turnOrder = new String[Database.numPlayers()];
+			for(int i=0; i<Database.numPlayers(); i++){
+				turnOrder[i] = _in.readLine();
+			}
+			_in.readLine();
+			Database.setTurnOrder(turnOrder);
 		}
 
 	}

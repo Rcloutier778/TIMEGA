@@ -36,6 +36,8 @@ public class CouncilTab extends AbstractTab {
 	private NumberTextField _numVotes2;
 	private Button _send2;
 
+	private Label _turnOrder;
+
 
 	private Text _pastTitle;
 	private Text _pastResText;
@@ -85,7 +87,7 @@ public class CouncilTab extends AbstractTab {
 
 		_numVotes1 = new NumberTextField();
 		_numVotes1.setPromptText("# of Votes");
-		_numVotes1.setLayoutX(160);
+		_numVotes1.setLayoutX(180);
 		_numVotes1.setLayoutY(180);
 		_numVotes1.setMaxWidth(80);
 
@@ -138,7 +140,7 @@ public class CouncilTab extends AbstractTab {
 
 		_numVotes2 = new NumberTextField();
 		_numVotes2.setPromptText("# of Votes");
-		_numVotes2.setLayoutX(160);
+		_numVotes2.setLayoutX(180);
 		_numVotes2.setLayoutY(360);
 		_numVotes2.setMaxWidth(80);
 
@@ -163,8 +165,13 @@ public class CouncilTab extends AbstractTab {
 		_pastResText.maxWidth(820);
 		_pastResText.setWrappingWidth(820);
 
+		_turnOrder = new Label();
+		_turnOrder.setLayoutX(625);
+		_turnOrder.setLayoutY(40);
+
+
 		pane.getChildren().addAll(_name1, _pro1, _con1, _extra1, _name2, _pro2, _con2, _extra2, _pastTitle, _pastResText,
-				_voteLabel1,_vote1,_numVotes1,_send1,_voteLabel2,_vote2,_numVotes2,_send2);
+				_voteLabel1,_vote1,_numVotes1,_send1,_voteLabel2,_vote2,_numVotes2,_send2, _turnOrder);
 		
 	}
 
@@ -192,8 +199,6 @@ public class CouncilTab extends AbstractTab {
 				_vote2.setDisable(false);
 				_numVotes2.setDisable(false);
 				_send2.setDisable(false);
-
-				Database.clearVotes();
 			}
 		});
 	}
@@ -204,16 +209,17 @@ public class CouncilTab extends AbstractTab {
 			public void run() {
 				_pastTitle.setText("Past Resolutions");
 				String display = "";
-				for(int i=0; i<2; i++) {
-					for(String resolution: Database.resolutionKeys()){
-						if(Database.getRes(resolution).equals("for")){
-							display = display.concat(resolution + ": " + Database.getPro(resolution) + "\n");
-						}else{
-							display = display.concat(resolution + ": " + Database.getCon(resolution) + "\n");
-						}
+				for(String resolution: Database.resolutionKeys()){
+					if(Database.getRes(resolution).equals("for")){
+						display += (resolution + ": " + Database.getPro(resolution) + "\n");
+					}else if(Database.getRes(resolution).equals("against")){
+						display += (resolution + ": " + Database.getCon(resolution) + "\n");
 					}
 				}
+				System.out.println(Database.resolutionKeys());
+				System.out.println(Database.getTurnOrder());
 				_pastResText.setText(display);
+				_turnOrder.setText(Database.getTurnOrder());
 			}
 		});
 	}

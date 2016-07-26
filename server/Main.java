@@ -10,9 +10,7 @@ import sandbox_client.Protocol;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
+import java.util.*;
 //import server.CommandMap;
 
 public class Main {
@@ -137,7 +135,7 @@ public class Main {
 			}
 		}
 	}
-	
+
 	// EXPANDED PROTOCOLS: lots of them, not a lot of good ways of condensing them
 
 	//Reloads server data from log file produced on shutdown.
@@ -348,19 +346,19 @@ public class Main {
 	public void broadcastResolutionResult(String result[]) {
 		ServerDatabase.RESOLUTION_LOCK.lock();
 		for(int i=0; i<2; i++){
-			if(_currentResolutions[i].equals("New Constitution") && result[i+2].equals("for")){
+			if(_currentResolutions[i].equals("New Constitution") && result[i].equals("for")){
 				ServerDatabase.PAST_RESOLUTION.clear();
 				writeColortext("Enacted New Constitution", CLIENTOUT);
 				ServerDatabase.RESOLUTION_LOCK.unlock();
 				this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[i] + "\n" + result[i]);
 				break;
-			} else if(_currentResolutions[i].equals("Repeal") && result[i+2].equals("for")){
-				ServerDatabase.PAST_RESOLUTION.remove(result[i + 2]);
-				writeColortext( "Repealed " + result[i+2], CLIENTOUT);
+			} else if(_currentResolutions[i].equals("Repeal") && result[i].equals("for")){
+				ServerDatabase.PAST_RESOLUTION.remove(result[i]);
+				writeColortext( "Repealed " + _repealResolution[i], CLIENTOUT);
 				this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[i] + "\n" + result[i] + "\n" + _repealResolution[i]);
 			} else if (_currentResolutions[i].equals("Revote")) {
 				//Is never actually passed in, just vote on the agenda to be revoted
-			} else if(result[i+2].equals("tie")){
+			} else if(result[i].equals("tie")){
 				//do nothing
 			} else {
 				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i], result[i]);
@@ -379,7 +377,7 @@ public class Main {
 		ServerDatabase.VOTES_LOCK.unlock();
 
 		ServerDatabase.TOTAL_VOTES_LOCK.lock();
-		ServerDatabase.TOTAL_VOTES.put(player, ServerDatabase.TOTAL_VOTES.get(player) + numFor + numAgainst);
+		ServerDatabase.TOTAL_VOTES.put(player, numFor + numAgainst);
 		ServerDatabase.TOTAL_VOTES_LOCK.unlock();
 	}
 
@@ -387,7 +385,6 @@ public class Main {
 		ServerDatabase.VOTES_LOCK.lock();
 		Integer _for[] = {0,0};
 		Integer _against[] = {0,0};
-		System.out.println(ServerDatabase.PLAYERS.length);
 		for(int i=0; i<2; i++) {
 			for (int k = 0; k < ServerDatabase.PLAYERS.length; k++) {
 				_for[i] += ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[0];
@@ -410,6 +407,26 @@ public class Main {
 		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[0], new Integer[]{_for[0],_against[0]});
 		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[1], new Integer[]{_for[1],_against[1]});
 		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
+
+		ServerDatabase.TOTAL_VOTES_LOCK.lock();
+		List<String> playersByVotes = new ArrayList<String>(ServerDatabase.TOTAL_VOTES.keySet());
+		Collections.sort(playersByVotes, new Comparator<String>(){
+			public int compare(String p1, String p2){
+				return ServerDatabase.TOTAL_VOTES.get(p1) - ServerDatabase.TOTAL_VOTES.get(p2);
+			}
+		});
+
+		Collections.reverse(playersByVotes);
+
+		writeColortext("Turn order: " + playersByVotes, SERVEROUT);
+		ServerDatabase.TOTAL_VOTES_LOCK.unlock();
+
+		String turnOrder = "";
+		for(String s : playersByVotes){
+			turnOrder += s + "\n";
+		}
+
+		this.broadcast(Protocol.TURN_ORDER, turnOrder);
 
 	}
 	
