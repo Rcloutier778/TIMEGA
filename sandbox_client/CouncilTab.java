@@ -79,20 +79,23 @@ public class CouncilTab extends AbstractTab {
 		_voteLabel1 = new Label("Vote:");
 		_voteLabel1.setLayoutX(40);
 		_voteLabel1.setLayoutY(180);
+		_voteLabel1.setVisible(false);
 
 		_vote1 = new ComboBox<>();
 		_vote1.setLayoutX(80);
 		_vote1.setLayoutY(180);
 		_vote1.getItems().addAll("For","Against");
+		_vote1.setVisible(false);
 
 		_numVotes1 = new NumberTextField();
 		_numVotes1.setPromptText("# of Votes");
 		_numVotes1.setLayoutX(180);
 		_numVotes1.setLayoutY(180);
 		_numVotes1.setMaxWidth(80);
+		_numVotes1.setVisible(false);
 
 		_send1 = new Button("Send");
-		_send1.setLayoutX(260);
+		_send1.setLayoutX(280);
 		_send1.setLayoutY(180);
 		_send1.setOnAction(e->{
 			if(_vote1.getValue()!=null && _numVotes1.getNumber() >=0 ){
@@ -103,7 +106,7 @@ public class CouncilTab extends AbstractTab {
 
 			}
 		});
-
+		_send1.setVisible(false);
 
 		_name2 = new Text();
 		_name2.setLayoutX(40);
@@ -132,20 +135,23 @@ public class CouncilTab extends AbstractTab {
 		_voteLabel2 = new Label("Vote:");
 		_voteLabel2.setLayoutX(40);
 		_voteLabel2.setLayoutY(360);
+		_voteLabel2.setVisible(false);
 
 		_vote2 = new ComboBox<>();
 		_vote2.setLayoutX(80);
 		_vote2.setLayoutY(360);
 		_vote2.getItems().addAll("For","Against");
+		_vote2.setVisible(false);
 
 		_numVotes2 = new NumberTextField();
 		_numVotes2.setPromptText("# of Votes");
 		_numVotes2.setLayoutX(180);
 		_numVotes2.setLayoutY(360);
 		_numVotes2.setMaxWidth(80);
+		_numVotes2.setVisible(false);
 
 		_send2 = new Button("Send");
-		_send2.setLayoutX(260);
+		_send2.setLayoutX(280);
 		_send2.setLayoutY(360);
 		_send2.setOnAction(e->{
 			if(_vote2.getValue()!=null && _numVotes2.getNumber() >=0 ){
@@ -155,6 +161,7 @@ public class CouncilTab extends AbstractTab {
 				_send2.setDisable(true);
 			}
 		});
+		_send2.setVisible(false);
 
 		_pastTitle.setLayoutX(40);
 		_pastTitle.setLayoutY(400);
@@ -189,6 +196,10 @@ public class CouncilTab extends AbstractTab {
 				_vote1.setDisable(false);
 				_numVotes1.setDisable(false);
 				_send1.setDisable(false);
+				_vote1.setVisible(true);
+				_numVotes1.setVisible(true);
+				_send1.setVisible(true);
+				_voteLabel1.setVisible(true);
 						
 				_name2.setText(resolution2);
 				String pro2 = "For: " + Database.getPro(resolution2);
@@ -199,6 +210,10 @@ public class CouncilTab extends AbstractTab {
 				_vote2.setDisable(false);
 				_numVotes2.setDisable(false);
 				_send2.setDisable(false);
+				_vote2.setVisible(true);
+				_numVotes2.setVisible(true);
+				_send2.setVisible(true);
+				_voteLabel2.setVisible(true);
 			}
 		});
 	}

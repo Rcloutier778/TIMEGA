@@ -349,13 +349,9 @@ public class Main {
 			if(_currentResolutions[i].equals("New Constitution") && result[i].equals("for")){
 				ServerDatabase.PAST_RESOLUTION.clear();
 				writeColortext("Enacted New Constitution", CLIENTOUT);
-				ServerDatabase.RESOLUTION_LOCK.unlock();
-				this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[i] + "\n" + result[i]);
-				break;
 			} else if(_currentResolutions[i].equals("Repeal") && result[i].equals("for")){
 				ServerDatabase.PAST_RESOLUTION.remove(result[i]);
 				writeColortext( "Repealed " + _repealResolution[i], CLIENTOUT);
-				this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[i] + "\n" + result[i] + "\n" + _repealResolution[i]);
 			} else if (_currentResolutions[i].equals("Revote")) {
 				//Is never actually passed in, just vote on the agenda to be revoted
 			} else if(result[i].equals("tie")){
@@ -363,10 +359,11 @@ public class Main {
 			} else {
 				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i], result[i]);
 				writeColortext("Voted on resolution.", CLIENTOUT);
-				this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[i] + "\n" + result[i]);
 			}
 		}
 		//Current1, Result1, Current2, Result2, Repeal1, Repeal2
+
+		this.broadcast(Protocol.RESOLUTION_RESULT,_currentResolutions[0] + "\n" + result[0] + "\n" + _repealResolution[0] + "\n" + _currentResolutions[1] + "\n" + result[1] + "\n" + _repealResolution[1]);
 		ServerDatabase.RESOLUTION_LOCK.unlock();
 	}
 
@@ -407,7 +404,9 @@ public class Main {
 		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[0], new Integer[]{_for[0],_against[0]});
 		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[1], new Integer[]{_for[1],_against[1]});
 		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
+	}
 
+	public void broadcastTurnOrder(){
 		ServerDatabase.TOTAL_VOTES_LOCK.lock();
 		List<String> playersByVotes = new ArrayList<String>(ServerDatabase.TOTAL_VOTES.keySet());
 		Collections.sort(playersByVotes, new Comparator<String>(){
@@ -427,7 +426,6 @@ public class Main {
 		}
 
 		this.broadcast(Protocol.TURN_ORDER, turnOrder);
-
 	}
 	
 	// MAP INFO

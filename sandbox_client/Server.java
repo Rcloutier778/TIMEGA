@@ -242,19 +242,31 @@ public class Server implements Runnable {
 
 			_client.resolution(resolution1, resolution2);
 		} else if(message == Protocol.RESOLUTION_RESULT){
-			String result[] = new String[3];
-			result[0] = _in.readLine();
-			result[1] = _in.readLine();
-			if(result[0].equals("New Constitution") && result[1].equals("for")){
-				Database.clearPast();
-			}else if(result[0].equals("Repeal") && result[1].equals("for")){
-				result[2] = _in.readLine();
-				Database.removePast(result[2]);
-			}else{
-				Database.putRes(result[0], result[1]);
+			String resolution[] = new String[2];
+			String result[] = new String[2];
+			String repeal[] = new String[2];
+
+			for(int i=0; i<2; i++){
+				resolution[i] = _in.readLine();
+				result[i] = _in.readLine();
+				repeal[i] = _in.readLine();
 			}
 
+			if((resolution[0].equals("New Constitution") && result[0].equals("for")) ||(resolution[1].equals("New Constitution") && result[1].equals("for") )){
+				Database.clearPast();
+			} else{
+				for(int i=0; i<2; i++){
+					if(resolution[i].equals("Repeal") && result[i].equals("for")){
+						Database.removePast(repeal[i]);
+					}else{
+						Database.putRes(resolution[i], result[i]);
+					}
+				}
+			}
+
+
 			_client.resolutionResult();
+
 		} else if(message == Protocol.VOTE){
 
 			for(int i=0; i<2; i++){
@@ -262,15 +274,19 @@ public class Server implements Runnable {
 			}
 
 			this.write(Protocol.VOTE);
+			this.write(Protocol.TURN_ORDER);
 
 			Database.clearVoteQueue();
 		} else if(message == Protocol.TURN_ORDER){
+			System.out.println("Turn ORder Server");
 			String[] turnOrder = new String[Database.numPlayers()];
 			for(int i=0; i<Database.numPlayers(); i++){
 				turnOrder[i] = _in.readLine();
 			}
 			_in.readLine();
 			Database.setTurnOrder(turnOrder);
+
+			_client.resolutionResult();
 		}
 
 	}

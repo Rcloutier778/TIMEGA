@@ -418,8 +418,8 @@ public class CommandMap {
 				Main.writeColortext("No such resolution: " + res, Main.ERROR);
 			}else{
 				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.lock();
-				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(args[1])[0] +
-						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(args[1])[1],Main.SERVEROUT);
+				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[0] +
+						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[1],Main.SERVEROUT);
 				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
 			}
 		}

@@ -354,6 +354,15 @@ public class ClientThread implements Runnable {
 				}
 			}).start();
 		}
+
+		else if(i==Protocol.TURN_ORDER){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					_main.broadcastTurnOrder();
+				}
+			}).start();
+		}
 		
 	}
 	

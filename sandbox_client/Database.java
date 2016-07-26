@@ -865,6 +865,7 @@ public class Database {
 	}
 
 	public static void setTurnOrder(String[] order){
+		System.out.println("setTurnOrder");
 		synchronized (TURN_ORDER){
 			TURN_ORDER = "Turn Order: ";
 			for (String s : order) {
