@@ -42,16 +42,11 @@ import java.util.HashMap;
  4) You should definitely underline the letters of the ship name instead of putting it in parentheses
 
  Council Room
- 1) This tab may need to be rewritten. When rewriting a tab, lay out the UI on paper first, then code in the UI, and then start adding in functionality. This will save you hours and me a headache.
  2) We don't care about all past resolutions, only the ones still in play (note that some stay in play for a single round and then disappear)
- 4) Players should be able to cast votes from this tab as well (this is a big update, hence why it may need to be rewritten).
 
  Server
- 3) the server should be track total votes, reset them whenever new resolutions are sent, and be able to report the votes for each resolution on command and the turn order on command. the turn order should be sent to each player.
- 4) the server should also keep track of the total votes cast by each player (for statistics purposes)
- 5) the server should save the resolutions in play, the resolutions under deliberation, the votes cast for the current resolutions by player, and the total votes cast be each player
- 6) the server should be able to load the information in the above step
-
+ 3) and be able to report the votes for each resolution on command and the turn order on command.
+ 4) the turn order should be sent to each player.
 
 
  Finally, the simulator should be able to handle this (exhaustive) list of all combat effects:

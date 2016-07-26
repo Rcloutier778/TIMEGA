@@ -333,7 +333,6 @@ public class ClientThread implements Runnable {
 		}
 
 		else if(i == Protocol.VOTE_TALLY){
-			System.out.println("in Client Thread Vote_Tally"+ System.nanoTime());
 			String player = _in.readLine();
 			int resolution = Integer.parseInt(_in.readLine());
 			int numFor = Integer.parseInt(_in.readLine());
@@ -348,7 +347,6 @@ public class ClientThread implements Runnable {
 		}
 
 		else if(i==Protocol.VOTE){
-			System.out.println("in Client Thread Vote"+ System.nanoTime());
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -372,7 +370,6 @@ public class ClientThread implements Runnable {
 	// can also be used to write a protocol without a message
 	public void write(int protocol, int ... message) {
 		synchronized(_out) {
-			System.out.println("Client thread write"+ System.nanoTime());
 			_out.write(protocol);
 			for(int i : message) {
 				_out.write(i);
@@ -385,7 +382,6 @@ public class ClientThread implements Runnable {
 	// writes a protocol and its corresponding message
 	public void write(int protocol, String message) {
 		synchronized(_out) {
-			System.out.println("Client thread write"+ System.nanoTime());
 			_out.write(protocol);
 			_out.write(message);
 			_out.flush();

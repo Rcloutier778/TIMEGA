@@ -5,7 +5,6 @@ package sandbox_client;
  */
 
 import server.Player;
-import server.ServerDatabase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -243,35 +242,16 @@ public class Server implements Runnable {
 
 			_client.resolution(resolution1, resolution2);
 		} else if(message == Protocol.RESOLUTION_RESULT){
-			String result[] = new String[4];
+			String result[] = new String[3];
 			result[0] = _in.readLine();
 			result[1] = _in.readLine();
-			result[2] = _in.readLine();
-			result[3] = _in.readLine();
-
-			//todo make sure repeal doesn't slip past.
-			for(int i=0; i<2; i++){
-				if(result[i*2].equals("Repeal") && result[(i*2)+1].equals("for")){
-					ServerDatabase.RESOLUTION_LOCK.lock();
-					for(String s : Database.resolutionKeys()){
-						if(!ServerDatabase.PAST_RESOLUTION.keySet().contains(s)){
-							Database.removePast(s);
-						}
-					}
-					ServerDatabase.RESOLUTION_LOCK.unlock();
-				}
-				else if(result[i*2].equals("Revote")){
-					//do nothing
-				}
-				else{
-					Database.putRes(result[i*2], result[(i*2)+1]);
-				}
-			}
-
-			for(int i=0; i<2; i++) {
-				if (result[i*2].equals("New Constitution") && result[(i*2)+1].equals("for")) {
-					Database.clearPast();
-				}
+			if(result[0].equals("New Constitution") && result[1].equals("for")){
+				Database.clearPast();
+			}else if(result[0].equals("Repeal") && result[1].equals("for")){
+				result[2] = _in.readLine();
+				Database.removePast(result[2]);
+			}else{
+				Database.putRes(result[0], result[1]);
 			}
 
 			_client.resolutionResult();

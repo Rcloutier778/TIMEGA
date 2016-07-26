@@ -155,7 +155,6 @@ public class Client {
 	
 	// write information to the server
 	public void write(int protocol, String text) {
-		System.out.println("In Client write" + System.nanoTime());
 		_server.write(protocol, text);
 	}
 	

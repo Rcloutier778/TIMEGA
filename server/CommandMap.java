@@ -102,7 +102,7 @@ public class CommandMap {
 					}else if(args[1].equals("release")){
 						Main.writeColortext("Fires a personnel for a player", Main.SERVEROUT);
 					}else if(args[1].equals("resolutions")){
-						Main.writeColortext("Sets the resolutions to be voted on", Main.SERVEROUT);
+						Main.writeColortext("Sets the resolutions to be voted on.\nIf repealing, Repeal must be entered first with the law to be repealed entered after the second resolution.", Main.SERVEROUT);
 					}else if(args[1].equals("resresult")) {
 						Main.writeColortext("Sets the result of the current resolution. ", Main.SERVEROUT);
 						//todo finish up council tab before doing repeals
@@ -355,47 +355,46 @@ public class CommandMap {
 	private class ResolutionCommand implements Command {
 
 		public void run(String[] args) {
-			if (args.length < 3) {
-				Main.writeColortext("usage: resolution <agenda_1> <agenda_2>", Main.ERROR);
+			if (args.length < 3 || args.length > 5) {
+				Main.writeColortext("usage: resolution <agenda_1> <agenda_2> <repeal_1> <repeal_2>", Main.ERROR);
 				return;
 			}
 
 			String res1 = args[1].replace("_", " ");
 			String res2 = args[2].replace("_", " ");
-
+			String res3 = "";
+			String res4 = "";
+			if(args.length > 2){
+				res3 = args[3].replace("_"," ");
+			}
+			if(args.length > 3){
+				res4 = args[4].replace("_"," ");
+			}
 			if (!ServerDatabase.RESOLUTION_SET.contains(res1)) {
 				Main.writeColortext("resolution \"" + res1 + "\" not found", Main.ERROR);
 			} else if (!ServerDatabase.RESOLUTION_SET.contains(res2)) {
 				Main.writeColortext("resolution \"" + res2 + "\" not found", Main.ERROR);
-			} else{
-				_main.broadcastResolution(res1, res2);
+			} else if (!ServerDatabase.RESOLUTION_SET.contains(res3) && args.length>3) {
+				Main.writeColortext("resolution \"" + res3 + "\" not found", Main.ERROR);
+			}else if (!ServerDatabase.RESOLUTION_SET.contains(res4) && args.length>4) {
+				Main.writeColortext("resolution \"" + res4 + "\" not found", Main.ERROR);
+			}else{
+				_main.broadcastResolution(res1, res2, res3, res4);
 			}
 		}
 
 	}
 
 	private class ResolutionWinCommand implements Command {
-//todo what if second resolution is repeal?
+		//todo what if second resolution is repeal?
 		public void run(String[] args) {
-			if (args.length < 3 || args.length >5) {
-				Main.writeColortext("usage: resresult <result_1> <result_2> <repeal_1> <repeal_2>", Main.ERROR);
+			if (args.length < 3) {
+				Main.writeColortext("usage: resresult <result_1> <result_2>", Main.ERROR);
 				return;
 			}
-			String[] result = new String[4];
+			String[] result = new String[2];
 			result[0] = args[1];
 			result[1] = args[2];
-			if(args.length == 4){
-				result[2] = args[3].replace("_"," ");
-				if(!ServerDatabase.RESOLUTION_SET.contains(result[2])){
-					Main.writeColortext("resolution \"" + result[2] + "\" not found", Main.ERROR);
-				}
-			}
-			if(args.length == 5){
-				result[3] = args[4].replace("_"," ");
-				if(!ServerDatabase.RESOLUTION_SET.contains(result[3])){
-					Main.writeColortext("resolution \"" + result[3] + "\" not found", Main.ERROR);
-				}
-			}
 			if (!(args[1].equals("for") || args[1].equals("against")) ||!(args[2].equals("for") || args[2].equals("against")) ) {
 				Main.writeColortext("usage: resresult <for/against> <for/against>", Main.ERROR);
 			}else{

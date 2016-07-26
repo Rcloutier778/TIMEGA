@@ -46,7 +46,14 @@ public class ServerDatabase {
 	//string = player, integer = for/against numbers, array = resolution
 	public static final HashMap<String,Integer[]> VOTES[] = new HashMap[]{new HashMap<String, Integer[]>(),new HashMap<String, Integer[]>()};
 	public static final Lock VOTES_LOCK = new ReentrantLock();
-	
+
+	public static final HashMap<String, Integer> TOTAL_VOTES = new HashMap<String, Integer>();
+	public static final Lock TOTAL_VOTES_LOCK = new ReentrantLock();
+
+	public static final String[] CURRENT_RESOLUTIONS = {"",""};
+	public static final Lock CURRENT_RESOLUTIONS_LOCK = new ReentrantLock();
+
+
 	public static final HashMap<String,String> TABS = new HashMap<String,String>();
 
 	public static boolean hasName(String name) {
@@ -67,6 +74,7 @@ public class ServerDatabase {
 			TECH.put(p.name, new HashSet<String>());
 			PERSONNEL.put(p.name, new HashSet<String>());
 			EMPIRE_STAGE.put(p.name, 0);
+			TOTAL_VOTES.put(p.name,0);
 			for(int k=0; k<2; k++){
 				VOTES[k].put(p.name,new Integer[]{0,0});
 			}
