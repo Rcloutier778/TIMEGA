@@ -773,6 +773,12 @@ public class Database {
 		// ^ maps a resolution name to its extra effect, if present
 	private static final HashMap<String, String> PAST_RESOLUTIONS = new HashMap<String,String>();
 
+	private static final int[][] VOTE_QUEUE = {{0,0},{0,0}};
+	// [resolution][for/against]
+
+	private static final int[][] VOTES = {{0,0},{0,0}};
+
+
 	// populate the resolutions from the xml file
 	public static void addResolutionToDatabase(String name, String pro, String con, String extra) {
 		PROS.put(name, pro);
@@ -834,7 +840,55 @@ public class Database {
 			PAST_RESOLUTIONS.remove(name);
 		}
 	}
-	
+
+	//Local Vote
+	public static void localVote(Integer resolution, String result, Integer number){
+		synchronized (VOTE_QUEUE){
+			int res = result.equals("For") ? 0:1;
+			VOTE_QUEUE[resolution][res] += number;
+		}
+	}
+
+	//Get votes enqueued
+	public static int getVoteQueue(Integer resolution, String result){
+		synchronized (VOTE_QUEUE){
+			return VOTE_QUEUE[resolution][result.equals("For") ? 0:1];
+		}
+	}
+
+	public static void clearVotes(){
+		synchronized (VOTES){
+			for(int i=0; i<2; i++){
+				for(int k=0; k<2; k++){
+					VOTES[i][k] = 0;
+				}
+			}
+		}
+	}
+
+	public static void clearVoteQueue(){
+		synchronized (VOTE_QUEUE){
+			for(int i=0; i<2; i++){
+				for(int k=0; k<2; k++){
+					VOTE_QUEUE[i][k] = 0;
+				}
+			}
+		}
+	}
+
+
+	//Vote
+	public static void vote(Integer resolution, Integer _for, Integer _against){
+		synchronized (VOTES){
+			VOTES[resolution][0] += _for;
+			VOTES[resolution][1] += _against;
+
+			VOTE_QUEUE[resolution][0] = 0;
+			VOTE_QUEUE[resolution][1] = 0;
+
+		}
+	}
+
 	
 	//      _     _           
 	//  ___| |__ (_)_ __  ___ 
@@ -849,9 +903,8 @@ public class Database {
 	public static final int DREADNOUGHT = 3;
 	public static final int WAR_SUN = 4;
 	public static final int SAS = 5;
-	public static final int GROUND_FORCE = 6;
 	// keep codes and array synchronized!
-	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS", "Ground Force"};
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS"};
 	
 	public static final int NUM_SHIPS = SHIP_NAMES.length;
 	

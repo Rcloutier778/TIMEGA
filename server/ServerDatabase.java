@@ -42,7 +42,10 @@ public class ServerDatabase {
 	public static final HashSet<String> TECH_SET = new HashSet<String>();
 	public static final HashSet<String> PERSONNEL_SET = new HashSet<String>();
 	public static final HashSet<String> RESOLUTION_SET = new HashSet<String>();
-	
+
+	//string = player, integer = for/against numbers, array = resolution
+	public static final HashMap<String,Integer[]> VOTES[] = new HashMap[]{new HashMap<String, Integer[]>(),new HashMap<String, Integer[]>()};
+	public static final Lock VOTES_LOCK = new ReentrantLock();
 	
 	public static final HashMap<String,String> TABS = new HashMap<String,String>();
 
@@ -64,6 +67,9 @@ public class ServerDatabase {
 			TECH.put(p.name, new HashSet<String>());
 			PERSONNEL.put(p.name, new HashSet<String>());
 			EMPIRE_STAGE.put(p.name, 0);
+			for(int k=0; k<2; k++){
+				VOTES[k].put(p.name,new Integer[]{0,0});
+			}
 		}
 
 		for(String tab : Client.TAB_NAMES) {

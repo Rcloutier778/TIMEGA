@@ -47,6 +47,13 @@ public class CommandMap {
 		_map.put("resolutions", new ResolutionCommand());
 		_map.put("resresult", new ResolutionWinCommand());
 		_map.put("help", new HelpCommand());
+		//_map.put("vote", new VoteCommand());
+		_map.put("vote", new Command() {
+			@Override
+			public void run(String[] args) {
+				_main.broadcast(Protocol.VOTE);
+			}
+		});
 
 	}
 
@@ -99,6 +106,8 @@ public class CommandMap {
 					}else if(args[1].equals("resresult")) {
 						Main.writeColortext("Sets the result of the current resolution. ", Main.SERVEROUT);
 						//todo finish up council tab before doing repeals
+					}else if(args[1].equals("vote")){
+						Main.writeColortext("Tallies the votes for the current resolutions", Main.SERVEROUT);
 					}
 				}else {
 					Main.writeColortext("No command \"" + args[1] + "\" found", Main.ERROR);
@@ -366,7 +375,7 @@ public class CommandMap {
 	}
 
 	private class ResolutionWinCommand implements Command {
-
+//todo what if second resolution is repeal?
 		public void run(String[] args) {
 			if (args.length < 3 || args.length >5) {
 				Main.writeColortext("usage: resresult <result_1> <result_2> <repeal_1> <repeal_2>", Main.ERROR);

@@ -123,6 +123,7 @@ public class Main {
 	// broadcast a single protocol
 	public void broadcast(int protocol) {
 		synchronized(_clients) {
+			System.out.println("Main broadcast");
 			for(ClientThread c : _clients) {
 				c.write(protocol);
 			}
@@ -319,6 +320,8 @@ public class Main {
 	}
 
 	public void broadcastResolutionResult(String result[]) {
+		//todo what to do if tie? Have a tie input along with for/against
+		System.out.println("In resolution results");
 		ServerDatabase.RESOLUTION_LOCK.lock();
 		for(int i=0; i<2; i++){
 			if(_currentResolutions[i].equals("New Constitution") && result[i+2].equals("for")){
@@ -338,6 +341,47 @@ public class Main {
 		//todo make repeal and new const statements, implement revote
 		this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[0] + "\n" + result[0] + "\n" + _currentResolutions[1] + "\n" + result[1] + "\n");
 		ServerDatabase.RESOLUTION_LOCK.unlock();
+	}
+
+	public void broadcastVoteTally(String player, int resolution, int numFor, int numAgainst){
+		System.out.println("Int Main Vote Tally");
+		ServerDatabase.VOTES_LOCK.lock();
+		Integer res[] = {numFor,numAgainst};
+		ServerDatabase.VOTES[resolution].put(player,res);
+		ServerDatabase.VOTES_LOCK.unlock();
+	}
+
+	public void broadcastVote(){
+		System.out.println("Int Main Vote");
+		ServerDatabase.VOTES_LOCK.lock();
+		Integer _for[] = {0,0};
+		Integer _against[] = {0,0};
+		System.out.println(ServerDatabase.PLAYERS.length);
+		for(int i=0; i<2; i++) {
+			for (int k = 0; k < ServerDatabase.PLAYERS.length; k++) {
+				_for[i] += ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[0];
+				_against[i] += ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[1];
+				System.out.println(ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[0]);
+				System.out.println(ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[1]);
+			}
+		}
+		System.out.println(_for[0]);
+		System.out.println(_against[0]);
+		System.out.println(_for[1]);
+		System.out.println(_against[1]);
+
+		if(_for[0] > _against[0] && _for[1] > _against[1]){//for for
+			this.broadcastResolutionResult(new String[]{"for","for"});
+		}else if(_for[0] > _against[0] && _for[1] < _against[1]) {//for against
+			this.broadcastResolutionResult(new String[]{"for", "against"});
+		}else if(_for[0] < _against[0] && _for[1] > _against[1]) {//against for
+			this.broadcastResolutionResult(new String[]{"against", "for"});
+		}else if(_for[0] < _against[0] && _for[1] < _against[1]) {//against against
+			this.broadcastResolutionResult(new String[]{"against", "against"});
+		}
+
+		System.out.println("End of broadcastVote");
+		ServerDatabase.VOTES_LOCK.unlock();
 	}
 	
 	// MAP INFO
