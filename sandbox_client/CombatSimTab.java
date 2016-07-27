@@ -111,7 +111,8 @@ public class CombatSimTab extends AbstractTab {
     //Contains the T/F and # value associated with a racial ability
     //Key = String, Values = int. 0=false, 1=true, other==embers
     //Creuss, L1Z1X, Mentak
-    private HashMap<String,Integer>[] _raceEffects = new HashMap[2];
+    @SuppressWarnings("unchecked")
+	private HashMap<String,Integer>[] _raceEffects = new HashMap[2];
 
     //Button to show extras pane
     private Button _extraButton = new Button("Next");
