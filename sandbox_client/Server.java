@@ -5,7 +5,6 @@ package sandbox_client;
  */
 
 import server.Player;
-import server.ServerDatabase;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -185,7 +184,7 @@ public class Server implements Runnable {
 					this.write(Protocol.SEND_PERSON, Database.getName() + "\n" + person);
 				}
 			}
-			
+
 			this.write(Protocol.END_ROUND);
 			
 			if(Database.isAdvancing()) {
@@ -243,48 +242,66 @@ public class Server implements Runnable {
 
 			_client.resolution(resolution1, resolution2);
 		} else if(message == Protocol.RESOLUTION_RESULT){
-			String result[] = new String[4];
-			result[0] = _in.readLine();
-			result[1] = _in.readLine();
-			result[2] = _in.readLine();
-			result[3] = _in.readLine();
+			String resolution[] = new String[2];
+			String result[] = new String[2];
+			String repeal[] = new String[2];
 
-			//todo make sure repeal doesn't slip past.
 			for(int i=0; i<2; i++){
-				if(result[i*2].equals("Repeal") && result[(i*2)+1].equals("for")){
-					ServerDatabase.RESOLUTION_LOCK.lock();
-					for(String s : Database.resolutionKeys()){
-						if(!ServerDatabase.PAST_RESOLUTION.keySet().contains(s)){
-							Database.removePast(s);
-						}
+				resolution[i] = _in.readLine();
+				result[i] = _in.readLine();
+				repeal[i] = _in.readLine();
+			}
+
+			if((resolution[0].equals("New Constitution") && result[0].equals("for")) ||(resolution[1].equals("New Constitution") && result[1].equals("for") )){
+				Database.clearPast();
+			} else{
+				for(int i=0; i<2; i++){
+					if(resolution[i].equals("Repeal") && result[i].equals("for")){
+						Database.removePast(repeal[i]);
+					}else{
+						Database.putRes(resolution[i], result[i]);
 					}
-					ServerDatabase.RESOLUTION_LOCK.unlock();
-				}
-				else if(result[i*2].equals("Revote")){
-					//do nothing
-				}
-				else{
-					Database.putRes(result[i*2], result[(i*2)+1]);
 				}
 			}
 
-			for(int i=0; i<2; i++) {
-				if (result[i*2].equals("New Constitution") && result[(i*2)+1].equals("for")) {
-					Database.clearPast();
-				}
+
+			_client.resolutionResult();
+
+		} else if(message == Protocol.VOTE){
+
+			for(int i=0; i<2; i++){
+				this.write(Protocol.VOTE_TALLY, Database.getName() + "\n" + i + "\n" + Database.getVoteQueue(i, "For") + "\n" + Database.getVoteQueue(i,"Against"));
 			}
+
+			this.write(Protocol.VOTE);
+			this.write(Protocol.TURN_ORDER);
+
+			Database.clearVoteQueue();
+		} else if(message == Protocol.TURN_ORDER){
+			System.out.println("Turn ORder Server");
+			String[] turnOrder = new String[Database.numPlayers()];
+			for(int i=0; i<Database.numPlayers(); i++){
+				turnOrder[i] = _in.readLine();
+			}
+			_in.readLine();
+			Database.setTurnOrder(turnOrder);
 
 			_client.resolutionResult();
 		}
+
 	}
 	
 	public synchronized void write(int protocol, String text) {
+		System.out.println("In Server write" + System.nanoTime());
+
 		_out.write(protocol);
 		_out.write(text + "\n");
 		_out.flush();
 	}
 	
 	public synchronized void write(int protocol) {
+		System.out.println("In Server write" + System.nanoTime());
+
 		_out.write(protocol);
 		_out.flush();
 	}

@@ -10,9 +10,7 @@ import sandbox_client.Protocol;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
+import java.util.*;
 //import server.CommandMap;
 
 public class Main {
@@ -137,14 +135,14 @@ public class Main {
 			}
 		}
 	}
-	
+
 	// EXPANDED PROTOCOLS: lots of them, not a lot of good ways of condensing them
 
 	//Reloads server data from log file produced on shutdown.
 	public void broadcastReload(String filename){
 		try(BufferedReader br = new BufferedReader(new FileReader(filename))){
 			//Planets, Space Docks, Tech, Personnel, Empire Stage, Resolution, End
-			boolean[] passed = {false, false, false, false, false, false, false};
+			boolean[] passed = {false, false, false, false, false, false, false, false, false};
 			ArrayList<String> playernames = new ArrayList<>();
 			for(int i = 0; i<ServerDatabase.PLAYERS.length;i++) {
 				playernames.add(ServerDatabase.PLAYERS[i].name);
@@ -180,8 +178,16 @@ public class Main {
 					passed[5] = true;
 					continue;
 				}
-				if(line.equals("EndFile")){
+				if(line.equals("Current Resolutions")){
 					passed[6] = true;
+					continue;
+				}
+				if(line.equals("Total Votes")){
+					passed[7] = true;
+					continue;
+				}
+				if(line.equals("EndFile")){
+					passed[8] = true;
 					break;
 				}
 				//Planets: Owner, Planet name
@@ -217,7 +223,6 @@ public class Main {
 							broadcastAdvance(splitline[0], "[" + splitline[0] + "] ");
 						}
 					}
-
 				}
 				//Resolution
 				//
@@ -227,6 +232,16 @@ public class Main {
 					//result1, result2
 					String[] ret = {splitline[1],splitline[3]};
 					broadcastResolutionResult(ret);
+				}
+				//Current Resolutions
+				if(passed[6] && !passed[7]){
+					_currentResolutions[0] = splitline[0].replace("_", " ");
+					_currentResolutions[1] = splitline[1].replace("_", " ");
+				}
+				//Total Votes
+				if(passed[7] && !passed[8]){
+					ServerDatabase.TOTAL_VOTES_LOCK.lock();
+					ServerDatabase.TOTAL_VOTES.put(splitline[0],Integer.parseInt(splitline[1]));
 				}
 
 			}
@@ -312,22 +327,34 @@ public class Main {
 	}
 
 	private String[] _currentResolutions = new String[2];
-	public void broadcastResolution(String res1, String res2) {
+	private String[] _repealResolution = new String[2];
+
+	public void broadcastResolution(String res1, String res2, String rep1, String rep2) {
 		_currentResolutions[0] = res1;
 		_currentResolutions[1] = res2;
+		_repealResolution[0] = rep1;
+		_repealResolution[1] = rep2;
+
+		ServerDatabase.CURRENT_RESOLUTIONS_LOCK.lock();
+		ServerDatabase.CURRENT_RESOLUTIONS[0] = _currentResolutions[0];
+		ServerDatabase.CURRENT_RESOLUTIONS[1] = _currentResolutions[1];
+		ServerDatabase.CURRENT_RESOLUTIONS_LOCK.unlock();
+
 		this.broadcast(Protocol.SEND_RESOLUTION, res1 + "\n" + res2 + "\n");
 	}
 
 	public void broadcastResolutionResult(String result[]) {
 		ServerDatabase.RESOLUTION_LOCK.lock();
 		for(int i=0; i<2; i++){
-			if(_currentResolutions[i].equals("New Constitution") && result[i+2].equals("for")){
+			if(_currentResolutions[i].equals("New Constitution") && result[i].equals("for")){
 				ServerDatabase.PAST_RESOLUTION.clear();
-				writeColortext( "Enacted New Constitution", CLIENTOUT);
-			}else if(_currentResolutions[i].equals("Repeal") && result[i+2].equals("for")){
-				ServerDatabase.PAST_RESOLUTION.remove(result[i + 2]);
-				writeColortext( "Repealed " + result[i+2], CLIENTOUT);
-			}else if (_currentResolutions[i].equals("Revote")) {
+				writeColortext("Enacted New Constitution", CLIENTOUT);
+			} else if(_currentResolutions[i].equals("Repeal") && result[i].equals("for")){
+				ServerDatabase.PAST_RESOLUTION.remove(result[i]);
+				writeColortext( "Repealed " + _repealResolution[i], CLIENTOUT);
+			} else if (_currentResolutions[i].equals("Revote")) {
+				//Is never actually passed in, just vote on the agenda to be revoted
+			} else if(result[i].equals("tie")){
 				//do nothing
 			} else {
 				ServerDatabase.PAST_RESOLUTION.put(_currentResolutions[i], result[i]);
@@ -335,9 +362,70 @@ public class Main {
 			}
 		}
 		//Current1, Result1, Current2, Result2, Repeal1, Repeal2
-		//todo make repeal and new const statements, implement revote
-		this.broadcast(Protocol.RESOLUTION_RESULT, _currentResolutions[0] + "\n" + result[0] + "\n" + _currentResolutions[1] + "\n" + result[1] + "\n");
+
+		this.broadcast(Protocol.RESOLUTION_RESULT,_currentResolutions[0] + "\n" + result[0] + "\n" + _repealResolution[0] + "\n" + _currentResolutions[1] + "\n" + result[1] + "\n" + _repealResolution[1]);
 		ServerDatabase.RESOLUTION_LOCK.unlock();
+	}
+
+	public void broadcastVoteTally(String player, int resolution, int numFor, int numAgainst){
+		ServerDatabase.VOTES_LOCK.lock();
+		Integer res[] = {numFor,numAgainst};
+		ServerDatabase.VOTES[resolution].put(player,res);
+		ServerDatabase.VOTES_LOCK.unlock();
+
+		ServerDatabase.TOTAL_VOTES_LOCK.lock();
+		ServerDatabase.TOTAL_VOTES.put(player, numFor + numAgainst);
+		ServerDatabase.TOTAL_VOTES_LOCK.unlock();
+	}
+
+	public void broadcastVote(){
+		ServerDatabase.VOTES_LOCK.lock();
+		Integer _for[] = {0,0};
+		Integer _against[] = {0,0};
+		for(int i=0; i<2; i++) {
+			for (int k = 0; k < ServerDatabase.PLAYERS.length; k++) {
+				_for[i] += ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[0];
+				_against[i] += ServerDatabase.VOTES[i].get(ServerDatabase.PLAYERS[k].name)[1];
+			}
+		}
+
+		if(_for[0] > _against[0] && _for[1] > _against[1]){//for for
+			this.broadcastResolutionResult(new String[]{"for", "for"});
+		}else if(_for[0] > _against[0] && _for[1] < _against[1]) {//for against
+			this.broadcastResolutionResult(new String[]{"for", "against"});
+		}else if(_for[0] < _against[0] && _for[1] > _against[1]) {//against for
+			this.broadcastResolutionResult(new String[]{"against", "for"});
+		}else if(_for[0] < _against[0] && _for[1] < _against[1]) {//against against
+			this.broadcastResolutionResult(new String[]{"against", "against"});
+		}
+		ServerDatabase.VOTES_LOCK.unlock();
+
+		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.lock();
+		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[0], new Integer[]{_for[0],_against[0]});
+		ServerDatabase.VOTES_BY_RESOLUTION.put(_currentResolutions[1], new Integer[]{_for[1],_against[1]});
+		ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
+	}
+
+	public void broadcastTurnOrder(){
+		ServerDatabase.TOTAL_VOTES_LOCK.lock();
+		List<String> playersByVotes = new ArrayList<String>(ServerDatabase.TOTAL_VOTES.keySet());
+		Collections.sort(playersByVotes, new Comparator<String>(){
+			public int compare(String p1, String p2){
+				return ServerDatabase.TOTAL_VOTES.get(p1) - ServerDatabase.TOTAL_VOTES.get(p2);
+			}
+		});
+
+		Collections.reverse(playersByVotes);
+
+		writeColortext("Turn order: " + playersByVotes, SERVEROUT);
+		ServerDatabase.TOTAL_VOTES_LOCK.unlock();
+
+		String turnOrder = "";
+		for(String s : playersByVotes){
+			turnOrder += s + "\n";
+		}
+
+		this.broadcast(Protocol.TURN_ORDER, turnOrder);
 	}
 	
 	// MAP INFO
@@ -443,21 +531,33 @@ public class Main {
 					//Resolution1, Result1, Resolution2, Result2
 					writer.write("Resolutions\n");
 					ServerDatabase.RESOLUTION_LOCK.lock();
-					int i=0;
+					int place=0;
 					for(String s: ServerDatabase.PAST_RESOLUTION.keySet()){
 						writer.write(s.replace(" ","_") + " ");
 						writer.write(ServerDatabase.PAST_RESOLUTION.get(s));
-						if(i==0){
+						if(place==0){
 							writer.write(" ");
-							i++;
+							place++;
 						}else{
 							writer.write("\n");
-							i--;
+							place--;
 						}
 					}
 					ServerDatabase.RESOLUTION_LOCK.unlock();
 
+					//Current Resolution
+					writer.write("Current Resolutions\n");
+					ServerDatabase.CURRENT_RESOLUTIONS_LOCK.lock();
+					writer.write(ServerDatabase.CURRENT_RESOLUTIONS[0].replace(" ", "_") + " " + ServerDatabase.CURRENT_RESOLUTIONS[1].replace(" ", "_") + "\n");
+					ServerDatabase.CURRENT_RESOLUTIONS_LOCK.unlock();
 
+					//Total Votes
+					writer.write("Total Votes\n");
+					ServerDatabase.TOTAL_VOTES_LOCK.lock();
+					for(String s : ServerDatabase.TOTAL_VOTES.keySet()){
+						writer.write(s + " " + ServerDatabase.TOTAL_VOTES.get(s) + "\n");
+					}
+					ServerDatabase.TOTAL_VOTES_LOCK.unlock();
 
 					writer.write("EndFile");
 					String timeLog = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(Calendar.getInstance().getTime());

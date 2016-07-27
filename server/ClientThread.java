@@ -6,14 +6,14 @@ package server;
  * @author dmayans
  */
 
+import sandbox_client.Protocol;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Map;
-
-import sandbox_client.Protocol;
 
 public class ClientThread implements Runnable {
 	
@@ -330,6 +330,38 @@ public class ClientThread implements Runnable {
 		
 		else if(i == Protocol.END_ROUND) {
 			this.write(Protocol.ROUND_OK);
+		}
+
+		else if(i == Protocol.VOTE_TALLY){
+			String player = _in.readLine();
+			int resolution = Integer.parseInt(_in.readLine());
+			int numFor = Integer.parseInt(_in.readLine());
+			int numAgainst = Integer.parseInt(_in.readLine());
+
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					_main.broadcastVoteTally(player, resolution, numFor, numAgainst);
+				}
+			}).start();
+		}
+
+		else if(i==Protocol.VOTE){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					_main.broadcastVote();
+				}
+			}).start();
+		}
+
+		else if(i==Protocol.TURN_ORDER){
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					_main.broadcastTurnOrder();
+				}
+			}).start();
 		}
 		
 	}

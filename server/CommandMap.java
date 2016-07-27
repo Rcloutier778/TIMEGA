@@ -46,6 +46,15 @@ public class CommandMap {
 		_map.put("release", new ReleaseCommand());
 		_map.put("resolutions", new ResolutionCommand());
 		_map.put("resresult", new ResolutionWinCommand());
+		_map.put("help", new HelpCommand());
+		//_map.put("vote", new VoteCommand());
+		_map.put("vote", new Command() {
+			@Override
+			public void run(String[] args) {
+				_main.broadcast(Protocol.VOTE);
+			}
+		});
+		_map.put("totalvotes", new TotalVotesCommand());
 
 	}
 
@@ -61,6 +70,54 @@ public class CommandMap {
 
 	public boolean getEnabled(String tab) {
 		return _enabled.get(tab);
+	}
+
+	private class HelpCommand implements Command{
+		public void run(String[] args){
+			if(args.length == 1){
+				for(String s : _map.keySet()){
+					Main.writeColortext(s + "\n", Main.SERVEROUT);
+				}
+				return;
+			}
+			if(args.length == 2){
+				if(_map.containsKey(args[1])){
+					if(args[1].equals("enable")){
+						Main.writeColortext("Enables the desired tab or all tabs", Main.SERVEROUT);
+					}else if(args[1].equals("disable")){
+						Main.writeColortext("Disables the desired tab or all tabs", Main.SERVEROUT);
+					}else if(args[1].equals("clear")){
+						Main.writeColortext("Clears the terminal", Main.SERVEROUT);
+					}else if(args[1].equals("chown")){
+						Main.writeColortext("Captures a planet for a player", Main.SERVEROUT);
+					}else if(args[1].equals("reload")){
+						Main.writeColortext("Reloads game data from a save file", Main.SERVEROUT);
+					}else if(args[1].equals("sync")){
+						Main.writeColortext("Ends the round, syncs the client and server databses", Main.SERVEROUT);
+					}else if(args[1].equals("research")){
+						Main.writeColortext("Researches a tech for a player", Main.SERVEROUT);
+					}else if(args[1].equals("forget")){
+						Main.writeColortext("Removes a tech from a player", Main.SERVEROUT);
+					}else if(args[1].equals("hire")){
+						Main.writeColortext("Hires a personnel for a player", Main.SERVEROUT);
+					}else if(args[1].equals("release")){
+						Main.writeColortext("Fires a personnel for a player", Main.SERVEROUT);
+					}else if(args[1].equals("resolutions")){
+						Main.writeColortext("Sets the resolutions to be voted on.\nIf repealing, Repeal must be entered first with the law to be repealed entered after the second resolution.", Main.SERVEROUT);
+					}else if(args[1].equals("resresult")) {
+						Main.writeColortext("Sets the result of the current resolution. ", Main.SERVEROUT);
+						//todo finish up council tab before doing repeals
+					}else if(args[1].equals("vote")){
+						Main.writeColortext("Tallies the votes for the current resolutions", Main.SERVEROUT);
+					}else if(args[1].equals("totalvotes")){
+						Main.writeColortext("Returns the total votes for/against for a given resolution and the turn order", Main.SERVEROUT);
+					}
+				}else {
+					Main.writeColortext("No command \"" + args[1] + "\" found", Main.ERROR);
+				}
+			}
+
+		}
 	}
 
 	// enable a single tab
@@ -301,47 +358,46 @@ public class CommandMap {
 	private class ResolutionCommand implements Command {
 
 		public void run(String[] args) {
-			if (args.length < 3) {
-				Main.writeColortext("usage: resolution <agenda_1> <agenda_2>", Main.ERROR);
+			if (args.length < 3 || args.length > 5) {
+				Main.writeColortext("usage: resolution <agenda_1> <agenda_2> <repeal_1> <repeal_2>", Main.ERROR);
 				return;
 			}
 
 			String res1 = args[1].replace("_", " ");
 			String res2 = args[2].replace("_", " ");
-
+			String res3 = "";
+			String res4 = "";
+			if(args.length > 3){
+				res3 = args[3].replace("_"," ");
+			}
+			if(args.length > 4){
+				res4 = args[4].replace("_"," ");
+			}
 			if (!ServerDatabase.RESOLUTION_SET.contains(res1)) {
 				Main.writeColortext("resolution \"" + res1 + "\" not found", Main.ERROR);
 			} else if (!ServerDatabase.RESOLUTION_SET.contains(res2)) {
 				Main.writeColortext("resolution \"" + res2 + "\" not found", Main.ERROR);
-			} else{
-				_main.broadcastResolution(res1, res2);
+			} else if (!ServerDatabase.RESOLUTION_SET.contains(res3) && args.length>3) {
+				Main.writeColortext("resolution \"" + res3 + "\" not found", Main.ERROR);
+			}else if (!ServerDatabase.RESOLUTION_SET.contains(res4) && args.length>4) {
+				Main.writeColortext("resolution \"" + res4 + "\" not found", Main.ERROR);
+			}else{
+				_main.broadcastResolution(res1, res2, res3, res4);
 			}
 		}
 
 	}
 
 	private class ResolutionWinCommand implements Command {
-
+		//todo what if second resolution is repeal?
 		public void run(String[] args) {
-			if (args.length < 3 || args.length >5) {
-				Main.writeColortext("usage: resresult <result_1> <result_2> <repeal_1> <repeal_2>", Main.ERROR);
+			if (args.length < 3) {
+				Main.writeColortext("usage: resresult <result_1> <result_2>", Main.ERROR);
 				return;
 			}
-			String[] result = new String[4];
+			String[] result = new String[2];
 			result[0] = args[1];
 			result[1] = args[2];
-			if(args.length == 4){
-				result[2] = args[3].replace("_"," ");
-				if(!ServerDatabase.RESOLUTION_SET.contains(result[2])){
-					Main.writeColortext("resolution \"" + result[2] + "\" not found", Main.ERROR);
-				}
-			}
-			if(args.length == 5){
-				result[3] = args[4].replace("_"," ");
-				if(!ServerDatabase.RESOLUTION_SET.contains(result[3])){
-					Main.writeColortext("resolution \"" + result[3] + "\" not found", Main.ERROR);
-				}
-			}
 			if (!(args[1].equals("for") || args[1].equals("against")) ||!(args[2].equals("for") || args[2].equals("against")) ) {
 				Main.writeColortext("usage: resresult <for/against> <for/against>", Main.ERROR);
 			}else{
@@ -350,4 +406,46 @@ public class CommandMap {
 		}
 
 	}
+
+	private class TotalVotesCommand implements Command{
+		public void run(String[] args){
+			if(args.length != 2){
+				Main.writeColortext("usage: totalvotes <resolution>", Main.ERROR);
+				return;
+			}
+			String res = args[1].replace("_"," ");
+			if(!ServerDatabase.VOTES_BY_RESOLUTION.containsKey(res)){
+				Main.writeColortext("No such resolution: " + res, Main.ERROR);
+			}else{
+				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.lock();
+				Main.writeColortext("For: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[0] +
+						" Against: " + ServerDatabase.VOTES_BY_RESOLUTION.get(res)[1],Main.SERVEROUT);
+				ServerDatabase.VOTES_BY_RESOLUTION_LOCK.unlock();
+			}
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

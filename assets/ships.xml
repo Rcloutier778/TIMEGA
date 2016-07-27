@@ -30,9 +30,4 @@
         <hitrate>8</hitrate>
         <dice>1</dice>
     </ship>
-	<ship>
-        <name>Ground Force</name>
-        <hitrate>20</hitrate>
-        <dice>1</dice>
-    </ship>
 </ships>
