@@ -3,8 +3,7 @@
     <race>
         <name>The Arborec</name>
         <ability>You may not build space docks or invade planets.</ability>
-        <ability>At the end of each development phase, each ground force may capture one neutral planet in its current system or in an adjacent system. Then, receive one ground force above each planet with a green technology specialty, if able.</ability>
-        <ability>At the end of each battle phase, all enemy planets in systems containing at least one of your ships are reverted to neutral.</ability>
+        <ability>At the end of each development phase, each ground force may capture one planet in its current system (this ground force is not consumed). Then, receive one ground force above each planet with a green technology specialty, if able.</ability>
         <ability>Your ground forces cost one resource to build and have a production capacity of zero in all systems currently activated by you and one in all other systems. Upon advancing to republic, their production capacity is increased to one and two respectively.</ability>
         <home>Nestphar</home>
         <tech>Antimass Deflectors</tech>
@@ -13,7 +12,7 @@
     <race>
         <name>The Barony of Letnev</name>
         <ability>The base cost and plastic supply of your dreadnoughts are both modified to five.</ability>
-        <ability>When you have fewer than five dreadnoughts on the board, your first dreadnought in each system may sustain damage twice. Otherwise, your first dreadnought in each system rolls two dice every combat round.</ability>
+        <ability>The first time each of your dreadnoughts sustains damage, it blocks two hits.</ability>
         <home>Wren Terra</home>
         <home>Arc Prime</home>
         <tech>Hylar V Assault Laser</tech>
@@ -24,7 +23,7 @@
         <ability>Receive two fighters every time you capture a planet.</ability>
         <ability>You do not need to control your home system to advance your empire.</ability>
         <ability>Your space docks have a movement of two. Your space docks are not ships, do not count towards fleet supply, and do not participate in space battles. Your space docks are destroyed if left alone with enemy ships.</ability>
-        <ability>You may only have one space dock in each system. Your space docks begin with three capacity and three production capacity. This is increased by one every time you advance your empire.</ability>
+        <ability>You may only have one space dock in each system. Your space docks have 3/4/5/6 capacity and production capacity.</ability>
         <ability>During the development phase, each of your space docks may choose one of the planets in its system. You benefit from all technology specialties on the chosen planets.</ability>
         <home>Lisis II</home>
         <home>Ragh</home>
@@ -33,18 +32,17 @@
     </race>
     <race>
         <name>The Embers of Muaat</name>
-        <ability>Your ships may move through (but not end their turn in) systems containing super- novae. This does not cost a movement point if your the ships end their turn in a system containing enemy ships.</ability>
-        <ability>As an action, you may spend a command counter from your command pool to place two fighters or one destroyer in any system containing one of your war suns. Whenever one of your destroyers is destroyed, place an ember in its place.</ability>
-        <ability>Whenever your ships move through a system containing an ember, add another.</ability>
-        <ability>Whenever any other player’s ships move, ignite one ember in each system along their paths. When an ember is ignited, return it to its supply along with one destroyer from each fleet in its system (except yours).</ability>
-        <ability>After reaching republic, as an action, you may replace any neutral system on the map (except home systems and Mecatol Rex) with a supernova. Place an ember in all adjacent systems. Any ships remaining in the supernova by the end of the battle phase are destroyed.</ability>
+        <ability>Your ships may move through (but not end their turn in) systems containing supernovae. This does not cost a movement point if your the ships end their turn in a system containing enemy ships.</ability>
+        <ability>As an action, you may spend a command counter from your command pool to place two fighters or one destroyer in any system containing one of your war suns.</ability>
+        <ability>Your war suns receive +1 on all combat rolls for each red technologiy specialty you control. Your war suns cost one fewer resource for each yellow technology specialty you control.</ability>
+        <ability>After reaching republic, as an action, you may replace any neutral system on the map (except home systems and Mecatol Rex) with a supernova. Any ships remaining in the supernova by the end of the battle phase are destroyed.</ability>
         <home>Muaat</home>
         <tech>Enviro Compensator</tech>
         <tech>Sarween Tools</tech>
     </race>
     <race>
         <name>The Emirates of Hacan</name>
-        <ability>At the beginning of each action phase, receive one new trade contract. You may trade these cards with other players as if they were promissory notes. When doing so, you may add additional restrictions to the card (or lift restrictions you previously added).</ability>
+        <ability>At the beginning of each action phase, receive one new trade contract. You may trade these cards with other players as if they were promissory notes. When doing so, you may add additional restrictions to the card (or lift restrictions you previously added). Added restrictions must be quantifiably completable.</ability>
         <ability>Any player may exchange a completed trade contract for a fortune card at the end of each round. Fortune cards may only be traded for other fortune cards.</ability>
         <home>Arretze</home>
         <home>Kamdorn</home>
@@ -56,6 +54,7 @@
         <name>The Federation of Sol</name>
         <ability>Your carriers have a capacity of eight.</ability>
         <ability>Receive one bonus command counter in your command pool at the beginning of each action phase.</ability>
+        <ability>Once per round, as an action, you may spend one command counter to place two fighters or two ground forces on any friendly carrier.</ability>
         <ability>At the beginning of each action phase, name one type unit. All of your units of that type receive +1 on all combat rolls.</ability>
         <ability>After researching hyper metabolism, your ground forces may each roll a single combat die at 8+ at the end of the first combat round.</ability>
         <home>Jord</home>
@@ -72,5 +71,86 @@
         <home>Creuss</home>
         <tech>Antimass Deflectors</tech>
         <tech>XRD Transporters</tech>
+    </race>
+    <race>
+        <name>The L1Z1X Mindnet</name>
+        <ability>The cost to research dreadnought technologies is reduced by 0.5 for each dreadnought you have on the board.</ability>
+        <ability>During planetary landings, your dreadnoughts may each capture one planet that would otherwise require 1/1/2/3 ground forces to invade.</ability>
+        <ability>Each of your dreadnoughts receives a +1 on all combat rolls for each adjacent system containing a friendly dreadnought.</ability>
+        <home>[0.0.0]</home>
+    </race>
+    <race>
+        <name>The Mentak Coalition</name>
+        <ability>Receive one stolen good at the beginning of each development phase.</ability>
+        <ability>When buying technology, you may instead spend four stolen goods to receive a technology from the black market.</ability>
+        <ability>Each battle, up to two of your destroyers or cruisers (or any mix thereof) receive one pre-combat roll each. Receive one stolen good for each hit.</ability>
+        <ability>When capturing planets, receive one stolen good for each ground force lost.</ability>
+        <home>Moll Primus</home>
+        <tech>Hylar V Assault Laser</tech>
+        <tech>Stasis Capsules</tech>
+    </race>
+    <race>
+        <name>The Naalu Collective</name>
+        <ability>When another player activates a system containing your ships (but no other player's ships), you may move all of your ships in that system to an adjacent neutral system, placing a command counter from your reinforcements in their destination system.</ability>
+        <ability>After reaching republic, whenever another player activates a system you control, he loses a command counter from his fleet supply. You control a system if you control all planets in the system and have at least one ship present.</ability>
+        <ability>Your fighters receive +0/1/2/3 on all combat rolls. Upon advancing to empire, they receive one bonus movement.</ability>
+        <ability>Your ships cannot support fighters. Instead, your ships may carry shields. You may build shields at space docks for 0.5 resources or directly on carriers for 1 resource. In either case, shields do not consume production capacity, occupy one fighter capacity, do not roll combat dice, are considered ships of cost 0.5, and may be take as casualties during space battles (even during anti-fighter barrage).</ability>
+        <home>Maaluuk</home>
+        <home>Druaa</home>
+        <tech>Advanced Fighters</tech>
+    </race>
+    <race>
+        <name>The Nekro Virus</name>
+        <ability>When you destroy at least one enemy unit in a space battle, you may copy one technology advance (ignoring all prerequisites) that the enemy player has researched. You may not receive technology in any other way.</ability>
+        <ability>When building ships during the development phase, you amy replace any of your existing fleets with fleets of equal resource value.</ability>
+        <ability>You may not vote on galactic council resolutions or exchange promissory notes.</ability>
+        <home>Mordaii II</home>
+        <tech>Hylar V Assault Laser</tech>
+        <tech>Ion Cannons</tech>
+        <tech>Cybernetics</tech>
+    </race>
+    <race>
+        <name>The Sardakk N'Orr</name>
+        <ability>Before each battle, you may exhaust one of your space docks. If you do, all of your ships receive +1 on all combat rolls during that battle.</ability>
+        <ability>Begin the game with eight larvae in your reinforcements. At the end of each development phase, you may place one in any system you control.</ability>
+        <ability>When you win a space battle or invade a planet, leave a larva in the system. At the en of each battle phase, destroy all larvae that are in systems containing enemy ships.</ability>
+        <ability>As an action, you may place a command counter from your command pool fleet side up in any system. Exchange all larvae in that system for destroyers from your reinforcements. If enemy ships are present, resolve the battle immediately.</ability>
+        <home>Tren'lak</home>
+        <home>Quinarra</home>
+        <tech>Hylar V Assault Laser</tech>
+        <tech>Ion Cannons</tech>
+    </race>
+    <race>
+        <name>The Winnu</name>
+        <ability>Technology credits may be spent towards any color technology. You receive technology credits when exhausting planets for either resources or influence.</ability>
+        <ability>As long as you have at least five different ship types present in a system, all of your ships in that system receive +1 on all combat rolls. If you have seven different ship types, this bonus is increased to +2.</ability>
+        <home>Winnu</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>Enviro Compensator</tech>
+        <tech>Stasis Capsules</tech>
+    </race>
+    <race>
+        <name>The Xxcha Kingdom</name>
+        <ability>During the first combat round, enemy ships receive -1 on all combat rolls.</ability>
+        <home>Archon Ren</home>
+        <home>Archon Tau</home>
+        <tech>Antimass Deflectors</tech>
+        <tech>Stasis Capsules</tech>
+    </race>
+    <race>
+        <name>The Yin Brotherhood</name>
+        <ability>When exhausting planets, you may either receive its influence value as resources or its resource value as influence.</ability>
+        <home>Darien</home>
+        <tech>Hylar V Assault Laser</tech>
+        <tech>Automated Defence Turrets</tech>
+    </race>
+    <race>
+        <name>The Yssaril Tribes</name>
+        <ability>Your destroyers and cruisers receive +1 on all combat rolls during the action phase.</ability>
+        <ability>As an action, you may skip your turn. You may do this up to 1/2/3/4 times per round.</ability>
+        <ability>When each of your cruisers moves through an enemy fleet towards a neutral destination, it may choose a system along its path. As it moves, bring two enemy fighters with it or one enemy non-fighter ship (chosen by the enemy) from that system. Up to three enemy fighters are destroyed upon reaching the destination. All enemy ships that re moved in this way must belong to the same player (you may choose the player). At the end of each turn that you used this ability, place a command counter from your reinforcements in the activated system.</ability>
+        <home>Retillion</home>
+        <home>Shalloq</home>
+        <tech>Wave Deflectors</tech>
     </race>
 </races>

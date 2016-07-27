@@ -39,7 +39,7 @@
     </tech>
     <tech color="blue" prereq="Antimass Deflectors">
         <name>Striker Fleets</name>
-        <effect>Your destroyers and cruisers receive a combat bonus equal to their remaining movement points when attacking in a small battle.</effect>
+        <effect>Your destroyers and cruisers receive a combat bonus equal to their remaining movement points during your turns.</effect>
     </tech>
     <tech color="blue" prereq="Antimass Deflectors">
         <name>XRD Transporters</name>
