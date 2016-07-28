@@ -16,6 +16,15 @@
         <dice>1</dice>
     </ship>
     <ship>
+        <name>SAS</name>
+        <hitrate>8</hitrate>
+        <dice>1</dice>
+    </ship>
+    <ship>
+        <name>Carrier</name>
+        <dice>0</dice>
+    </ship>
+    <ship>
         <name>Dreadnought</name>
         <hitrate>6</hitrate>
         <dice>1</dice>
@@ -25,9 +34,157 @@
         <hitrate>3</hitrate>
         <dice>3</dice>
     </ship>
-	<ship>
-        <name>SAS</name>
+    
+    <flagship>
+        <name>Duha Menaimon</name>
+        <race>The Arborec</race>
+        <hitrate>6</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>5</capacity>
+        <ability>Whenever an enemy ship is destroyed in an adjacent system, set aside the same type of unit from your plastic supply, if able. Immediately before building at space docks, you may build any or all of those ships in the system containing the Duha Menaimon, ignoring production capacity. Then, return the rest to your plastic supply.</ability>
+    </flagship>
+    <flagship>
+        <name>Arc Secundus</name>
+        <race>The Barony of Letnev</race>
+        <hitrate>6</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>2</capacity>
+        <ability>When this ship sustains damage, you may sustain damage on one of your dreadnoughts in an adjacent system instead.</ability>
+    </flagship>
+    <flagship>
+        <name>Son of Ragh</name>
+        <race>The Clan of Saar</race>
+        <hitrate>6</hitrate>
+        <dice>3</dice>
+        <movement>2</movement>
+        <capacity>4</capacity>
+        <ability>This ship may be built in any system containing one of your space docks.</ability>
+    </flagship>
+    <flagship>
+        <name>Inferno</name>
+        <race>The Embers of Muaat</race>
+        <hitrate>6</hitrate>
+        <dice>3</dice>
+        <movement>1</movement>
+        <capacity>3</capacity>
+        <ability>Immediately after moving, destroy one destroyer from each enemy fleet in this ship’s destination system. If the Inferno has moved through a supernova this turn, do this to all adjacent systems as well.</ability>
+    </flagship>
+    <flagship>
+        <name>Wrath of Kenara</name>
+        <race>The Emirates of Hacan</race>
+        <hitrate>9</hitrate>
+        <dice>4</dice>
+        <movement>2</movement>
+        <capacity>2</capacity>
+        <ability>While the Wrath of Kenara is on the board, whenever another player activates a system containing at least one of your ships, the Wrath of Kenara receives +1 on all combat rolls against that player.</ability>
+    </flagship>
+    <flagship>
+        <name>Genesis I</name>
+        <race>The Federation of Sol</race>
         <hitrate>8</hitrate>
+        <dice>3</dice>
+        <movement>2</movement>
+        <capacity>2</capacity>
+        <ability>Ground forces do not take up any capacity on the Genesis I. Receive one ground force on board every time this ship moves into or through a system.</ability>
+    </flagship>
+    <flagship>
+        <name>Hil Colish</name>
+        <race>The Ghosts of Creuss</race>
+        <hitrate>4</hitrate>
         <dice>1</dice>
-    </ship>
+        <movement>2</movement>
+        <capacity>2</capacity>
+        <ability>When this ship is not moving, treat its current system as if it had a D wormhole. When this ship is moving, treat its destination system as if it had a D wormhole.</ability>
+    </flagship>
+    <flagship>
+        <name>Will of the Emperor</name>
+        <race>The L1Z1X Mindnet</race>
+        <hitrate>7</hitrate>
+        <movement>2</movement>
+        <capacity>2</capacity>
+        <ability>Dreadnoughts in adjacent systems roll one pre-combat die. Roll one die per combat round for each adjacent system containing a friendly dreadnought.</ability>
+    </flagship>
+    <flagship>
+        <name>Fourth Moon</name>
+        <race>The Mentak Coalition</race>
+        <hitrate>5</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>1</capacity>
+        <ability>No enemy ships may sustain damage in systems containing the Fourth Moon or in systems adjacent to it (even during battles in which you are not participating).</ability>
+    </flagship>
+    <flagship>
+        <name>Matriarch</name>
+        <race>The Naalu Collective</race>
+        <hitrate>5</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>4</capacity>
+        <ability>When this ship hits, you may place a shield on the Matriarch or on any friendly carrier in an adjacent system. You always control the system containing the Matriarch and all adjacent neutral systems.</ability>
+    </flagship>
+    <flagship>
+        <name>Alastor</name>
+        <race>The Nekro Virus</name>
+        <hitrate>9</hitrate>
+        <dice>4</dice>
+        <movement>1</movement>
+        <capacity>1</capacity>
+        <ability>If the Alastor is destroyed, remove all ships from its system.</ability>
+    </flagship>
+    <flagship>
+        <name>C'Morran N'Orr</name>
+        <race>The Sardakk N'Orr</race>
+        <hitrate>3</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>1</capacity>
+        <ability>At the beginning of each development phase, you may place a larva in each adjacent neutral system that does not contain any larvae.</ability>
+    </flagship>
+    <flagship>
+        <name>J.N.S. Hylarim</name>
+        <race>The Universities of Jol-Nar</race>
+        <hitrate>5</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>3</capacity>
+        <ability>At the beginning of any battle involving the J.N.S. Hylarim, choose one number in any technology advancement. For the duration of the battle, your ships fight as if that number were doubled.</ability>
+    </flagship>
+    <flagship>
+        <name>Salai Sai Corian</name>
+        <race>The Winnu</race>
+        <hitrate>8</hitrate>
+        <movement>2</movement>
+        <capacity>3</capacity>
+        <ability>This ship rolls one die for every enemy non-fighter ship in its system. This ship receives +1 for each enemy fleet in an adjacent system, up to +3.</ability>
+    </flagship>
+    <flagship>
+        <name>Loncara Ssodu</name>
+        <race>The Xxcha Kingdom</race>
+        <hitrate>6</hitrate>
+        <dice>2</dice>
+        <movement>1</movement>
+        <capacity>4</capacity>
+        <ability>WIP</ability>
+    </flagship>
+    <flagship>
+        <name>Van Hauge</name>
+        <race>The Yin Brotherhood</race>
+        <hitrate>5</hitrate>
+        <dice>2</dice>
+        <movement>1</movement>
+        <capacity>4</capacity>
+        <ability>WIP</ability>
+    </flagship>
+    <flagship>
+        <name>Y'sia Y'ssrila</name>
+        <race>The Yssaril Tribes</race>
+        <hitrate>6</hitrate>
+        <dice>2</dice>
+        <movement>2</movement>
+        <capacity>3</capacity>
+        <ability>When your ships enter this system, they have their movement points refreshed.</ability>
+    </flagship>
+
 </ships>
