@@ -891,17 +891,20 @@ public class Database {
 	public static final int FIGHTER = 0;
 	public static final int DESTROYER = 1;
 	public static final int CRUISER = 2;
-	public static final int DREADNOUGHT = 3;
-	public static final int WAR_SUN = 4;
-	public static final int SAS = 5;
+	public static final int SAS = 3;
+	public static final int CARRIER = 4;
+	public static final int DREADNOUGHT = 5;
+	public static final int WAR_SUN = 6;
 	// keep codes and array synchronized!
-	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "Dreadnought", "War Sun", "SAS"};
+	private static final String[] SHIP_NAMES = {"Fighter", "Destroyer", "Cruiser", "SAS", "Carrier", "Dreadnought", "War Sun"};
 	
 	public static final int NUM_SHIPS = SHIP_NAMES.length;
+		
+	private static final Ship[] SHIPS = new Ship[NUM_SHIPS];
+		// ^ maps a ship code to its ship 'struct'
+	private static final HashMap<String,Ship> FLAGSHIPS = new HashMap<String,Ship>();
+		// ^ maps a race to its flagship 'struct'
 	
-	private static final int[] HIT_RATES = new int[NUM_SHIPS];
-	private static final int[] DICE = new int[NUM_SHIPS];
-
 	// returns a ship's name given its integer code
 	public static String nameOfShip(int code) {
 		return SHIP_NAMES[code];
@@ -920,15 +923,30 @@ public class Database {
 	// add a ship to the database
 	public static void addShip(String name, int hit, int dice) {
 		int index = Database.codeOfShip(name);
-		HIT_RATES[index] = hit;
-		DICE[index] = dice;
+		Ship s = new Ship();
+		s.name = name;
+		s.hitrate = hit;
+		s.dice = dice;
+		SHIPS[index] = s;
+	}
+	
+	// add a flagship to the database
+	public static void addFlagship(String name, String race, int hit, int dice, int movement, int capacity, String ability) {
+		Ship s = new Ship();
+		s.name = name;
+		s.hitrate = hit;
+		s.dice = dice;
+		s.movement = movement;
+		s.capacity = capacity;
+		s.ability = ability;
+		FLAGSHIPS.put(race, s);
 	}
 	
 	// access ship info
 	public static int[] getBaseHitRates() {
 		int[] output = new int[NUM_SHIPS];
 		for(int i=0; i<NUM_SHIPS; i++) {
-			output[i] = HIT_RATES[i];
+			output[i] = SHIPS[i].hitrate;
 		}
 		return output;
 	}
@@ -936,9 +954,14 @@ public class Database {
 	public static int[] getBaseDiceRolled() {
 		int[] output = new int[NUM_SHIPS];
 		for(int i=0; i<NUM_SHIPS; i++) {
-			output[i] = DICE[i];
+			output[i] = SHIPS[i].dice;
 		}
 		return output;
+	}
+	
+	// access flagship
+	public static Ship getFlagshipOf(String race) {
+		return new Ship(FLAGSHIPS.get(race));
 	}
 
 	

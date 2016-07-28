@@ -44,6 +44,7 @@ public class ServerDatabase {
 	public static final HashSet<String> RESOLUTION_SET = new HashSet<String>();
 
 	//string = player, integer = for/against numbers, array = resolution
+	@SuppressWarnings("unchecked")
 	public static final HashMap<String,Integer[]> VOTES[] = new HashMap[]{new HashMap<String, Integer[]>(),new HashMap<String, Integer[]>()};
 	public static final Lock VOTES_LOCK = new ReentrantLock();
 
