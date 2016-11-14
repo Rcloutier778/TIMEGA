@@ -278,7 +278,7 @@ public class Server implements Runnable {
 
 			Database.clearVoteQueue();
 		} else if(message == Protocol.TURN_ORDER){
-			System.out.println("Turn ORder Server");
+			System.out.println("Turn Order Server");
 			String[] turnOrder = new String[Database.numPlayers()];
 			for(int i=0; i<Database.numPlayers(); i++){
 				turnOrder[i] = _in.readLine();

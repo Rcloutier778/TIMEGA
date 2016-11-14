@@ -126,7 +126,7 @@
     </flagship>
     <flagship>
         <name>Alastor</name>
-        <race>The Nekro Virus</name>
+        <race>The Nekro Virus</race>
         <hitrate>9</hitrate>
         <dice>4</dice>
         <movement>1</movement>
